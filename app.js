@@ -1,13 +1,3 @@
-/* HRDF Irshad - Content Management UI (Vanilla JS)
-   Added fields:
-   - contentNumber (auto increment)
-   - contentType
-   - beneficiary
-   - materialDate
-   - availableCount / consumedCount
-   - attachmentType + attachment (local/base64)
-*/
-
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
@@ -290,6 +280,13 @@ function onEscClose(e) {
   if (e.key === "Escape") closeModal();
 }
 
+function previewNextNumber() {
+  const raw = localStorage.getItem(COUNTER_KEY);
+  const n = raw ? parseInt(raw, 10) : 0;
+  const safe = Number.isFinite(n) ? n : 0;
+  return safe + 1;
+}
+
 function openModal(id = null) {
   const modal = $("#modal");
   const form = $("#form");
@@ -341,14 +338,6 @@ function closeModal() {
   modal.setAttribute("aria-hidden", "true");
   state.editingId = null;
   document.removeEventListener("keydown", onEscClose);
-}
-
-function previewNextNumber() {
-  // لا نزيد العداد فعليا إلا عند الحفظ، هذا فقط للعرض
-  const raw = localStorage.getItem(COUNTER_KEY);
-  const n = raw ? parseInt(raw, 10) : 0;
-  const safe = Number.isFinite(n) ? n : 0;
-  return safe + 1;
 }
 
 async function fileToBase64(file) {
@@ -409,7 +398,6 @@ function downloadAttachment(item) {
   const att = item.attachment;
   if (!att || !att.dataUrl) return;
 
-  // dataUrl = "data:...;base64,...."
   const a = document.createElement("a");
   a.href = att.dataUrl;
   a.download = att.name || "attachment";
@@ -480,14 +468,12 @@ function bindUI() {
     toast(isLight ? "تم تفعيل الوضع الداكن" : "تم تفعيل الوضع الفاتح");
   });
 
-  // Form submit (handles file upload)
   $("#form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const id = $("#id").value || uid();
     const isEdit = Boolean($("#id").value);
 
-    // Ensure counter based on current max
     const maxNum = Math.max(0, ...state.items.map(x => Number(x.contentNumber) || 0));
     ensureCounterIsAtLeast(maxNum);
 
@@ -507,7 +493,6 @@ function bindUI() {
     const summary = $("#summary").value.trim();
     const body = $("#body").value.trim();
 
-    // Attachment handling
     const file = $("#attachmentFile").files?.[0] || null;
 
     let attachment = null;
@@ -522,7 +507,6 @@ function bindUI() {
         uploadedAt: nowISO(),
       };
     } else if (isEdit && prev?.attachment) {
-      // Keep existing if no new file selected
       attachment = prev.attachment;
     }
 
@@ -547,7 +531,6 @@ function bindUI() {
     closeModal();
   });
 
-  // Sidebar placeholders
   $$(".nav__item").forEach(btn => {
     btn.addEventListener("click", () => {
       $$(".nav__item").forEach(x => x.classList.remove("is-active"));
@@ -566,7 +549,7 @@ function seedIfEmpty() {
   state.items = [
     {
       id: uid(),
-      contentNumber: n2, // نعرض الاعلى أول
+      contentNumber: n2,
       title: "سياسة إدارة المحتوى",
       contentType: "article",
       beneficiary: "career_advisor",
@@ -605,7 +588,6 @@ function init() {
   initTheme();
   state.items = loadLocal();
 
-  // Counter sync
   const maxNum = Math.max(0, ...state.items.map(x => Number(x.contentNumber) || 0));
   ensureCounterIsAtLeast(maxNum);
 
