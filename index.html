@@ -5,70 +5,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>منصة إدارة المحتوى - ارشاد</title>
 
-  <link rel="stylesheet" href="./style.css" />
-  <script type="module" src="./app.js"></script>
+  <!-- Font (بديل ممتاز لـ SST) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+
+  <!-- Topbar -->
   <header class="topbar">
-   <div class="topbar-inner">
-  <div class="brand right">
-    <img class="logo-img" src="./hrdf-logo.png" alt="HRDF" />
-  </div>
+    <div class="topbar-inner">
+      <div class="brand right">
+        <img class="logo-img" src="./hrdf-logo.png" alt="HRDF" />
+      </div>
 
-  <div class="titleblock">
-    <h1 class="title"><span>منصة إدارة المحتوى</span></h1>
-    <p class="subtitle">مبادرة ارشاد - بيئة داخلية للفريق</p>
-  </div>
-
-  <div class="brand left">
-    <img class="logo-img" src="./irshad-logo.png" alt="Irshad" />
-  </div>
-</div>
       <div class="titleblock">
-        <h1 class="title">منصة إدارة المحتوى</h1>
+        <h1 class="title"><span>منصة إدارة المحتوى</span></h1>
         <p class="subtitle">مبادرة ارشاد - بيئة داخلية للفريق</p>
       </div>
 
-      <div class="actions">
-        <button class="btn btn-soft btn-sm" id="btnExport">تصدير CSV</button>
-        <button class="btn btn-primary btn-sm" id="btnNew">اضافة محتوى</button>
+      <div class="brand left">
+        <img class="logo-img" src="./irshad-logo.png" alt="Irshad" />
       </div>
     </div>
   </header>
 
   <main class="container">
+
+    <!-- Notice -->
     <div class="notice">
       <div class="notice-icon">i</div>
       <div class="notice-text">
-        هذه نسخة واجهة فقط. سنربط Firebase لاحقا. الآن نركز على التصميم وتجربة الاستخدام.
+        هذه نسخة واجهة فقط. الربط مع Firebase (قاعدة البيانات وتسجيل الدخول) سيتم لاحقا. الآن نركز على الشكل وتدفق العمل.
       </div>
     </div>
 
+    <!-- KPI -->
     <section class="kpis">
       <div class="kpi">
         <div class="kpi-title">اجمالي العناصر</div>
         <div class="kpi-num" id="kpiTotal">0</div>
       </div>
+
       <div class="kpi">
         <div class="kpi-title">مسودات</div>
-        <div class="kpi-num" id="kpiDraft">0</div>
+        <div class="kpi-num orange" id="kpiDraft">0</div>
       </div>
+
       <div class="kpi">
         <div class="kpi-title">قيد المراجعة</div>
         <div class="kpi-num" id="kpiReview">0</div>
       </div>
+
       <div class="kpi">
         <div class="kpi-title">منشور</div>
         <div class="kpi-num" id="kpiPublished">0</div>
       </div>
     </section>
 
+    <!-- Main grid -->
     <section class="grid-main">
+
+      <!-- Left / Tools -->
       <div class="card">
         <div class="card-head">
           <h2 class="h2">بحث وفلاتر</h2>
-          <span class="muted">ابحث بالعنوان او الوصف</span>
+          <span class="muted">تصفية سريعة</span>
         </div>
 
         <label class="label" for="q">بحث</label>
@@ -76,8 +82,8 @@
 
         <div class="grid-2 mt12">
           <div>
-            <label class="label" for="typeFilter">النوع</label>
-            <select class="input" id="typeFilter">
+            <label class="label" for="filterType">النوع</label>
+            <select class="input" id="filterType">
               <option value="all">الكل</option>
               <option value="guide">دليل</option>
               <option value="faq">اسئلة شائعة</option>
@@ -86,8 +92,8 @@
           </div>
 
           <div>
-            <label class="label" for="statusFilter">الحالة</label>
-            <select class="input" id="statusFilter">
+            <label class="label" for="filterStatus">الحالة</label>
+            <select class="input" id="filterStatus">
               <option value="all">الكل</option>
               <option value="draft">مسودة</option>
               <option value="review">قيد المراجعة</option>
@@ -97,13 +103,17 @@
           </div>
         </div>
 
-        <button class="btn btn-outline mt12" id="btnClear">مسح الفلاتر</button>
+        <div class="mt12" style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" id="btnOpenModal">اضافة محتوى</button>
+          <button class="btn btn-outline btn-sm" id="btnExportCsv">تصدير CSV</button>
+        </div>
       </div>
 
+      <!-- Right / Table -->
       <div class="card">
         <div class="card-head">
-          <h2 class="h2">المحتوى</h2>
-          <span class="muted" id="itemsHint">0 عنصر</span>
+          <h2 class="h2">قائمة المحتوى</h2>
+          <span class="muted" id="listHint">عرض العناصر حسب البحث والفلاتر</span>
         </div>
 
         <div class="table" id="table">
@@ -111,26 +121,31 @@
             <div>العنوان</div>
             <div>النوع</div>
             <div>الحالة</div>
-            <div>تاريخ</div>
-            <div></div>
+            <div>التاريخ</div>
+            <div>عرض</div>
           </div>
 
           <div id="rows"></div>
         </div>
       </div>
+
     </section>
+
+    <div class="footer">
+      حقوق 2026 - HRDF / ارشاد
+    </div>
+
   </main>
 
-  <footer class="footer">
-    نسخة داخلية - HRDF ارشاد
-  </footer>
-
+  <!-- Modal -->
   <div class="modal" id="modal" hidden>
     <div class="modal-backdrop" id="modalBackdrop"></div>
-    <div class="modal-card">
+
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <button class="modal-close" id="modalCloseBtn" aria-label="اغلاق">✕</button>
+
       <div class="modal-head">
         <div class="modal-title">اضافة محتوى</div>
-        <button class="btn btn-outline btn-sm" id="modalClose">اغلاق</button>
       </div>
 
       <div class="modal-body">
@@ -161,9 +176,50 @@
         <label class="label" for="summary">وصف مختصر</label>
         <textarea class="input textarea" id="summary" placeholder="اكتب وصف مختصر..."></textarea>
 
-        <button class="btn btn-primary mt12" id="btnSave">حفظ</button>
+        <div class="mt12" style="display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;">
+          <button class="btn btn-outline" id="btnCancel">الغاء</button>
+          <button class="btn btn-primary" id="btnSave">حفظ</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <script type="module" src="app.js"></script>
+
+  <!-- Modal close logic (بدون تعديل app.js) -->
+  <script>
+    const modal = document.getElementById("modal");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalCloseBtn = document.getElementById("modalCloseBtn");
+    const btnCancel = document.getElementById("btnCancel");
+
+    function closeModalUI(){
+      modal.hidden = true;
+      document.body.classList.remove("modal-open");
+    }
+
+    function openModalUI(){
+      modal.hidden = false;
+      document.body.classList.add("modal-open");
+    }
+
+    // لو app.js يفتح المودال، نخليه يشتغل طبيعي.
+    // لو ما فيه فتح، زر اضافة محتوى هنا يفتح.
+    const btnOpenModal = document.getElementById("btnOpenModal");
+    btnOpenModal?.addEventListener("click", () => {
+      openModalUI();
+    });
+
+    modalCloseBtn.addEventListener("click", closeModalUI);
+    btnCancel.addEventListener("click", closeModalUI);
+    modalBackdrop.addEventListener("click", closeModalUI);
+
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape" && !modal.hidden){
+        closeModalUI();
+      }
+    });
+  </script>
+
 </body>
 </html>
