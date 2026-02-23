@@ -1,1 +1,162 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منصة إدارة المحتوى - ارشاد</title>
 
+  <link rel="stylesheet" href="./style.css" />
+  <script type="module" src="./app.js"></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logos">
+        <img class="logo-img" src="./hrdf-logo.png" alt="HRDF" />
+        <div class="divider"></div>
+        <img class="logo-img" src="./irshad-logo.png" alt="Irshad" />
+      </div>
+
+      <div class="titleblock">
+        <h1 class="title">منصة إدارة المحتوى</h1>
+        <p class="subtitle">مبادرة ارشاد - بيئة داخلية للفريق</p>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-soft btn-sm" id="btnExport">تصدير CSV</button>
+        <button class="btn btn-primary btn-sm" id="btnNew">اضافة محتوى</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="notice">
+      <div class="notice-icon">i</div>
+      <div class="notice-text">
+        هذه نسخة واجهة فقط. سنربط Firebase لاحقا. الآن نركز على التصميم وتجربة الاستخدام.
+      </div>
+    </div>
+
+    <section class="kpis">
+      <div class="kpi">
+        <div class="kpi-title">اجمالي العناصر</div>
+        <div class="kpi-num" id="kpiTotal">0</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">مسودات</div>
+        <div class="kpi-num" id="kpiDraft">0</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">قيد المراجعة</div>
+        <div class="kpi-num" id="kpiReview">0</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-title">منشور</div>
+        <div class="kpi-num" id="kpiPublished">0</div>
+      </div>
+    </section>
+
+    <section class="grid-main">
+      <div class="card">
+        <div class="card-head">
+          <h2 class="h2">بحث وفلاتر</h2>
+          <span class="muted">ابحث بالعنوان او الوصف</span>
+        </div>
+
+        <label class="label" for="q">بحث</label>
+        <input class="input" id="q" placeholder="اكتب كلمة البحث..." />
+
+        <div class="grid-2 mt12">
+          <div>
+            <label class="label" for="typeFilter">النوع</label>
+            <select class="input" id="typeFilter">
+              <option value="all">الكل</option>
+              <option value="guide">دليل</option>
+              <option value="faq">اسئلة شائعة</option>
+              <option value="post">منشور</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="label" for="statusFilter">الحالة</label>
+            <select class="input" id="statusFilter">
+              <option value="all">الكل</option>
+              <option value="draft">مسودة</option>
+              <option value="review">قيد المراجعة</option>
+              <option value="published">منشور</option>
+              <option value="archived">مؤرشف</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-outline mt12" id="btnClear">مسح الفلاتر</button>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2 class="h2">المحتوى</h2>
+          <span class="muted" id="itemsHint">0 عنصر</span>
+        </div>
+
+        <div class="table" id="table">
+          <div class="thead">
+            <div>العنوان</div>
+            <div>النوع</div>
+            <div>الحالة</div>
+            <div>تاريخ</div>
+            <div></div>
+          </div>
+
+          <div id="rows"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    نسخة داخلية - HRDF ارشاد
+  </footer>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title">اضافة محتوى</div>
+        <button class="btn btn-outline btn-sm" id="modalClose">اغلاق</button>
+      </div>
+
+      <div class="modal-body">
+        <label class="label" for="title">العنوان</label>
+        <input class="input" id="title" placeholder="مثال: دليل ارشاد للمستفيدين" />
+
+        <div class="grid-2 mt12">
+          <div>
+            <label class="label" for="type">النوع</label>
+            <select class="input" id="type">
+              <option value="guide">دليل</option>
+              <option value="faq">اسئلة شائعة</option>
+              <option value="post">منشور</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="label" for="status">الحالة</label>
+            <select class="input" id="status">
+              <option value="draft">مسودة</option>
+              <option value="review">قيد المراجعة</option>
+              <option value="published">منشور</option>
+              <option value="archived">مؤرشف</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="label" for="summary">وصف مختصر</label>
+        <textarea class="input textarea" id="summary" placeholder="اكتب وصف مختصر..."></textarea>
+
+        <button class="btn btn-primary mt12" id="btnSave">حفظ</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
