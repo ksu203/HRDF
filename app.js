@@ -174,3 +174,41 @@ function init() {
 }
 
 init();
+// =============================
+// Modal Control
+// =============================
+
+const modal = document.getElementById("modal");
+const btnNew = document.getElementById("btnNew");
+const btnNew2 = document.getElementById("btnNew2");
+const btnClose = document.getElementById("btnClose");
+
+// فتح المودال
+function openModal() {
+  modal.classList.add("is-open");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+// إغلاق المودال
+function closeModal() {
+  modal.classList.remove("is-open");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+// زر محتوى جديد
+btnNew?.addEventListener("click", () => {
+  document.getElementById("form").reset();
+  document.getElementById("id").value = "";
+  openModal();
+});
+
+// زر داخل empty state
+btnNew2?.addEventListener("click", openModal);
+
+// زر X
+btnClose?.addEventListener("click", closeModal);
+
+// الضغط على الخلفية
+document.querySelectorAll("[data-close]").forEach(el => {
+  el.addEventListener("click", closeModal);
+});
