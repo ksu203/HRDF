@@ -477,3 +477,4 @@ button, input, textarea, select{ font: inherit; color: inherit; }
   .search{ min-width: 100%; }
   .formGrid{ grid-template-columns: 1fr; }
 }
+/* ===== FIX MODAL SCROLL ===== */
