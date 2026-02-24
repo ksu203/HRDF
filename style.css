@@ -396,12 +396,13 @@ button, input, textarea, select{ font: inherit; color: inherit; }
 .modal__dialog{
   position: relative;
   width: min(900px, calc(100% - 20px));
+  max-height: 90vh;           /* 🔥 مهم */
   margin: 5vh auto;
   border-radius: 22px;
   border: 1px solid var(--border);
   background: color-mix(in oklab, var(--bg) 76%, #ffffff 8%);
   box-shadow: var(--shadow);
-  overflow:hidden;
+  overflow-y: auto;           /* 🔥 يسمح بالتمرير */
 }
 
 .modal__head{
