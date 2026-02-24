@@ -112,3 +112,21 @@ body{
   display:flex;
   gap: 10px;
 }
+/* =========================
+   FIX: Modal Scroll Safe
+========================= */
+
+.modal {
+  overflow-y: auto;
+}
+
+.modal__dialog {
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__body {
+  overflow-y: auto;
+  max-height: 65vh;
+}
