@@ -101,9 +101,7 @@ function render() {
       <td>${item.availableCount || 0}</td>
       <td>${item.consumedCount || 0}</td>
       <td>
-        ${item.attachment?.url 
-          ? `<button onclick="window.open('${item.attachment.url}','_blank')" class="btn btn--ghost">تحميل</button>` 
-          : "-"}
+       ${item.attachment?.url ? renderAttachment(item.attachment) : "-"}
       </td>
       <td>
         <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
@@ -160,6 +158,45 @@ $("#form").addEventListener("submit", async (e) => {
   }
 
   saveLocal();
+  function renderAttachment(att) {
+  const url = att.url;
+  const mime = att.mime || "";
+
+  if (mime.startsWith("image/")) {
+    return `
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
+        <img src="${url}" 
+             style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,0.2);" />
+        <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">فتح</button>
+      </div>
+    `;
+  }
+
+  if (mime.startsWith("video/")) {
+    return `
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
+        <span>🎥</span>
+        <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">عرض</button>
+      </div>
+    `;
+  }
+
+  if (mime.startsWith("audio/")) {
+    return `
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
+        <span>🎵</span>
+        <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">تشغيل</button>
+      </div>
+    `;
+  }
+
+  return `
+    <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
+      <span>📄</span>
+      <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">تحميل</button>
+    </div>
+  `;
+}
   render();
   $("#modal").classList.remove("is-open");
 });
