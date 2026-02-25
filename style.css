@@ -1,226 +1,168 @@
 :root {
-  --hrdf-green: #0B6B3A;
-  --hrdf-green-deep: #063f22;
-  --hrdf-orange: #f2994a;
-  --gold-accent: #d4af37;
+  --primary: #0B6B3A;
+  --accent: #f2994a;
 
-  --bg: linear-gradient(135deg, #eef4f1, #f7faf8);
-  --surface: rgba(255, 255, 255, 0.85);
-  --glass: rgba(255, 255, 255, 0.65);
+  --sky-glass: rgba(0, 170, 255, 0.08);
+  --glass: rgba(255,255,255,0.75);
 
-  --border: rgba(11, 107, 58, 0.12);
-  --text: #082e1a;
-  --muted: #6b8a7a;
+  --border: rgba(0, 120, 200, 0.15);
+  --text: #083b20;
 
-  --shadow-soft: 0 8px 25px rgba(0, 0, 0, 0.05);
-  --shadow-elevated: 0 20px 60px rgba(11, 107, 58, 0.15);
+  --shadow-soft: 0 8px 25px rgba(0,0,0,0.06);
+  --shadow-strong: 0 20px 60px rgba(0,120,200,0.15);
 
-  --radius: 22px;
+  --radius: 20px;
   --radius-sm: 14px;
 
   --font: "SST Arabic", "Tajawal", system-ui, sans-serif;
 }
 
-/* Reset */
-* { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; }
+/* ================= BODY ================= */
 
 body {
   font-family: var(--font);
-  background: var(--bg);
   direction: rtl;
+  margin: 0;
   color: var(--text);
-  line-height: 1.7;
+
+  background:
+    linear-gradient(135deg, rgba(0,170,255,0.05), rgba(0,120,255,0.08)),
+    radial-gradient(circle at 20% 30%, rgba(0,170,255,0.08), transparent 60%),
+    #f4f9fc;
 }
 
-/* ===== Topbar (Smaller & Premium) ===== */
+/* ================= TOPBAR ================= */
+
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 100;
+  padding: 8px 24px; /* أصغر */
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 10px 28px; /* أصغر */
-  background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
-  backdrop-filter: blur(18px);
+  align-items: center;
+  backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.6);
   border-bottom: 1px solid var(--border);
-  box-shadow: var(--shadow-soft);
 }
 
-/* Bigger Logos */
 .logo {
-  width: 75px;
-  height: 75px;
+  width: 80px; /* أكبر */
+  height: 80px;
   object-fit: contain;
 }
 
-/* Hide settings & theme icons if موجودة */
-.icon-settings,
-.icon-theme,
-.theme-toggle,
-.settings-btn {
-  display: none !important;
-}
+/* ================= LAYOUT ================= */
 
-/* ===== Layout ===== */
 .shell {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 280px 1fr;
   gap: 24px;
-  padding: 28px;
-  max-width: 1500px;
-  margin: auto;
+  padding: 30px;
 }
 
-/* Sidebar */
-.sidebar {
-  position: sticky;
-  top: 100px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
+/* ================= SEARCH & FILTER ================= */
 
-/* Glass Cards */
-.sidebar__card,
-.card,
-.panel,
 .toolbar {
-  background: var(--glass);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 20px;
-  backdrop-filter: blur(18px);
-  box-shadow: var(--shadow-soft);
-  transition: 0.3s ease;
-}
-
-.card:hover,
-.sidebar__card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-elevated);
-}
-
-/* ===== Sidebar Nav ===== */
-.nav__item {
-  padding: 14px 16px;
-  border-radius: var(--radius-sm);
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
-  cursor: pointer;
-  transition: 0.25s ease;
-  font-weight: 600;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
 }
 
-.nav__item:hover {
-  background: rgba(11,107,58,0.06);
-}
-
-.nav__item.is-active {
-  background: linear-gradient(90deg, rgba(11,107,58,0.12), transparent);
-  border-right: 4px solid var(--hrdf-green);
-  color: var(--hrdf-green);
-  font-weight: 800;
-}
-
-/* ===== Main ===== */
-.main {
+.toolbar__left {
   display: flex;
-  flex-direction: column;
-  gap: 22px;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
 }
 
-/* ===== Inputs ===== */
 .input {
-  padding: 13px 15px;
+  padding: 12px 16px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   background: #fff;
-  font-size: 14px;
+  min-width: 260px;
   transition: 0.2s;
 }
 
 .input:focus {
-  border-color: var(--hrdf-green);
-  box-shadow: 0 0 0 3px rgba(11,107,58,0.15);
+  border-color: #00aaff;
+  box-shadow: 0 0 0 3px rgba(0,170,255,0.2);
   outline: none;
 }
 
-/* ===== Buttons (Luxury Look) ===== */
-.btn {
-  padding: 12px 20px;
-  border-radius: var(--radius-sm);
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.25s ease;
-  border: none;
-}
+/* ================= STAT CARDS (أصغر) ================= */
 
-.btn--primary {
-  background: linear-gradient(135deg, var(--hrdf-orange), #e8882f);
-  color: #fff;
-  box-shadow: 0 8px 20px rgba(242,153,74,0.3);
-}
-
-.btn--primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(242,153,74,0.4);
-}
-
-.btn--ghost {
-  background: transparent;
-  border: 1px solid var(--border);
-}
-
-/* ===== Grid Cards ===== */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
 }
 
 .card--stat {
-  min-height: 140px;
+  min-height: 95px; /* أصغر */
+  padding: 16px;
+  border-radius: var(--radius);
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: 0.3s ease;
+}
+
+.card--stat:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-strong);
 }
 
 .card__value {
-  font-size: 36px;
+  font-size: 26px; /* أصغر */
   font-weight: 900;
-  color: var(--hrdf-green);
-  letter-spacing: 1px;
+  color: #007acc;
 }
 
-/* ===== Table (Executive Style) ===== */
-.tableWrap { overflow-x: auto; }
+/* ================= TABLE ================= */
+
+.tableWrap {
+  overflow-x: auto;
+  margin-top: 20px;
+}
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  background: var(--glass);
+  backdrop-filter: blur(15px);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .table th {
-  background: rgba(11,107,58,0.08);
-  font-weight: 800;
-  letter-spacing: 0.5px;
+  background: rgba(0,170,255,0.08);
+  font-weight: 700;
 }
 
 .table th,
 .table td {
-  padding: 16px;
+  padding: 14px;
   border-bottom: 1px solid var(--border);
 }
 
 .table tbody tr:hover {
-  background: rgba(11,107,58,0.04);
+  background: rgba(0,170,255,0.05);
 }
 
-/* ===== Modal Premium ===== */
+/* ================= MODAL (نافذة اضافة المحتوى) ================= */
+
 .modal {
   position: fixed;
   inset: 0;
@@ -237,39 +179,56 @@ body {
 .modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0,40,20,0.45);
+  background: rgba(0, 120, 200, 0.35);
   backdrop-filter: blur(8px);
 }
 
 .modal__dialog {
   position: relative;
-  width: min(1000px, 95%);
+  width: min(850px, 95%);
   max-height: 90vh;
   overflow-y: auto;
-  border-radius: 30px;
+  border-radius: 28px;
   padding: 30px;
-  background: linear-gradient(135deg, #ffffff, #f6faf8);
-  box-shadow: var(--shadow-elevated);
+  background: linear-gradient(135deg, #ffffff, #f2fbff);
+  box-shadow: var(--shadow-strong);
   animation: fadeIn 0.3s ease;
 }
 
+/* تنسيق حقول المودال */
+.modal__dialog .input {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+/* زر رئيسي */
+.btn--primary {
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #00aaff, #007acc);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,120,255,0.3);
+}
+
+/* ================= ANIMATION ================= */
+
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== Responsive ===== */
+/* ================= RESPONSIVE ================= */
+
 @media (max-width: 1100px) {
   .shell {
     grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    position: static;
-  }
-
-  .logo {
-    width: 60px;
-    height: 60px;
   }
 }
