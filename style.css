@@ -1,8 +1,8 @@
-/* ================== GLOBAL ================== */
+/* ================= GLOBAL ================= */
 
 * {
   box-sizing: border-box;
-  font-family: "SST Arabic", "Tajawal", system-ui, sans-serif !important;
+  font-family: "Tajawal", system-ui, sans-serif;
 }
 
 body {
@@ -12,170 +12,302 @@ body {
   color: #123c2a;
 }
 
-/* ================== HEADER ================== */
+/* ================= TOPBAR ================= */
 
-header,
 .topbar {
-  height: 60px !important;
-  min-height: 60px !important;
-  padding: 0 30px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  background: rgba(255,255,255,0.95) !important;
-  border-bottom: 1px solid #dde7f0 !important;
+  height: 64px;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #e6eef5;
 }
 
-.logo img,
+.topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 .logo {
-  width: 80px !important;
-  height: auto !important;
+  width: 85px;
+  height: auto;
 }
 
-/* ================== TITLE ================== */
-
-.hero h1,
-h1 {
-  font-size: 30px;
+.topbar__title h1 {
   margin: 0;
+  font-size: 20px;
   font-weight: 700;
   color: #0B6B3A;
 }
 
-/* ================== TOOLBAR ================== */
+.kicker {
+  font-size: 13px;
+  color: #6b8a7a;
+}
+
+/* ================= LAYOUT ================= */
+
+.shell {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 25px;
+  padding: 30px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar__card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid #e6eef5;
+  margin-bottom: 18px;
+}
+
+.sidebar__logos {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo--sm {
+  width: 60px;
+}
+
+.divider {
+  height: 1px;
+  background: #e6eef5;
+  margin: 15px 0;
+}
+
+.nav__item {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: right;
+}
+
+.nav__item.is-active {
+  background: #eef6fb;
+  color: #0B6B3A;
+  font-weight: 600;
+}
+
+/* ================= TOOLBAR ================= */
 
 .toolbar {
-  display: flex !important;
+  display: flex;
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
-  padding: 18px !important;
-  background: white !important;
+  justify-content: space-between;
+  background: #ffffff;
   border-radius: 16px;
-  border: 1px solid #e4edf5;
+  padding: 18px;
+  border: 1px solid #e6eef5;
 }
 
-.toolbar input,
-.toolbar select {
-  height: 42px;
+.toolbar__left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.search {
+  position: relative;
+}
+
+.search__icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #888;
+}
+
+.input {
+  height: 40px;
   padding: 0 14px;
   border-radius: 10px;
   border: 1px solid #dbe5ef;
+  min-width: 200px;
   font-size: 14px;
-  font-family: inherit !important;
 }
 
-/* ================== STAT CARDS ================== */
+.input--search {
+  padding-left: 30px;
+}
+
+.pill {
+  background: #eef6fb;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #0B6B3A;
+}
+
+/* ================= STAT CARDS ================= */
 
 .grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
   margin-top: 20px;
 }
 
 .card--stat {
-  background: white !important;
-  border-radius: 14px;
-  border: 1px solid #e4edf5;
-  padding: 16px !important;
-  min-height: 80px !important;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid #e6eef5;
 }
 
-.card--stat h3 {
+.card__label {
   font-size: 13px;
-  margin: 0 0 5px 0;
   color: #6b8a7a;
+  margin-bottom: 6px;
 }
 
 .card__value {
-  font-size: 22px !important;
+  font-size: 22px;
   font-weight: 700;
-  color: #0077b6 !important;
+  color: #0077b6;
 }
 
-/* ================== TABLE ================== */
+.card__sub {
+  font-size: 12px;
+  color: #888;
+}
+
+/* ================= PANEL ================= */
+
+.panel {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #e6eef5;
+  margin-top: 20px;
+}
+
+.panel__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.panel__title {
+  margin: 0;
+  font-size: 18px;
+}
+
+.panel__desc {
+  font-size: 13px;
+  color: #6b8a7a;
+}
+
+/* ================= TABLE ================= */
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  background: white;
-  border-radius: 14px;
-  overflow: hidden;
 }
 
 .table th,
 .table td {
-  padding: 14px;
+  padding: 12px;
   border-bottom: 1px solid #eef3f8;
+  font-size: 14px;
 }
 
-/* ================== MODAL FIXED PROPERLY ================== */
+.table th {
+  background: #f3f8fc;
+}
+
+/* ================= MODAL ================= */
 
 .modal {
-  position: fixed !important;
+  position: fixed;
   inset: 0;
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 999;
 }
 
 .modal.is-open {
-  display: flex !important;
+  display: flex;
 }
 
 .modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.45);
 }
 
 .modal__dialog {
   position: relative;
-  background: white;
-  width: 850px;
+  background: #ffffff;
+  width: 900px;
   max-width: 95%;
   border-radius: 18px;
   padding: 30px;
   z-index: 2;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-/* زر الإغلاق */
+.modal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-.modal__close {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  background: #f1f5f9;
+.iconBtn {
   border: none;
+  background: #f3f8fc;
   border-radius: 8px;
   padding: 6px 10px;
   cursor: pointer;
-  font-size: 14px;
 }
 
-.modal__dialog form {
+.formGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
-.modal__dialog input,
-.modal__dialog select,
-.modal__dialog textarea {
-  height: 42px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1px solid #dbe5ef;
-  font-family: inherit !important;
+.field--full {
+  grid-column: span 2;
 }
 
-/* Responsive */
+.modal__foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
 
-@media (max-width: 1100px) {
-  .modal__dialog form {
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1000px) {
+  .shell {
     grid-template-columns: 1fr;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .field--full {
+    grid-column: span 1;
   }
 }
