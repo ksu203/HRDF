@@ -2,9 +2,8 @@
 // Supabase Configuration
 // =============================
 
-// ملاحظة: تأكد من مراجعة سياسات RLS في لوحة تحكم Supabase للسماح بالرفع والقراءة
 const SUPABASE_URL = "https://ygruefrffbpatidtldxd.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlncnVlZnJmZmJwYXRpZHRsZHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NTQyODksImV4cCI6MjA4NzUzMDI4OX0.9nOT9BqY5wlczibxgr1MBEJPJAAw6-9Msmo11r9UF7k";
+const SUPABASE_KEY = "YOUR_PUBLIC_ANON_KEY"; // ضع المفتاح هنا
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -13,14 +12,12 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 // =============================
 
 const $ = (sel, root = document) => root.querySelector(sel);
-const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-const STORAGE_KEY = "hrdf_irshad_content_v3";
-const COUNTER_KEY = "hrdf_irshad_content_counter_v1";
+const STORAGE_KEY = "hrdf_irshad_content_v4";
+const COUNTER_KEY = "hrdf_irshad_content_counter_v2";
 
 const state = {
-  items: [],
-  editingId: null,
+  items: []
 };
 
 function uid() {
@@ -50,11 +47,12 @@ function getNextNumber() {
 }
 
 // =============================
-// 🔥 Supabase Upload
+// Supabase Upload
 // =============================
 
 async function uploadToSupabase(file) {
   const fileName = Date.now() + "_" + file.name;
+
   try {
     const { error } = await supabaseClient.storage
       .from("media")
@@ -71,114 +69,177 @@ async function uploadToSupabase(file) {
       mime: file.type || "",
       size: file.size || 0,
       url: data.publicUrl,
-      uploadedAt: nowISO(),
+      uploadedAt: nowISO()
     };
-  } catch (error) {
-    console.error("Upload Error:", error);
-    alert("فشل رفع المرفق، يرجى التحقق من الاتصال أو سياسات التخزين.");
+  } catch (err) {
+    console.error(err);
+    alert("فشل رفع الملف");
     return null;
   }
 }
 
 // =============================
-// Render Logic
+// Stats
+// =============================
+
+function updateStats() {
+  const total = state.items.length;
+  const used = state.items.filter(i => i.isUsed).length;
+
+  const totalEl = $("#statTotal");
+  const usedEl = $("#statUsed");
+
+  if (totalEl) totalEl.textContent = total;
+  if (usedEl) usedEl.textContent = used;
+
+  updateTypeStats();
+}
+
+function updateTypeStats() {
+  const container = $("#typeStats");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const counts = {};
+
+  state.items.forEach(item => {
+    const type = item.contentType || "other";
+    counts[type] = (counts[type] || 0) + 1;
+  });
+
+  const labels = {
+    article: "مقال",
+    video: "فيديو",
+    images: "صور",
+    infographic: "انفوجرافيك",
+    audio: "صوت",
+    press: "لقاء صحفي",
+    podcast: "بودكاست"
+  };
+
+  Object.keys(labels).forEach(key => {
+    const value = counts[key] || 0;
+
+    const box = document.createElement("div");
+    box.style.padding = "8px 14px";
+    box.style.borderRadius = "20px";
+    box.style.background = "#f3f6f5";
+    box.style.fontSize = "0.85rem";
+    box.style.fontWeight = "600";
+    box.style.color = "#0B6B3A";
+    box.style.display = "flex";
+    box.style.gap = "6px";
+
+    box.innerHTML = `
+      <span>${labels[key]}</span>
+      <span style="background:#0B6B3A;color:#fff;padding:2px 8px;border-radius:12px;">
+        ${value}
+      </span>
+    `;
+
+    container.appendChild(box);
+  });
+}
+
+// =============================
+// Render
 // =============================
 
 function renderAttachment(att) {
   if (!att || !att.url) return "-";
-  const url = att.url;
-  const mime = att.mime || "";
 
-  let icon = "📄";
-  let actionText = "تحميل";
-
-  if (mime.startsWith("image/")) {
-    return `
-      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
-        <img src="${url}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;border:1px solid #ddd;" />
-        <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">عرض</button>
-      </div>`;
-  } else if (mime.startsWith("video/")) { icon = "🎥"; actionText = "عرض"; }
-    else if (mime.startsWith("audio/")) { icon = "🎵"; actionText = "تشغيل"; }
-
-  return `
-    <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
-      <span style="font-size:1.2rem;">${icon}</span>
-      <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">${actionText}</button>
-    </div>`;
+  return `<button onclick="window.open('${att.url}','_blank')" class="btn btn--ghost">عرض</button>`;
 }
 
 function render() {
   const tbody = $("#rows");
   if (!tbody) return;
+
   tbody.innerHTML = "";
 
   if (state.items.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px;">لا يوجد محتوى حالياً</td></tr>`;
-      return;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;">لا يوجد محتوى حالياً</td></tr>`;
+    updateStats();
+    return;
   }
 
   state.items.forEach(item => {
     const tr = document.createElement("tr");
+
+    if (item.isUsed) {
+      tr.style.background = "#f0f8f5";
+      tr.style.opacity = "0.8";
+    }
+
     tr.innerHTML = `
-      <td>${String(item.contentNumber).padStart(3, "0")}</td>
-      <td>${item.title || "-"}</td>
-      <td>${item.availableCount || 0}</td>
-      <td>${item.consumedCount || 0}</td>
+      <td>${String(item.contentNumber).padStart(3,"0")}</td>
+      <td>${item.title}</td>
       <td>${renderAttachment(item.attachment)}</td>
       <td>
-        <div style="display:flex; gap:5px; justify-content:center;">
-            <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
-            <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
-        </div>
+        <button onclick="toggleUsed('${item.id}')" class="btn btn--ghost">
+          ${item.isUsed ? "✓ مستخدم" : "تم استخدامه"}
+        </button>
+      </td>
+      <td>
+        <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
+        <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
       </td>
     `;
+
     tbody.appendChild(tr);
   });
+
+  updateStats();
 }
 
 // =============================
-// CRUD Actions
+// Actions
 // =============================
 
+function toggleUsed(id) {
+  const item = state.items.find(x => x.id === id);
+  if (!item) return;
+
+  item.isUsed = !item.isUsed;
+  saveLocal();
+  render();
+}
+
 function deleteItem(id) {
-  if (confirm("هل أنت متأكد من حذف هذا العنصر؟")) {
-    state.items = state.items.filter(x => x.id !== id);
-    saveLocal();
-    render();
-  }
+  if (!confirm("هل أنت متأكد؟")) return;
+  state.items = state.items.filter(x => x.id !== id);
+  saveLocal();
+  render();
 }
 
 function editItem(id) {
-    const item = state.items.find(x => x.id === id);
-    if (!item) return;
+  const item = state.items.find(x => x.id === id);
+  if (!item) return;
 
-    // تعبئة النموذج
-    $("#id").value = item.id;
-    $("#title").value = item.title;
-    $("#availableCount").value = item.availableCount;
-    $("#consumedCount").value = item.consumedCount;
-    
-    openModal();
+  $("#id").value = item.id;
+  $("#title").value = item.title;
+  $("#contentType").value = item.contentType || "article";
+
+  openModal();
 }
+
+// =============================
+// Submit
+// =============================
 
 $("#form").addEventListener("submit", async (e) => {
   e.preventDefault();
-  
-  const submitBtn = e.target.querySelector('button[type="submit"]');
-  submitBtn.disabled = true;
-  submitBtn.innerText = "جاري الحفظ...";
 
   const idField = $("#id").value;
   const isEdit = Boolean(idField);
   const id = isEdit ? idField : uid();
 
-  const file = $("#attachmentFile").files?.[0] || null;
   const prev = state.items.find(x => x.id === id);
+  const file = $("#attachmentFile").files?.[0] || null;
 
   let attachment = isEdit ? prev?.attachment : null;
 
-  // إذا تم اختيار ملف جديد، قم برفعه
   if (file) {
     const uploaded = await uploadToSupabase(file);
     if (uploaded) attachment = uploaded;
@@ -188,56 +249,49 @@ $("#form").addEventListener("submit", async (e) => {
     id,
     contentNumber: isEdit ? prev.contentNumber : getNextNumber(),
     title: $("#title").value.trim(),
-    availableCount: parseInt($("#availableCount").value || "0", 10),
-    consumedCount: parseInt($("#consumedCount").value || "0", 10),
+    contentType: $("#contentType").value,
     attachment,
+    isUsed: isEdit ? prev.isUsed : false,
     createdAt: isEdit ? prev.createdAt : nowISO(),
-    updatedAt: nowISO(),
+    updatedAt: nowISO()
   };
 
   const idx = state.items.findIndex(x => x.id === id);
-  if (idx >= 0) {
-    state.items[idx] = item;
-  } else {
-    state.items.unshift(item);
-  }
+  if (idx >= 0) state.items[idx] = item;
+  else state.items.unshift(item);
 
   saveLocal();
   render();
   closeModal();
-  
-  submitBtn.disabled = false;
-  submitBtn.innerText = "حفظ";
 });
 
 // =============================
-// Modal & Init
+// Modal
 // =============================
 
 const modal = $("#modal");
-const btnNew = $("#btnNew");
-const btnNew2 = $("#btnNew2");
-const btnClose = $("#btnClose");
 
 function openModal() {
   modal.classList.add("is-open");
-  modal.setAttribute("aria-hidden", "false");
 }
 
 function closeModal() {
   modal.classList.remove("is-open");
-  modal.setAttribute("aria-hidden", "true");
   $("#form").reset();
   $("#id").value = "";
 }
 
-btnNew?.addEventListener("click", openModal);
-btnNew2?.addEventListener("click", openModal);
-btnClose?.addEventListener("click", closeModal);
+$("#btnNew")?.addEventListener("click", openModal);
+$("#btnNew2")?.addEventListener("click", openModal);
+$("#btnClose")?.addEventListener("click", closeModal);
 
-document.querySelectorAll("[data-close]").forEach(el => {
-  el.addEventListener("click", closeModal);
-});
+document.querySelectorAll("[data-close]").forEach(el =>
+  el.addEventListener("click", closeModal)
+);
+
+// =============================
+// Init
+// =============================
 
 function init() {
   state.items = loadLocal();
@@ -245,22 +299,3 @@ function init() {
 }
 
 init();
-const dateInput = document.getElementById("materialDate");
-const datePreview = document.getElementById("datePreview");
-
-dateInput.addEventListener("change", function () {
-  if (!this.value) {
-    datePreview.textContent = "Select date";
-    return;
-  }
-
-  const date = new Date(this.value);
-
-  const formatted = date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric"
-  });
-
-  datePreview.textContent = formatted;
-});
