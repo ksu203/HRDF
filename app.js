@@ -2,7 +2,7 @@
 // Supabase Configuration
 // =============================
 
-const SUPABASE_URL = "https://ygruefrffbpatidtldxd.supabase.co";
+const SUPABASE_URL = "https://ygruefrffbpatidldxd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_8GpUTVWD4YNPJA3jFnrlDA_8fLTBTS2";
 
 const supabaseClient = supabase.createClient(
@@ -158,7 +158,20 @@ $("#form").addEventListener("submit", async (e) => {
   }
 
   saveLocal();
-  function renderAttachment(att) {
+  $("#modal").classList.remove("is-open");
+});
+
+// =============================
+// Init
+// =============================
+
+function init() {
+  state.items = loadLocal();
+  // =============================
+// Attachment Renderer
+// =============================
+
+function renderAttachment(att) {
   const url = att.url;
   const mime = att.mime || "";
 
@@ -197,16 +210,9 @@ $("#form").addEventListener("submit", async (e) => {
     </div>
   `;
 }
-  render();
-  $("#modal").classList.remove("is-open");
-});
+function render() {
+   ...
 
-// =============================
-// Init
-// =============================
-
-function init() {
-  state.items = loadLocal();
   render();
 }
 
