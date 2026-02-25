@@ -210,12 +210,9 @@ function renderAttachment(att) {
     </div>
   `;
 }
-function render() {
-   ...
-
+function render() 
   render();
 }
-
 init();
 // =============================
 // Modal Control
