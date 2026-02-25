@@ -14,109 +14,67 @@
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="topbar__brand">
-      <img class="logo" src="./hrdf-logo.png" alt="HRDF" />
-      <div class="topbar__title">
-        <div class="kicker">مبادرة إرشاد</div>
-        <h1>منصة إدارة المحتوى</h1>
+
+<header class="topbar">
+  <div class="topbar__brand">
+    <img class="logo" src="./hrdf-logo.png" alt="HRDF" />
+    <div class="topbar__title">
+      <div class="kicker">مبادرة إرشاد</div>
+      <h1>منصة إدارة المحتوى</h1>
+    </div>
+  </div>
+
+  <div class="topbar__actions">
+    <button class="btn btn--primary" id="btnNew">
+      <span class="icon">＋</span>
+      <span>محتوى جديد</span>
+    </button>
+  </div>
+</header>
+
+
+<div class="shell">
+
+<aside class="sidebar">
+  <div class="sidebar__card">
+    <div class="sidebar__logos">
+      <img class="logo logo--sm" src="./irshad-logo.png" alt="Irshad" />
+      <div class="sidebar__meta">
+        <div class="sidebar__metaTitle">إدارة المحتوى</div>
+        <div class="sidebar__metaSub">لوحة تحكم تفاعلية</div>
       </div>
     </div>
+  </div>
+</aside>
 
-    <div class="topbar__actions">
-      <button class="btn btn--ghost" id="btnTheme" type="button" title="تغيير المظهر">
-        <span class="icon" aria-hidden="true">◐</span>
-        <span>المظهر</span>
-      </button>
 
-      <button class="btn btn--primary" id="btnNew" type="button">
-        <span class="icon" aria-hidden="true">＋</span>
-        <span>محتوى جديد</span>
-      </button>
+<main class="main">
+
+<!-- Toolbar -->
+<section class="toolbar">
+  <div class="toolbar__left">
+    <div class="search">
+      <span class="search__icon">⌕</span>
+      <input id="q" class="input input--search"
+             type="search"
+             placeholder="ابحث بالرقم أو العنوان..."
+             autocomplete="off" />
     </div>
-  </header>
+  </div>
 
-  <div class="shell">
-    <aside class="sidebar" aria-label="لوحة التنقل">
-      <div class="sidebar__card">
-        <div class="sidebar__logos">
-          <img class="logo logo--sm" src="./irshad-logo.png" alt="Irshad" />
-          <div class="sidebar__meta">
-            <div class="sidebar__metaTitle">إدارة المحتوى</div>
-            <div class="sidebar__metaSub">إصدار تجريبي - قابل للربط بـ Firebase لاحقا</div>
-          </div>
-        </div>
+  <div class="toolbar__right">
+    <div class="pill" id="statsPill">0 عنصر</div>
+  </div>
+</section>
 
-        <div class="divider"></div>
 
-        <nav class="nav">
-          <button class="nav__item is-active" data-view="content" type="button">
-            <span class="nav__dot" aria-hidden="true"></span>
-            المحتوى
-          </button>
-          <button class="nav__item" data-view="settings" type="button">
-            <span class="nav__dot" aria-hidden="true"></span>
-            الإعدادات
-          </button>
-        </nav>
-      </div>
-
-      <div class="sidebar__card sidebar__hint">
-        <div class="hint__title">ملحوظة</div>
-        <div class="hint__text">
-          رفع المرفق حاليا يتم تخزينه داخل المتصفح (localStorage).
-          عند الربط بـ Firebase سيتم رفعه إلى Storage تلقائيا.
-        </div>
-      </div>
-    </aside>
-
-    <main class="main" aria-label="المحتوى الرئيسي">
-      <section class="toolbar">
-        <div class="toolbar__left">
-          <div class="search">
-            <span class="search__icon" aria-hidden="true">⌕</span>
-            <input id="q" class="input input--search" type="search" placeholder="ابحث بالرقم أو العنوان أو الوصف..." autocomplete="off" />
-          </div>
-
-          <select id="filterContentType" class="input input--select" aria-label="تصفية حسب نوع المحتوى">
-            <option value="all">كل أنواع المحتوى</option>
-            <option value="article">مقال</option>
-            <option value="video">فيديو</option>
-            <option value="images">صور</option>
-            <option value="infographic">انفوجرافيك</option>
-            <option value="audio">صوت</option>
-            <option value="press">لقاء صحفي</option>
-            <option value="podcast">بودكاست</option>
-          </select>
-
-          <select id="filterBeneficiary" class="input input--select" aria-label="تصفية حسب المستفيد">
-            <option value="all">كل المستفيدين</option>
-            <option value="career_counselor">مرشد مهني</option>
-            <option value="student">طالب</option>
-            <option value="career_advisor">موجه مهني</option>
-            <option value="job_seeker">باحث عن عمل</option>
-          </select>
-
-          <select id="sortBy" class="input input--select" aria-label="الترتيب">
-            <option value="number_desc">الرقم (تنازلي)</option>
-            <option value="number_asc">الرقم (تصاعدي)</option>
-            <option value="newest">الأحدث تحديثا</option>
-            <option value="oldest">الأقدم تحديثا</option>
-            <option value="title">العنوان</option>
-          </select>
-        </div>
-
-        <div class="toolbar__right">
-          <div class="pill" id="statsPill">0 عنصر</div>
-        </div>
-      </section>
-
-   <section class="grid">
+<!-- Stats -->
+<section class="grid">
 
   <article class="card card--stat">
     <div class="card__label">إجمالي المحتوى</div>
     <div class="card__value" id="statTotal">0</div>
-    <div class="card__sub">يشمل جميع العناصر في بنك المحتوى</div>
+    <div class="card__sub">يشمل جميع العناصر</div>
   </article>
 
   <article class="card card--stat">
@@ -125,157 +83,112 @@
     <div class="card__sub">عدد العناصر التي تم استخدامها</div>
   </article>
 
-      <section class="panel">
-        <div class="panel__head">
-          <div>
-            <h2 class="panel__title">قائمة المحتوى</h2>
-            <div class="panel__desc">الضغط على الصف يفتح التعديل، والرقم يتم توليده تلقائيا.</div>
-          </div>
-          <div class="panel__actions">
-            <button class="btn btn--ghost" id="btnExport" type="button">
-              <span class="icon" aria-hidden="true">⤓</span>
-              تصدير JSON
-            </button>
-          </div>
-        </div>
+  <article class="card card--stat card--wide">
+    <div class="card__label">إحصاء حسب نوع المحتوى</div>
+    <div id="typeStats" class="type-stats"></div>
+  </article>
 
-        <div class="tableWrap" role="region" aria-label="جدول المحتوى" tabindex="0">
-          <table class="table">
-            <thead>
-              <tr>
-                <th style="width:110px;">رقم</th>
-                <th>العنوان</th>
-                <th class="hide-md">نوع المحتوى</th>
-                <th class="hide-md">المستفيد</th>
-                <th class="hide-md">تاريخ المادة</th>
-                <th>المتاح</th>
-                <th>المستهلك</th>
-                <th class="col-actions">مرفق</th>
-                <th class="col-actions">إجراءات</th>
-              </tr>
-            </thead>
-            <tbody id="rows"></tbody>
-          </table>
-        </div>
+</section>
 
-        <div class="empty" id="emptyState" hidden>
-          <div class="empty__icon" aria-hidden="true">📁</div>
-          <div class="empty__title">لا يوجد محتوى مطابق</div>
-          <div class="empty__text">غيّر التصفية أو أضف محتوى جديد.</div>
-          <button class="btn btn--primary" id="btnNew2" type="button">إضافة محتوى</button>
-        </div>
-      </section>
-    </main>
-  </div>
 
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal__backdrop" data-close="true"></div>
+<!-- Table -->
+<section class="panel">
 
-    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal__head">
-        <div>
-          <div class="modal__kicker" id="modalKicker">محتوى</div>
-          <h3 class="modal__title" id="modalTitle">إضافة / تعديل محتوى</h3>
-        </div>
-
-        <button class="iconBtn" id="btnClose" type="button" aria-label="إغلاق">✕</button>
+  <div class="panel__head">
+    <div>
+      <h2 class="panel__title">قائمة المحتوى</h2>
+      <div class="panel__desc">
+        يمكن الضغط على نوع المحتوى من الإحصاء للفلترة
       </div>
-
-      <form class="modal__body" id="form">
-        <input type="hidden" id="id" />
-
-        <div class="formGrid">
-          <div class="field">
-            <label class="label" for="number">رقم المحتوى</label>
-            <input class="input" id="number" name="number" disabled />
-            <div class="help">يتم إنشاؤه تلقائيا (تعداد رقمي)</div>
-          </div>
-
-          <div class="field">
-            <label class="label" for="materialDate">تاريخ المادة</label>
-            <input class="input" id="materialDate" name="materialDate" type="date" required />
-          </div>
-
-          <div class="field field--full">
-            <label class="label" for="title">العنوان</label>
-            <input class="input" id="title" name="title" required maxlength="120" placeholder="مثال: دليل المرشد المهني" />
-            <div class="help">حد أقصى 120 حرف</div>
-          </div>
-
-          <div class="field">
-            <label class="label" for="contentType">نوع المحتوى</label>
-            <select class="input input--select" id="contentType" name="contentType" required>
-              <option value="article">مقال</option>
-              <option value="video">فيديو</option>
-              <option value="images">صور</option>
-              <option value="infographic">انفوجرافيك</option>
-              <option value="audio">صوت</option>
-              <option value="press">لقاء صحفي</option>
-              <option value="podcast">بودكاست</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label class="label" for="beneficiary">من هو المستفيد</label>
-            <select class="input input--select" id="beneficiary" name="beneficiary" required>
-              <option value="career_counselor">مرشد مهني</option>
-              <option value="student">طالب</option>
-              <option value="career_advisor">موجه مهني</option>
-              <option value="job_seeker">باحث عن عمل</option>
-            </select>
-          </div>
-
-
-          <div class="field">
-            <label class="label" for="attachmentType">نوع المرفق</label>
-            <select class="input input--select" id="attachmentType" name="attachmentType" required>
-              <option value="text">نص</option>
-              <option value="image">صوره</option>
-              <option value="audio">صوت</option>
-              <option value="video">فيديو</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label class="label" for="attachmentFile">تحميل المرفق</label>
-            <input class="input" id="attachmentFile" name="attachmentFile" type="file" />
-            <div class="help" id="attachmentHint">اختياري - سيتم حفظه محليا حاليا</div>
-          </div>
-
-          <div class="field field--full">
-            <label class="label" for="summary">وصف مختصر</label>
-            <textarea class="input input--textarea" id="summary" name="summary" rows="3" maxlength="400" placeholder="ملخص قصير..."></textarea>
-          </div>
-
-          <div class="field field--full">
-            <label class="label" for="body">المحتوى</label>
-            <textarea class="input input--textarea" id="body" name="body" rows="10" placeholder="اكتب المحتوى هنا..."></textarea>
-          </div>
-        </div>
-
-        <div class="modal__foot">
-          <button class="btn btn--danger" id="btnDelete" type="button" hidden>
-            <span class="icon" aria-hidden="true">🗑</span>
-            حذف
-          </button>
-
-          <div class="modal__footRight">
-            <button class="btn btn--ghost" type="button" data-close="true">إلغاء</button>
-            <button class="btn btn--primary" id="btnSave" type="submit">
-              <span class="icon" aria-hidden="true">✔</span>
-              حفظ
-            </button>
-          </div>
-        </div>
-      </form>
     </div>
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden>
-    <div class="toast__dot" aria-hidden="true"></div>
-    <div class="toast__text" id="toastText">تم</div>
+  <div class="tableWrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="width:100px;">رقم</th>
+          <th>العنوان</th>
+          <th>نوع المحتوى</th>
+          <th>مرفق</th>
+          <th>الحالة</th>
+          <th style="width:160px;">إجراءات</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
   </div>
+
+  <div class="empty" id="emptyState" hidden>
+    <div class="empty__icon">📁</div>
+    <div class="empty__title">لا يوجد محتوى</div>
+    <button class="btn btn--primary" id="btnNew2">إضافة محتوى</button>
+  </div>
+
+</section>
+
+</main>
+</div>
+
+
+<!-- Modal -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal__backdrop" data-close="true"></div>
+
+  <div class="modal__dialog">
+    <div class="modal__head">
+      <h3>إضافة / تعديل محتوى</h3>
+      <button class="iconBtn" id="btnClose">✕</button>
+    </div>
+
+    <form class="modal__body" id="form">
+
+      <input type="hidden" id="id" />
+
+      <div class="formGrid">
+
+        <div class="field">
+          <label class="label">رقم المحتوى</label>
+          <input class="input" id="number" disabled />
+        </div>
+
+        <div class="field field--full">
+          <label class="label">العنوان</label>
+          <input class="input" id="title" required />
+        </div>
+
+        <div class="field">
+          <label class="label">نوع المحتوى</label>
+          <select class="input input--select" id="contentType" required>
+            <option value="article">مقال</option>
+            <option value="video">فيديو</option>
+            <option value="images">صور</option>
+            <option value="infographic">انفوجرافيك</option>
+            <option value="audio">صوت</option>
+            <option value="press">لقاء صحفي</option>
+            <option value="podcast">بودكاست</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="label">تحميل المرفق</label>
+          <input class="input" id="attachmentFile" type="file" />
+        </div>
+
+      </div>
+
+      <div class="modal__foot">
+        <button class="btn btn--ghost" type="button" data-close="true">إلغاء</button>
+        <button class="btn btn--primary" type="submit">حفظ</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./app.js"></script>
+
 </body>
 </html>
