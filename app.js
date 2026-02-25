@@ -245,3 +245,22 @@ function init() {
 }
 
 init();
+const dateInput = document.getElementById("materialDate");
+const datePreview = document.getElementById("datePreview");
+
+dateInput.addEventListener("change", function () {
+  if (!this.value) {
+    datePreview.textContent = "Select date";
+    return;
+  }
+
+  const date = new Date(this.value);
+
+  const formatted = date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+
+  datePreview.textContent = formatted;
+});
