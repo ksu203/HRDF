@@ -13,8 +13,10 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const $ = (sel, root = document) => root.querySelector(sel);
 
-const STORAGE_KEY = "hrdf_irshad_content_v4";
-const COUNTER_KEY = "hrdf_irshad_content_counter_v2";
+const STORAGE_KEY = "hrdf_irshad_content_v5";
+const COUNTER_KEY = "hrdf_irshad_content_counter_v3";
+
+let activeTypeFilter = "all";
 
 const state = {
   items: []
@@ -86,11 +88,8 @@ function updateStats() {
   const total = state.items.length;
   const used = state.items.filter(i => i.isUsed).length;
 
-  const totalEl = $("#statTotal");
-  const usedEl = $("#statUsed");
-
-  if (totalEl) totalEl.textContent = total;
-  if (usedEl) usedEl.textContent = used;
+  $("#statTotal").textContent = total;
+  $("#statUsed").textContent = used;
 
   updateTypeStats();
 }
@@ -102,7 +101,6 @@ function updateTypeStats() {
   container.innerHTML = "";
 
   const counts = {};
-
   state.items.forEach(item => {
     const type = item.contentType || "other";
     counts[type] = (counts[type] || 0) + 1;
@@ -118,25 +116,45 @@ function updateTypeStats() {
     podcast: "بودكاست"
   };
 
+  const colors = {
+    article: "#0B6B3A",
+    video: "#2563eb",
+    images: "#9333ea",
+    infographic: "#f59e0b",
+    audio: "#14b8a6",
+    press: "#ef4444",
+    podcast: "#6366f1"
+  };
+
   Object.keys(labels).forEach(key => {
     const value = counts[key] || 0;
 
     const box = document.createElement("div");
+    box.style.cursor = "pointer";
     box.style.padding = "8px 14px";
     box.style.borderRadius = "20px";
-    box.style.background = "#f3f6f5";
-    box.style.fontSize = "0.85rem";
-    box.style.fontWeight = "600";
-    box.style.color = "#0B6B3A";
     box.style.display = "flex";
-    box.style.gap = "6px";
+    box.style.gap = "8px";
+    box.style.alignItems = "center";
+    box.style.fontWeight = "600";
+    box.style.background = activeTypeFilter === key ? colors[key] : "#f3f6f5";
+    box.style.color = activeTypeFilter === key ? "#fff" : "#0B6B3A";
 
     box.innerHTML = `
       <span>${labels[key]}</span>
-      <span style="background:#0B6B3A;color:#fff;padding:2px 8px;border-radius:12px;">
+      <span style="
+        background:${activeTypeFilter === key ? "rgba(255,255,255,0.3)" : colors[key]};
+        color:#fff;
+        padding:2px 8px;
+        border-radius:12px;">
         ${value}
       </span>
     `;
+
+    box.addEventListener("click", () => {
+      activeTypeFilter = activeTypeFilter === key ? "all" : key;
+      render();
+    });
 
     container.appendChild(box);
   });
@@ -148,23 +166,48 @@ function updateTypeStats() {
 
 function renderAttachment(att) {
   if (!att || !att.url) return "-";
-
   return `<button onclick="window.open('${att.url}','_blank')" class="btn btn--ghost">عرض</button>`;
 }
 
 function render() {
   const tbody = $("#rows");
-  if (!tbody) return;
+  const searchTerm = $("#q")?.value?.toLowerCase() || "";
 
+  if (!tbody) return;
   tbody.innerHTML = "";
 
-  if (state.items.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;">لا يوجد محتوى حالياً</td></tr>`;
+  let filtered = state.items;
+
+  if (activeTypeFilter !== "all") {
+    filtered = filtered.filter(i => i.contentType === activeTypeFilter);
+  }
+
+  if (searchTerm) {
+    filtered = filtered.filter(i =>
+      i.title.toLowerCase().includes(searchTerm) ||
+      String(i.contentNumber).includes(searchTerm)
+    );
+  }
+
+  $("#statsPill").textContent = `${filtered.length} عنصر`;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;">لا يوجد محتوى مطابق</td></tr>`;
     updateStats();
     return;
   }
 
-  state.items.forEach(item => {
+  const labels = {
+    article: "مقال",
+    video: "فيديو",
+    images: "صور",
+    infographic: "انفوجرافيك",
+    audio: "صوت",
+    press: "لقاء صحفي",
+    podcast: "بودكاست"
+  };
+
+  filtered.forEach(item => {
     const tr = document.createElement("tr");
 
     if (item.isUsed) {
@@ -175,6 +218,17 @@ function render() {
     tr.innerHTML = `
       <td>${String(item.contentNumber).padStart(3,"0")}</td>
       <td>${item.title}</td>
+      <td>
+        <span style="
+          padding:4px 10px;
+          border-radius:14px;
+          background:#e8f5ef;
+          color:#0B6B3A;
+          font-weight:600;
+          font-size:0.8rem;">
+          ${labels[item.contentType] || "-"}
+        </span>
+      </td>
       <td>${renderAttachment(item.attachment)}</td>
       <td>
         <button onclick="toggleUsed('${item.id}')" class="btn btn--ghost">
@@ -288,6 +342,12 @@ $("#btnClose")?.addEventListener("click", closeModal);
 document.querySelectorAll("[data-close]").forEach(el =>
   el.addEventListener("click", closeModal)
 );
+
+// =============================
+// Search
+// =============================
+
+$("#q")?.addEventListener("input", render);
 
 // =============================
 // Init
