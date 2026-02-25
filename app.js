@@ -52,16 +52,29 @@ function getNextNumber() {
 // =============================
 
 async function uploadToSupabase(file) {
-  const fileName = Date.now() + "_" + file.name;
+
+  // تنظيف اسم الملف من المسافات والأحرف غير المسموحة
+  const cleanName = file.name
+    .replace(/\s+/g, "_")
+    .replace(/[^\w.\-]/g, "");
+
+  const fileName = `${Date.now()}_${cleanName}`;
 
   try {
-    const { error } = await supabaseClient.storage
+    const { data, error } = await supabaseClient.storage
       .from("media")
-      .upload(fileName, file);
+      .upload(fileName, file, {
+        cacheControl: "3600",
+        upsert: false
+      });
 
-    if (error) throw error;
+    if (error) {
+      console.error("Upload error:", error);
+      alert(error.message);
+      return null;
+    }
 
-    const { data } = supabaseClient.storage
+    const { data: publicData } = supabaseClient.storage
       .from("media")
       .getPublicUrl(fileName);
 
@@ -69,15 +82,15 @@ async function uploadToSupabase(file) {
       name: file.name,
       mime: file.type || "",
       size: file.size || 0,
-      url: data.publicUrl,
+      url: publicData.publicUrl,
       uploadedAt: nowISO()
     };
+
   } catch (err) {
     console.error(err);
-    alert("فشل رفع الملف");
+    alert("حدث خطأ أثناء رفع الملف");
     return null;
   }
-}
 
 // =============================
 // Stats
