@@ -231,3 +231,89 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .toast.is-visible {
   bottom: 16px; /* يرتفع ليظهر عند التفعيل */
 }
+/* =========================================
+   إعدادات النافذة المنبثقة (Modal)
+========================================= */
+
+/* إخفاء النافذة افتراضياً وجعلها تطفو فوق الشاشة */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none; 
+  z-index: 50;
+}
+
+/* إظهار النافذة عند تفعيلها بالضغط على الزر */
+.modal.is-open {
+  display: block; 
+}
+
+/* التعتيم الزجاجي خلف النافذة */
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+/* الحاوية الأساسية للنافذة وتوسيطها */
+.modal__dialog {
+  position: relative;
+  width: min(900px, calc(100% - 20px));
+  max-height: 90vh;
+  margin: 5vh auto;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: #121814;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  overflow-y: auto;
+}
+
+/* تنسيق أقسام النافذة الداخلية */
+.modal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal__body { padding: 14px; }
+
+.modal__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* ترتيب حقول الإدخال بشكل شبكي */
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.field--full { grid-column: 1 / -1; }
+.label { display: block; font-size: 12px; color: var(--muted); font-weight: 800; margin-bottom: 6px; }
+
+/* إعدادات التنبيهات (Toast) أسفل الشاشة */
+.toast {
+  position: fixed;
+  bottom: -100px; /* مخفي في الأسفل */
+  left: 16px;
+  z-index: 60;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--hrdf-orange);
+  background: rgba(18, 24, 20, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  transition: bottom 0.3s ease;
+}
+.toast.is-visible {
+  bottom: 16px; /* يرتفع ليظهر عند التفعيل */
+}
