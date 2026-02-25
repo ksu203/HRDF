@@ -164,10 +164,7 @@ $("#form").addEventListener("submit", async (e) => {
 // =============================
 // Init
 // =============================
-
-function init() {
-  state.items = loadLocal();
-  // =============================
+// =============================
 // Attachment Renderer
 // =============================
 
@@ -210,9 +207,16 @@ function renderAttachment(att) {
     </div>
   `;
 }
-function render() 
+
+// =============================
+// Init
+// =============================
+
+function init() {
+  state.items = loadLocal();
   render();
 }
+
 init();
 // =============================
 // Modal Control
