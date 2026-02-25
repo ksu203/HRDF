@@ -3,7 +3,7 @@
 // =============================
 
 const SUPABASE_URL = "https://ygruefrffbpatidtldxd.supabase.co";
-const SUPABASE_KEY = "sb_publishable_8GpUTVWD4YNPJA3jFnrlDA_8fLTBTS2";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlncnVlZnJmZmJwYXRpZHRsZHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NTQyODksImV4cCI6MjA4NzUzMDI4OX0.9nOT9BqY5wlczibxgr1MBEJPJAAw6-9Msmo11r9UF7k";
 
 const supabaseClient = supabase.createClient(
   SUPABASE_URL,
