@@ -1,151 +1,178 @@
-/* ================= RESET ================= */
+/* ================== GLOBAL ================== */
 
 * {
   box-sizing: border-box;
+  font-family: "SST Arabic", "Tajawal", system-ui, sans-serif !important;
 }
 
 body {
   margin: 0;
-  font-family: "SST Arabic", "Tajawal", system-ui, sans-serif;
   direction: rtl;
-  background: linear-gradient(180deg, #eef6fb 0%, #f8fcff 100%);
+  background: linear-gradient(180deg, #eef6fb, #f8fcff);
   color: #123c2a;
 }
 
-/* ================= TOPBAR ================= */
+/* ================== HEADER ================== */
 
+header,
 .topbar {
-  height: 65px !important;
+  height: 60px !important;
+  min-height: 60px !important;
   padding: 0 30px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  background: rgba(255,255,255,0.9) !important;
-  border-bottom: 1px solid #dce9f3 !important;
+  background: rgba(255,255,255,0.95) !important;
+  border-bottom: 1px solid #dde7f0 !important;
 }
 
+.logo img,
 .logo {
-  width: 85px !important;
-  height: 85px !important;
-  object-fit: contain;
+  width: 80px !important;
+  height: auto !important;
 }
 
-/* ================= MAIN TITLE SECTION ================= */
+/* ================== TITLE ================== */
 
-.hero {
-  padding: 40px 30px 20px 30px;
-}
-
-.hero h1 {
-  font-size: 32px;
+.hero h1,
+h1 {
+  font-size: 30px;
   margin: 0;
+  font-weight: 700;
   color: #0B6B3A;
 }
 
-/* ================= SEARCH & FILTER ================= */
+/* ================== TOOLBAR ================== */
 
 .toolbar {
   display: flex !important;
-  gap: 12px;
   flex-wrap: wrap;
+  gap: 12px;
   align-items: center;
-  padding: 20px !important;
-  background: rgba(255,255,255,0.85) !important;
-  border-radius: 18px;
-  border: 1px solid #dce9f3;
+  padding: 18px !important;
+  background: white !important;
+  border-radius: 16px;
+  border: 1px solid #e4edf5;
 }
 
-.toolbar select,
-.toolbar input {
-  height: 45px;
+.toolbar input,
+.toolbar select {
+  height: 42px;
   padding: 0 14px;
-  border-radius: 12px;
-  border: 1px solid #dce9f3;
-  min-width: 220px;
+  border-radius: 10px;
+  border: 1px solid #dbe5ef;
+  font-size: 14px;
+  font-family: inherit !important;
 }
 
-/* ================= STAT CARDS ================= */
+/* ================== STAT CARDS ================== */
 
 .grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
   margin-top: 20px;
 }
 
 .card--stat {
-  padding: 18px !important;
-  border-radius: 16px;
   background: white !important;
-  border: 1px solid #e4edf5 !important;
-  min-height: 90px;
+  border-radius: 14px;
+  border: 1px solid #e4edf5;
+  padding: 16px !important;
+  min-height: 80px !important;
 }
 
 .card--stat h3 {
-  font-size: 14px;
-  margin: 0 0 6px 0;
+  font-size: 13px;
+  margin: 0 0 5px 0;
   color: #6b8a7a;
 }
 
 .card__value {
-  font-size: 24px !important;
-  font-weight: bold;
+  font-size: 22px !important;
+  font-weight: 700;
   color: #0077b6 !important;
 }
 
-/* ================= TABLE ================= */
+/* ================== TABLE ================== */
 
 .table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
   background: white;
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
 }
 
-.table th {
-  background: #f2f7fb;
-  padding: 14px;
-  font-weight: bold;
-}
-
+.table th,
 .table td {
   padding: 14px;
   border-bottom: 1px solid #eef3f8;
 }
 
-.table tr:hover {
-  background: #f8fbff;
+/* ================== MODAL FIXED PROPERLY ================== */
+
+.modal {
+  position: fixed !important;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
-/* ================= MODAL ================= */
+.modal.is-open {
+  display: flex !important;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+}
 
 .modal__dialog {
-  width: 800px !important;
+  position: relative;
+  background: white;
+  width: 850px;
   max-width: 95%;
-  border-radius: 20px;
-  padding: 30px !important;
-  background: white !important;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+  border-radius: 18px;
+  padding: 30px;
+  z-index: 2;
+}
+
+/* زر الإغلاق */
+
+.modal__close {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .modal__dialog form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: 16px;
 }
 
 .modal__dialog input,
 .modal__dialog select,
 .modal__dialog textarea {
-  height: 45px;
+  height: 42px;
   padding: 0 14px;
-  border-radius: 12px;
-  border: 1px solid #dce9f3;
+  border-radius: 10px;
+  border: 1px solid #dbe5ef;
+  font-family: inherit !important;
 }
 
-/* ================= RESPONSIVE ================= */
+/* Responsive */
 
 @media (max-width: 1100px) {
   .modal__dialog form {
