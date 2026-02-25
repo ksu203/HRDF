@@ -2,7 +2,7 @@
 // Supabase Configuration
 // =============================
 
-const SUPABASE_URL = "https://ygruefrffbpatidldxd.supabase.co";
+const SUPABASE_URL = "https://ygruefrffbpatidtldxd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_8GpUTVWD4YNPJA3jFnrlDA_8fLTBTS2";
 
 const supabaseClient = supabase.createClient(
