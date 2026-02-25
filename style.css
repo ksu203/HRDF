@@ -78,28 +78,6 @@ body {
   width: 60px;
 }
 
-.divider {
-  height: 1px;
-  background: #e6eef5;
-  margin: 15px 0;
-}
-
-.nav__item {
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  text-align: right;
-}
-
-.nav__item.is-active {
-  background: #eef6fb;
-  color: #0B6B3A;
-  font-weight: 600;
-}
-
 /* ================= TOOLBAR ================= */
 
 .toolbar {
@@ -112,12 +90,6 @@ body {
   border-radius: 16px;
   padding: 18px;
   border: 1px solid #e6eef5;
-}
-
-.toolbar__left {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
 }
 
 .search {
@@ -152,6 +124,7 @@ body {
   border-radius: 20px;
   font-size: 13px;
   color: #0B6B3A;
+  font-weight: 600;
 }
 
 /* ================= STAT CARDS ================= */
@@ -168,6 +141,12 @@ body {
   border-radius: 16px;
   padding: 18px;
   border: 1px solid #e6eef5;
+  transition: 0.2s ease;
+}
+
+.card--stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
 .card__label {
@@ -185,6 +164,24 @@ body {
 .card__sub {
   font-size: 12px;
   color: #888;
+}
+
+/* ================= TYPE STATS ================= */
+
+.type-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.type-stats div {
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.type-stats div:hover {
+  transform: translateY(-2px);
 }
 
 /* ================= PANEL ================= */
@@ -226,13 +223,38 @@ body {
   padding: 12px;
   border-bottom: 1px solid #eef3f8;
   font-size: 14px;
+  text-align: center;
 }
 
 .table th {
   background: #f3f8fc;
 }
 
-/* ================= MODAL LUXURY VERSION ================= */
+.table tr:hover {
+  background: #f8fbff;
+  transition: 0.2s ease;
+}
+
+/* ================= BADGES ================= */
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  display: inline-block;
+}
+
+.badge-article { background: #0B6B3A; }
+.badge-video { background: #2563eb; }
+.badge-images { background: #9333ea; }
+.badge-infographic { background: #f59e0b; }
+.badge-audio { background: #14b8a6; }
+.badge-press { background: #ef4444; }
+.badge-podcast { background: #6366f1; }
+
+/* ================= MODAL ================= */
 
 .modal {
   position: fixed;
@@ -254,11 +276,9 @@ body {
   backdrop-filter: blur(6px);
 }
 
-/* ===== DIALOG ===== */
-
 .modal__dialog {
   position: relative;
-  width: 1000px;
+  width: 900px;
   max-width: 95%;
   max-height: 90vh;
   overflow-y: auto;
@@ -269,21 +289,13 @@ body {
   z-index: 2;
 }
 
-/* ===== HEADER ===== */
-
 .modal__head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   padding-bottom: 15px;
   border-bottom: 1px solid #eef3f8;
-}
-
-.modal__kicker {
-  font-size: 13px;
-  color: #6b8a7a;
-  margin-bottom: 5px;
 }
 
 .modal__title {
@@ -293,28 +305,7 @@ body {
   color: #0B6B3A;
 }
 
-/* زر الإغلاق */
-
-.iconBtn {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: none;
-  background: #f3f8fc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: 0.2s ease;
-  font-size: 16px;
-}
-
-.iconBtn:hover {
-  background: #e6eef5;
-  transform: rotate(90deg);
-}
-
-/* ===== FORM GRID ===== */
+/* ================= FORM ================= */
 
 .formGrid {
   display: grid;
@@ -322,13 +313,9 @@ body {
   gap: 20px 30px;
 }
 
-/* Full width fields */
-
 .field--full {
   grid-column: span 2;
 }
-
-/* ===== FIELD STYLING ===== */
 
 .field {
   display: flex;
@@ -346,8 +333,6 @@ body {
   font-size: 12px;
   color: #888;
 }
-
-/* Inputs */
 
 .input {
   height: 44px;
@@ -369,23 +354,7 @@ body {
   padding: 12px;
 }
 
-/* ===== FOOTER ===== */
-
-.modal__foot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 30px;
-  padding-top: 15px;
-  border-top: 1px solid #eef3f8;
-}
-
-.modal__footRight {
-  display: flex;
-  gap: 10px;
-}
-
-/* Buttons */
+/* ================= BUTTONS ================= */
 
 .btn {
   padding: 9px 16px;
@@ -393,6 +362,7 @@ body {
   font-size: 14px;
   cursor: pointer;
   border: none;
+  transition: 0.2s ease;
 }
 
 .btn--primary {
@@ -408,22 +378,15 @@ body {
   background: #f3f8fc;
 }
 
+.btn--secondary {
+  background: #eef3f8;
+}
+
 .btn--danger {
   background: #fcebea;
   color: #c0392b;
 }
 
-/* ===== RESPONSIVE ===== */
-
-@media (max-width: 900px) {
-  .formGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .field--full {
-    grid-column: span 1;
-  }
-  
 /* ================= RESPONSIVE ================= */
 
 @media (max-width: 1000px) {
@@ -438,26 +401,4 @@ body {
   .field--full {
     grid-column: span 1;
   }
-}
-/* ===== DATE FIELD IMPROVED ===== */
-
-.dateField {
-  position: relative;
-}
-
-.dateInput {
-  background: #fff;
-  cursor: pointer;
-}
-
-.dateInput::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  position: absolute;
-  left: 10px;
-  cursor: pointer;
-.datePreview {
-  margin-top: 6px;
-  font-size: 13px;
-  color: #0077b6;
-  font-weight: 600;
 }
