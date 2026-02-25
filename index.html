@@ -43,6 +43,7 @@
           <img class="logo logo--sm" src="./irshad-logo.png" alt="Irshad" />
           <div class="sidebar__meta">
             <div class="sidebar__metaTitle">إدارة المحتوى</div>
+            <div class="sidebar__metaSub">إصدار تجريبي - قابل للربط بـ Firebase لاحقا</div>
           </div>
         </div>
 
@@ -55,6 +56,8 @@
           </button>
           <button class="nav__item" data-view="settings" type="button">
             <span class="nav__dot" aria-hidden="true"></span>
+            الإعدادات
+          </button>
         </nav>
       </div>
 
@@ -108,31 +111,19 @@
         </div>
       </section>
 
-      <section class="grid">
-        <article class="card card--stat">
-          <div class="card__label">إجمالي المحتوى</div>
-          <div class="card__value" id="statTotal">0</div>
-          <div class="card__sub">يشمل جميع الأنواع</div>
-        </article>
+   <section class="grid">
 
-        <article class="card card--stat">
-          <div class="card__label">إجمالي المتاح</div>
-          <div class="card__value" id="statAvailable">0</div>
-          <div class="card__sub">مجموع العدد المتاح</div>
-        </article>
+  <article class="card card--stat">
+    <div class="card__label">إجمالي المحتوى</div>
+    <div class="card__value" id="statTotal">0</div>
+    <div class="card__sub">يشمل جميع العناصر في بنك المحتوى</div>
+  </article>
 
-        <article class="card card--stat">
-          <div class="card__label">إجمالي المستهلك</div>
-          <div class="card__value" id="statConsumed">0</div>
-          <div class="card__sub">مجموع العدد المستهلك</div>
-        </article>
-
-        <article class="card card--stat">
-          <div class="card__label">نسبة الاستهلاك</div>
-          <div class="card__value" id="statRate">0%</div>
-          <div class="card__sub">مستهلك / (متاح + مستهلك)</div>
-        </article>
-      </section>
+  <article class="card card--stat">
+    <div class="card__label">المحتوى المستخدم</div>
+    <div class="card__value" id="statUsed">0</div>
+    <div class="card__sub">عدد العناصر التي تم استخدامها</div>
+  </article>
 
       <section class="panel">
         <div class="panel__head">
@@ -202,10 +193,8 @@
 
           <div class="field">
             <label class="label" for="materialDate">تاريخ المادة</label>
-<div class="dateField">
-  <input class="input dateInput" id="materialDate" name="materialDate" type="date" required />
-  <div class="datePreview" id="datePreview">Select date</div>
-</div>   
+            <input class="input" id="materialDate" name="materialDate" type="date" required />
+          </div>
 
           <div class="field field--full">
             <label class="label" for="title">العنوان</label>
@@ -236,15 +225,6 @@
             </select>
           </div>
 
-          <div class="field">
-            <label class="label" for="availableCount">العدد المتاح</label>
-            <input class="input" id="availableCount" name="availableCount" type="number" min="0" step="1" placeholder="00" required />
-          </div>
-
-          <div class="field">
-            <label class="label" for="consumedCount">العدد المستهلك</label>
-            <input class="input" id="consumedCount" name="consumedCount" type="number" min="0" step="1" placeholder="000" required />
-          </div>
 
           <div class="field">
             <label class="label" for="attachmentType">نوع المرفق</label>
