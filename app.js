@@ -2,29 +2,24 @@
 // Supabase Configuration
 // =============================
 
+// ملاحظة: تأكد من مراجعة سياسات RLS في لوحة تحكم Supabase للسماح بالرفع والقراءة
 const SUPABASE_URL = "https://ygruefrffbpatidtldxd.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlncnVlZnJmZmJwYXRpZHRsZHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NTQyODksImV4cCI6MjA4NzUzMDI4OX0.9nOT9BqY5wlczibxgr1MBEJPJAAw6-9Msmo11r9UF7k";
 
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// =============================
+// Helpers & State
 // =============================
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
 const STORAGE_KEY = "hrdf_irshad_content_v3";
-const THEME_KEY = "hrdf_irshad_theme";
 const COUNTER_KEY = "hrdf_irshad_content_counter_v1";
 
 const state = {
   items: [],
-  q: "",
-  filterContentType: "all",
-  filterBeneficiary: "all",
-  sortBy: "number_desc",
   editingId: null,
 };
 
@@ -60,83 +55,133 @@ function getNextNumber() {
 
 async function uploadToSupabase(file) {
   const fileName = Date.now() + "_" + file.name;
+  try {
+    const { error } = await supabaseClient.storage
+      .from("media")
+      .upload(fileName, file);
 
-  const { error } = await supabaseClient.storage
-    .from("media")
-    .upload(fileName, file);
+    if (error) throw error;
 
-  if (error) {
-    console.error(error);
-    alert("فشل رفع المرفق");
+    const { data } = supabaseClient.storage
+      .from("media")
+      .getPublicUrl(fileName);
+
+    return {
+      name: file.name,
+      mime: file.type || "",
+      size: file.size || 0,
+      url: data.publicUrl,
+      uploadedAt: nowISO(),
+    };
+  } catch (error) {
+    console.error("Upload Error:", error);
+    alert("فشل رفع المرفق، يرجى التحقق من الاتصال أو سياسات التخزين.");
     return null;
   }
-
-  const { data } = supabaseClient.storage
-    .from("media")
-    .getPublicUrl(fileName);
-
-  return {
-    name: file.name,
-    mime: file.type || "",
-    size: file.size || 0,
-    url: data.publicUrl,
-    uploadedAt: nowISO(),
-  };
 }
 
 // =============================
-// Render
+// Render Logic
 // =============================
+
+function renderAttachment(att) {
+  if (!att || !att.url) return "-";
+  const url = att.url;
+  const mime = att.mime || "";
+
+  let icon = "📄";
+  let actionText = "تحميل";
+
+  if (mime.startsWith("image/")) {
+    return `
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
+        <img src="${url}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;border:1px solid #ddd;" />
+        <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">عرض</button>
+      </div>`;
+  } else if (mime.startsWith("video/")) { icon = "🎥"; actionText = "عرض"; }
+    else if (mime.startsWith("audio/")) { icon = "🎵"; actionText = "تشغيل"; }
+
+  return `
+    <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+      <span style="font-size:1.2rem;">${icon}</span>
+      <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">${actionText}</button>
+    </div>`;
+}
 
 function render() {
   const tbody = $("#rows");
+  if (!tbody) return;
   tbody.innerHTML = "";
 
-  for (const item of state.items) {
-    const tr = document.createElement("tr");
+  if (state.items.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px;">لا يوجد محتوى حالياً</td></tr>`;
+      return;
+  }
 
+  state.items.forEach(item => {
+    const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${String(item.contentNumber).padStart(3,"0")}</td>
+      <td>${String(item.contentNumber).padStart(3, "0")}</td>
       <td>${item.title || "-"}</td>
       <td>${item.availableCount || 0}</td>
       <td>${item.consumedCount || 0}</td>
+      <td>${renderAttachment(item.attachment)}</td>
       <td>
-       ${item.attachment?.url ? renderAttachment(item.attachment) : "-"}
-      </td>
-      <td>
-        <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
+        <div style="display:flex; gap:5px; justify-content:center;">
+            <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
+            <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
+        </div>
       </td>
     `;
-
     tbody.appendChild(tr);
-  }
+  });
 }
 
 // =============================
-// CRUD
+// CRUD Actions
 // =============================
 
 function deleteItem(id) {
-  state.items = state.items.filter(x => x.id !== id);
-  saveLocal();
-  render();
+  if (confirm("هل أنت متأكد من حذف هذا العنصر؟")) {
+    state.items = state.items.filter(x => x.id !== id);
+    saveLocal();
+    render();
+  }
+}
+
+function editItem(id) {
+    const item = state.items.find(x => x.id === id);
+    if (!item) return;
+
+    // تعبئة النموذج
+    $("#id").value = item.id;
+    $("#title").value = item.title;
+    $("#availableCount").value = item.availableCount;
+    $("#consumedCount").value = item.consumedCount;
+    
+    openModal();
 }
 
 $("#form").addEventListener("submit", async (e) => {
   e.preventDefault();
+  
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  submitBtn.innerText = "جاري الحفظ...";
 
-  const id = $("#id").value || uid();
-  const isEdit = Boolean($("#id").value);
+  const idField = $("#id").value;
+  const isEdit = Boolean(idField);
+  const id = isEdit ? idField : uid();
 
   const file = $("#attachmentFile").files?.[0] || null;
-
-  let attachment = null;
   const prev = state.items.find(x => x.id === id);
 
+  let attachment = isEdit ? prev?.attachment : null;
+
+  // إذا تم اختيار ملف جديد، قم برفعه
   if (file) {
-    attachment = await uploadToSupabase(file);
-  } else if (isEdit && prev?.attachment) {
-    attachment = prev.attachment;
+    const uploaded = await uploadToSupabase(file);
+    if (uploaded) attachment = uploaded;
   }
 
   const item = {
@@ -158,59 +203,41 @@ $("#form").addEventListener("submit", async (e) => {
   }
 
   saveLocal();
-  $("#modal").classList.remove("is-open");
+  render();
+  closeModal();
+  
+  submitBtn.disabled = false;
+  submitBtn.innerText = "حفظ";
 });
 
 // =============================
-// Init
-// =============================
-// =============================
-// Attachment Renderer
+// Modal & Init
 // =============================
 
-function renderAttachment(att) {
-  const url = att.url;
-  const mime = att.mime || "";
+const modal = $("#modal");
+const btnNew = $("#btnNew");
+const btnNew2 = $("#btnNew2");
+const btnClose = $("#btnClose");
 
-  if (mime.startsWith("image/")) {
-    return `
-      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
-        <img src="${url}" 
-             style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,0.2);" />
-        <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">فتح</button>
-      </div>
-    `;
-  }
-
-  if (mime.startsWith("video/")) {
-    return `
-      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
-        <span>🎥</span>
-        <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">عرض</button>
-      </div>
-    `;
-  }
-
-  if (mime.startsWith("audio/")) {
-    return `
-      <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
-        <span>🎵</span>
-        <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">تشغيل</button>
-      </div>
-    `;
-  }
-
-  return `
-    <div style="display:flex;flex-direction:column;gap:6px;align-items:center;">
-      <span>📄</span>
-      <button onclick="window.open('${url}','_blank')" class="btn btn--ghost">تحميل</button>
-    </div>
-  `;
+function openModal() {
+  modal.classList.add("is-open");
+  modal.setAttribute("aria-hidden", "false");
 }
 
-// =============================
-// Init
-// =============================
+function closeModal() {
+  modal.classList.remove("is-open");
+  modal.setAttribute("aria-hidden", "true");
+  $("#form").reset();
+  $("#id").value = "";
+}
+
+btnNew?.addEventListener("click", openModal);
+btnNew2?.addEventListener("click", openModal);
+btnClose?.addEventListener("click", closeModal);
+
+document.querySelectorAll("[data-close]").forEach(el => {
+  el.addEventListener("click", closeModal);
+});
 
 function init() {
   state.items = loadLocal();
@@ -218,41 +245,3 @@ function init() {
 }
 
 init();
-// =============================
-// Modal Control
-// =============================
-
-const modal = document.getElementById("modal");
-const btnNew = document.getElementById("btnNew");
-const btnNew2 = document.getElementById("btnNew2");
-const btnClose = document.getElementById("btnClose");
-
-// فتح المودال
-function openModal() {
-  modal.classList.add("is-open");
-  modal.setAttribute("aria-hidden", "false");
-}
-
-// إغلاق المودال
-function closeModal() {
-  modal.classList.remove("is-open");
-  modal.setAttribute("aria-hidden", "true");
-}
-
-// زر محتوى جديد
-btnNew?.addEventListener("click", () => {
-  document.getElementById("form").reset();
-  document.getElementById("id").value = "";
-  openModal();
-});
-
-// زر داخل empty state
-btnNew2?.addEventListener("click", openModal);
-
-// زر X
-btnClose?.addEventListener("click", closeModal);
-
-// الضغط على الخلفية
-document.querySelectorAll("[data-close]").forEach(el => {
-  el.addEventListener("click", closeModal);
-});
