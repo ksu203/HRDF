@@ -43,7 +43,6 @@
           <img class="logo logo--sm" src="./irshad-logo.png" alt="Irshad" />
           <div class="sidebar__meta">
             <div class="sidebar__metaTitle">إدارة المحتوى</div>
-            <div class="sidebar__metaSub">إصدار تجريبي - قابل للربط بـ Firebase لاحقا</div>
           </div>
         </div>
 
@@ -56,8 +55,6 @@
           </button>
           <button class="nav__item" data-view="settings" type="button">
             <span class="nav__dot" aria-hidden="true"></span>
-            الإعدادات
-          </button>
         </nav>
       </div>
 
@@ -205,8 +202,10 @@
 
           <div class="field">
             <label class="label" for="materialDate">تاريخ المادة</label>
-            <input class="input" id="materialDate" name="materialDate" type="date" required />
-          </div>
+<div class="dateField">
+  <input class="input dateInput" id="materialDate" name="materialDate" type="date" required />
+  <div class="datePreview" id="datePreview">Select date</div>
+</div>   
 
           <div class="field field--full">
             <label class="label" for="title">العنوان</label>
