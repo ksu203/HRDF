@@ -3,8 +3,7 @@
 // =============================
 
 const SUPABASE_URL = "https://ygruefrffbpatidtldxd.supabase.co";
-const SUPABASE_KEY = "YOUR_PUBLIC_ANON_KEY"; // ضع المفتاح هنا
-
+const SUPABASE_KEY = "sb_publishable_8GpUTVWD4YNPJA3jFnrlDA_8fLTBTS2";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // =============================
