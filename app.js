@@ -339,11 +339,11 @@ $("#form").addEventListener("submit", async (e) => {
 const modal = $("#modal");
 
 function openModal() {
-  modal.classList.add("is-open");
+  modal.classList.add("active");
 }
 
 function closeModal() {
-  modal.classList.remove("is-open");
+  modal.classList.remove("active");
   $("#form").reset();
   $("#id").value = "";
 }
