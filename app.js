@@ -12,14 +12,12 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const $ = (sel, root = document) => root.querySelector(sel);
 
-const STORAGE_KEY = "hrdf_irshad_content_v5";
-const COUNTER_KEY = "hrdf_irshad_content_counter_v3";
+const STORAGE_KEY = "hrdf_irshad_content_v7";
+const COUNTER_KEY = "hrdf_irshad_content_counter_v5";
 
 let activeTypeFilter = "all";
 
-const state = {
-  items: []
-};
+const state = { items: [] };
 
 function uid() {
   return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
@@ -53,64 +51,60 @@ function getNextNumber() {
 
 async function uploadToSupabase(file) {
 
-  // استخراج الامتداد فقط
   const extension = file.name.split('.').pop();
-
-  // إنشاء اسم آمن بالكامل (لا يعتمد على اسم المستخدم)
   const fileName = `${Date.now()}_${Math.random()
     .toString(36)
     .substring(2, 10)}.${extension}`;
 
   try {
-    const { data, error } = await supabaseClient.storage
+    const { error } = await supabaseClient.storage
       .from("media")
-      .upload(fileName, file, {
-        cacheControl: "3600",
-        upsert: false
-      });
+      .upload(fileName, file, { cacheControl: "3600", upsert: false });
 
     if (error) {
-      console.error("Upload error:", error);
       alert(error.message);
       return null;
     }
 
-    const { data: publicData } = supabaseClient.storage
+    const { data } = supabaseClient.storage
       .from("media")
       .getPublicUrl(fileName);
 
     return {
-      name: file.name,   // نحفظ الاسم الأصلي للعرض فقط
+      name: file.name,
       mime: file.type || "",
       size: file.size || 0,
-      url: publicData.publicUrl,
-      uploadedAt: new Date().toISOString()
+      url: data.publicUrl,
+      uploadedAt: nowISO()
     };
 
   } catch (err) {
-    console.error(err);
     alert("حدث خطأ أثناء رفع الملف");
     return null;
   }
-  } 
+}
+
 // =============================
 // Stats
 // =============================
 
 function updateStats() {
-const total = state.items.length;
-const used = state.items.filter(i => i.isUsed).length;
 
-const percent = total ? Math.round((used / total) * 100) : 0;
+  const total = state.items.length;
+  const used = state.items.filter(i => i.isUsed).length;
 
-const fill = document.querySelector(".usage-fill");
-if(fill) fill.style.width = percent + "%";
+  const totalEl = document.getElementById("statTotal");
+  const usedEl = document.getElementById("statUsed");
+
+  if (totalEl) totalEl.textContent = total;
+  if (usedEl) usedEl.textContent = used;
+
   updateTypeStats();
 }
 
 function updateTypeStats() {
 
-  const container = document.querySelector(".type-distribution");
+  const container = document.getElementById("typeStats");
   if (!container) return;
 
   container.innerHTML = "";
@@ -131,27 +125,26 @@ function updateTypeStats() {
     podcast: "بودكاست"
   };
 
-  const total = state.items.length;
-
   Object.keys(labels).forEach(key => {
 
     const value = counts[key] || 0;
-    const percent = total ? Math.round((value / total) * 100) : 0;
 
-    const row = document.createElement("div");
-    row.className = "type-row";
+    const box = document.createElement("div");
+    box.className = "type-pill";
 
-    row.innerHTML = `
-      <div class="type-label">
-        <span>${labels[key]}</span>
-        <span>${value}</span>
-      </div>
-      <div class="type-bar">
-        <div class="type-fill" style="width:${percent}%"></div>
-      </div>
+    box.innerHTML = `
+      <span>${labels[key]}</span>
+      <span class="count">${value}</span>
     `;
 
-    container.appendChild(row);
+    box.style.cursor = "pointer";
+
+    box.addEventListener("click", () => {
+      activeTypeFilter = activeTypeFilter === key ? "all" : key;
+      render();
+    });
+
+    container.appendChild(box);
   });
 }
 
@@ -165,29 +158,29 @@ function renderAttachment(att) {
 }
 
 function render() {
+
   const tbody = $("#rows");
   const searchTerm = $("#q")?.value?.toLowerCase() || "";
 
   if (!tbody) return;
   tbody.innerHTML = "";
 
-  let filtered = state.items;
+  let filtered = [...state.items];
 
-  if (activeTypeFilter !== "all") {
+  if (activeTypeFilter !== "all")
     filtered = filtered.filter(i => i.contentType === activeTypeFilter);
-  }
 
-  if (searchTerm) {
+  if (searchTerm)
     filtered = filtered.filter(i =>
       i.title.toLowerCase().includes(searchTerm) ||
       String(i.contentNumber).includes(searchTerm)
     );
-  }
 
   $("#statsPill").textContent = `${filtered.length} عنصر`;
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;">لا يوجد محتوى مطابق</td></tr>`;
+    tbody.innerHTML =
+      `<tr><td colspan="7" style="text-align:center;padding:20px;">لا يوجد محتوى مطابق</td></tr>`;
     updateStats();
     return;
   }
@@ -203,24 +196,14 @@ function render() {
   };
 
   filtered.forEach(item => {
-    const tr = document.createElement("tr");
 
-    if (item.isUsed) {
-      tr.style.background = "#f0f8f5";
-      tr.style.opacity = "0.8";
-    }
+    const tr = document.createElement("tr");
 
     tr.innerHTML = `
       <td>${String(item.contentNumber).padStart(3,"0")}</td>
       <td>${item.title}</td>
       <td>
-        <span style="
-          padding:4px 10px;
-          border-radius:14px;
-          background:#e8f5ef;
-          color:#0B6B3A;
-          font-weight:600;
-          font-size:0.8rem;">
+        <span class="badge">
           ${labels[item.contentType] || "-"}
         </span>
       </td>
@@ -230,6 +213,7 @@ function render() {
           ${item.isUsed ? "✓ مستخدم" : "تم استخدامه"}
         </button>
       </td>
+      <td>${item.isUsed ? "مستخدم" : "غير مستخدم"}</td>
       <td>
         <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
         <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
@@ -249,7 +233,6 @@ function render() {
 function toggleUsed(id) {
   const item = state.items.find(x => x.id === id);
   if (!item) return;
-
   item.isUsed = !item.isUsed;
   saveLocal();
   render();
@@ -268,7 +251,7 @@ function editItem(id) {
 
   $("#id").value = item.id;
   $("#title").value = item.title;
-  $("#contentType").value = item.contentType || "article";
+  $("#contentType").value = item.contentType;
 
   openModal();
 }
@@ -278,6 +261,7 @@ function editItem(id) {
 // =============================
 
 $("#form").addEventListener("submit", async (e) => {
+
   e.preventDefault();
 
   const idField = $("#id").value;
@@ -334,9 +318,10 @@ $("#btnNew")?.addEventListener("click", openModal);
 $("#btnNew2")?.addEventListener("click", openModal);
 $("#btnClose")?.addEventListener("click", closeModal);
 
-document.querySelectorAll("[data-close]").forEach(el =>
-  el.addEventListener("click", closeModal)
-);
+modal?.addEventListener("click", function(e) {
+  if (e.target.classList.contains("modal__backdrop"))
+    closeModal();
+});
 
 // =============================
 // Search
