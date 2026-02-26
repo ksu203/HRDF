@@ -53,12 +53,13 @@ function getNextNumber() {
 
 async function uploadToSupabase(file) {
 
-  // تنظيف اسم الملف من المسافات والأحرف غير المسموحة
-  const cleanName = file.name
-    .replace(/\s+/g, "_")
-    .replace(/[^\w.\-]/g, "");
+  // استخراج الامتداد فقط
+  const extension = file.name.split('.').pop();
 
-  const fileName = `${Date.now()}_${cleanName}`;
+  // إنشاء اسم آمن بالكامل (لا يعتمد على اسم المستخدم)
+  const fileName = `${Date.now()}_${Math.random()
+    .toString(36)
+    .substring(2, 10)}.${extension}`;
 
   try {
     const { data, error } = await supabaseClient.storage
@@ -79,11 +80,11 @@ async function uploadToSupabase(file) {
       .getPublicUrl(fileName);
 
     return {
-      name: file.name,
+      name: file.name,   // نحفظ الاسم الأصلي للعرض فقط
       mime: file.type || "",
       size: file.size || 0,
       url: publicData.publicUrl,
-      uploadedAt: nowISO()
+      uploadedAt: new Date().toISOString()
     };
 
   } catch (err) {
@@ -91,7 +92,7 @@ async function uploadToSupabase(file) {
     alert("حدث خطأ أثناء رفع الملف");
     return null;
   }
-
+  
 // =============================
 // Stats
 // =============================
