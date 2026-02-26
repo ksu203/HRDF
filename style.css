@@ -8,7 +8,8 @@
   --white: #ffffff;
 }
 
-/* Reset */
+/* ================= RESET ================= */
+
 * {
   box-sizing: border-box;
 }
@@ -20,15 +21,15 @@ body {
   color: #1f2937;
 }
 
-/* ===================== Topbar ===================== */
+/* ================= TOPBAR ================= */
 
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(to left, var(--blue-dark), var(--blue-light));
+  background: #ffffff;
   padding: 20px 32px;
-  color: white;
+  border-bottom: 4px solid var(--blue-dark);
   flex-wrap: wrap;
 }
 
@@ -38,44 +39,47 @@ body {
   gap: 20px;
 }
 
-/* 🔥 تكبير الشعار هنا */
 .logo {
-  height: 70px;
+  height: 85px;
+  object-fit: contain;
 }
 
 .logo--sm {
-  height: 55px;
+  height: 60px;
 }
 
 .topbar__title h1 {
   margin: 0;
   font-size: 24px;
   font-weight: 800;
+  color: var(--blue-dark);
 }
 
 .kicker {
   font-size: 14px;
-  opacity: 0.9;
+  color: var(--gray);
 }
 
-/* ===================== Buttons ===================== */
+/* ================= BUTTONS ================= */
 
 .btn {
   border: none;
-  padding: 12px 20px;
-  border-radius: 10px;
+  padding: 14px 22px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: 700;
-  transition: all 0.2s ease;
+  transition: 0.25s ease;
 }
 
 .btn--primary {
   background: var(--green);
   color: white;
+  box-shadow: 0 6px 16px rgba(0,166,101,0.3);
 }
 
 .btn--primary:hover {
-  background: #009457;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,166,101,0.4);
 }
 
 .btn--ghost {
@@ -83,28 +87,24 @@ body {
   border: 1px solid #d1d5db;
 }
 
-.btn--ghost:hover {
-  background: #f1f1f1;
-}
-
-/* ===================== Layout ===================== */
+/* ================= LAYOUT RTL ================= */
 
 .shell {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  min-height: calc(100vh - 100px);
+  grid-template-columns: 1fr 280px;
+  min-height: calc(100vh - 110px);
 }
 
 .sidebar {
   background: var(--white);
-  padding: 24px;
-  border-left: 1px solid #e5e7eb;
+  padding: 26px;
+  border-right: 1px solid #e5e7eb;
 }
 
 .sidebar__card {
   background: #f9fafb;
   padding: 18px;
-  border-radius: 14px;
+  border-radius: 16px;
   border-top: 4px solid var(--blue-dark);
 }
 
@@ -118,7 +118,7 @@ body {
   padding: 30px;
 }
 
-/* ===================== Toolbar ===================== */
+/* ================= TOOLBAR ================= */
 
 .toolbar {
   display: flex;
@@ -137,7 +137,7 @@ body {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 12px;
+  right: 14px;
   color: var(--gray);
 }
 
@@ -164,11 +164,11 @@ body {
   background: var(--blue-dark);
   color: white;
   padding: 8px 14px;
-  border-radius: 20px;
+  border-radius: 30px;
   font-weight: 600;
 }
 
-/* ===================== Stats ===================== */
+/* ================= STATS ================= */
 
 .grid {
   display: grid;
@@ -179,14 +179,23 @@ body {
 
 .card {
   background: var(--white);
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: 0.2s ease;
+  padding: 26px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  transition: 0.3s ease;
+  border-right: 6px solid var(--blue-dark);
+}
+
+.card:nth-child(2) {
+  border-right-color: var(--green);
+}
+
+.card:nth-child(3) {
+  border-right-color: var(--orange);
 }
 
 .card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-6px);
 }
 
 .card__label {
@@ -195,23 +204,19 @@ body {
 }
 
 .card__value {
-  font-size: 34px;
+  font-size: 40px;
   font-weight: 800;
-  margin: 10px 0;
+  margin: 12px 0;
   color: var(--blue-dark);
 }
 
-.card--wide {
-  grid-column: span 2;
-}
-
-/* ===================== Panel ===================== */
+/* ================= TABLE ================= */
 
 .panel {
   background: var(--white);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 24px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
 }
 
 .panel__title {
@@ -224,10 +229,7 @@ body {
 .panel__desc {
   font-size: 13px;
   color: var(--gray);
-  margin-top: 4px;
 }
-
-/* ===================== Table ===================== */
 
 .tableWrap {
   overflow-x: auto;
@@ -256,19 +258,14 @@ body {
   background: rgba(0,81,135,0.05);
 }
 
-/* ===================== Empty ===================== */
+/* ================= EMPTY ================= */
 
 .empty {
   text-align: center;
   padding: 50px 0;
 }
 
-.empty__title {
-  font-size: 18px;
-  margin: 10px 0;
-}
-
-/* ===================== Modal ===================== */
+/* ================= MODAL FIX ================= */
 
 .modal {
   position: fixed;
@@ -276,6 +273,7 @@ body {
   display: none;
   align-items: center;
   justify-content: center;
+  z-index: 9999;
 }
 
 .modal[aria-hidden="false"] {
@@ -285,7 +283,7 @@ body {
 .modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.45);
 }
 
 .modal__dialog {
@@ -296,14 +294,7 @@ body {
   border-radius: 18px;
   padding: 28px;
   border-top: 6px solid var(--blue-dark);
-  z-index: 2;
-}
-
-.modal__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  z-index: 10000;
 }
 
 .formGrid {
@@ -323,7 +314,7 @@ body {
   gap: 12px;
 }
 
-/* ===================== Responsive ===================== */
+/* ================= RESPONSIVE ================= */
 
 @media (max-width: 1024px) {
   .shell {
@@ -331,12 +322,8 @@ body {
   }
 
   .sidebar {
-    border-left: none;
+    border-right: none;
     border-bottom: 1px solid #e5e7eb;
-  }
-
-  .card--wide {
-    grid-column: span 1;
   }
 }
 
@@ -355,15 +342,11 @@ body {
     grid-column: span 1;
   }
 
-  .input--search {
-    min-width: 100%;
-  }
-
   .btn {
     width: 100%;
   }
 
   .card__value {
-    font-size: 28px;
+    font-size: 30px;
   }
 }
