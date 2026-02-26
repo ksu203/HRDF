@@ -98,17 +98,19 @@ async function uploadToSupabase(file) {
 // =============================
 
 function updateStats() {
-  const total = state.items.length;
-  const used = state.items.filter(i => i.isUsed).length;
+const total = state.items.length;
+const used = state.items.filter(i => i.isUsed).length;
 
-  $("#statTotal").textContent = total;
-  $("#statUsed").textContent = used;
+const percent = total ? Math.round((used / total) * 100) : 0;
 
+const fill = document.querySelector(".usage-fill");
+if(fill) fill.style.width = percent + "%";
   updateTypeStats();
 }
 
 function updateTypeStats() {
-  const container = $("#typeStats");
+
+  const container = document.querySelector(".type-distribution");
   if (!container) return;
 
   container.innerHTML = "";
@@ -129,47 +131,27 @@ function updateTypeStats() {
     podcast: "بودكاست"
   };
 
-  const colors = {
-    article: "#0B6B3A",
-    video: "#2563eb",
-    images: "#9333ea",
-    infographic: "#f59e0b",
-    audio: "#14b8a6",
-    press: "#ef4444",
-    podcast: "#6366f1"
-  };
+  const total = state.items.length;
 
   Object.keys(labels).forEach(key => {
+
     const value = counts[key] || 0;
+    const percent = total ? Math.round((value / total) * 100) : 0;
 
-    const box = document.createElement("div");
-    box.style.cursor = "pointer";
-    box.style.padding = "8px 14px";
-    box.style.borderRadius = "20px";
-    box.style.display = "flex";
-    box.style.gap = "8px";
-    box.style.alignItems = "center";
-    box.style.fontWeight = "600";
-    box.style.background = activeTypeFilter === key ? colors[key] : "#f3f6f5";
-    box.style.color = activeTypeFilter === key ? "#fff" : "#0B6B3A";
+    const row = document.createElement("div");
+    row.className = "type-row";
 
-    box.innerHTML = `
-      <span>${labels[key]}</span>
-      <span style="
-        background:${activeTypeFilter === key ? "rgba(255,255,255,0.3)" : colors[key]};
-        color:#fff;
-        padding:2px 8px;
-        border-radius:12px;">
-        ${value}
-      </span>
+    row.innerHTML = `
+      <div class="type-label">
+        <span>${labels[key]}</span>
+        <span>${value}</span>
+      </div>
+      <div class="type-bar">
+        <div class="type-fill" style="width:${percent}%"></div>
+      </div>
     `;
 
-    box.addEventListener("click", () => {
-      activeTypeFilter = activeTypeFilter === key ? "all" : key;
-      render();
-    });
-
-    container.appendChild(box);
+    container.appendChild(row);
   });
 }
 
