@@ -92,7 +92,7 @@ async function uploadToSupabase(file) {
     alert("حدث خطأ أثناء رفع الملف");
     return null;
   }
-  
+  } 
 // =============================
 // Stats
 // =============================
