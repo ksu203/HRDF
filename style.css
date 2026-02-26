@@ -402,3 +402,17 @@ body {
     grid-column: span 1;
   }
 }
+.type-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.type-stats div {
+  transition: 0.2s ease;
+}
+
+.type-stats div:hover {
+  transform: translateY(-2px);
+}
