@@ -125,6 +125,16 @@ function updateTypeStats() {
     podcast: "بودكاست"
   };
 
+  const groupLabels = {
+  job_seekers: "الباحثين عن عمل",
+  teachers: "المعلمين",
+  school_students: "طلاب المدارس",
+  university_students: "طلاب الجامعات",
+  institute_students: "طلاب المعاهد",
+  employees: "الموظفين",
+  parents: "أولياء الامور",
+  career_counselors: "المرشدين المهنيين"
+};
   Object.keys(labels).forEach(key => {
 
     const value = counts[key] || 0;
@@ -252,7 +262,8 @@ function editItem(id) {
   $("#id").value = item.id;
   $("#title").value = item.title;
   $("#contentType").value = item.contentType;
-
+$("#targetGroup").value = item.targetGroup || "";
+  
   openModal();
 }
 
@@ -287,6 +298,7 @@ $("#form").addEventListener("submit", async (e) => {
     isUsed: isEdit ? prev.isUsed : false,
     createdAt: isEdit ? prev.createdAt : nowISO(),
     updatedAt: nowISO()
+targetGroup: $("#targetGroup").value || null,
   };
 
   const idx = state.items.findIndex(x => x.id === id);
