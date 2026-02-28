@@ -125,29 +125,18 @@ function updateTypeStats() {
     podcast: "بودكاست"
   };
 
-  const groupLabels = {
-  job_seekers: "الباحثين عن عمل",
-  teachers: "المعلمين",
-  school_students: "طلاب المدارس",
-  university_students: "طلاب الجامعات",
-  institute_students: "طلاب المعاهد",
-  employees: "الموظفين",
-  parents: "أولياء الامور",
-  career_counselors: "المرشدين المهنيين"
-};
   Object.keys(labels).forEach(key => {
 
     const value = counts[key] || 0;
 
     const box = document.createElement("div");
     box.className = "type-pill";
+    box.style.cursor = "pointer";
 
     box.innerHTML = `
       <span>${labels[key]}</span>
       <span class="count">${value}</span>
     `;
-
-    box.style.cursor = "pointer";
 
     box.addEventListener("click", () => {
       activeTypeFilter = activeTypeFilter === key ? "all" : key;
