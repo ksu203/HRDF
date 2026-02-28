@@ -158,6 +158,10 @@ function updateTypeStats() {
 // =============================
 // Render
 // =============================
+function renderAttachment(att) {
+  if (!att || !att.url) return "-";
+  return `<button onclick="window.open('${att.url}','_blank')" class="btn btn--ghost">عرض</button>`;
+}
 
 function render() {
 
