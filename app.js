@@ -315,11 +315,11 @@ $("#form").addEventListener("submit", async (e) => {
     contentNumber: isEdit ? prev.contentNumber : getNextNumber(),
     title: $("#title").value.trim(),
     contentType: $("#contentType").value,
+    targetGroup: $("#targetGroup").value || null,  // ✅ هنا تم تصحيحها
     attachment,
     isUsed: isEdit ? prev.isUsed : false,
     createdAt: isEdit ? prev.createdAt : nowISO(),
     updatedAt: nowISO()
-targetGroup: $("#targetGroup").value || null,
   };
 
   const idx = state.items.findIndex(x => x.id === id);
