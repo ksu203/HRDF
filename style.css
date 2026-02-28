@@ -242,3 +242,13 @@ body {
 @media (max-width: 900px) {
   .grid { flex-direction: column; }
 }
+.badge--group {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #f0f4f8;
+  color: #005187;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid #e2e8f0;
+}
