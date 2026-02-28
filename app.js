@@ -162,11 +162,6 @@ function updateTypeStats() {
 // Render
 // =============================
 
-function renderAttachment(att) {
-  if (!att || !att.url) return "-";
-  return `<button onclick="window.open('${att.url}','_blank')" class="btn btn--ghost">عرض</button>`;
-}
-
 function render() {
 
   const tbody = $("#rows");
@@ -190,7 +185,7 @@ function render() {
 
   if (filtered.length === 0) {
     tbody.innerHTML =
-      `<tr><td colspan="7" style="text-align:center;padding:20px;">لا يوجد محتوى مطابق</td></tr>`;
+      `<tr><td colspan="8" style="text-align:center;padding:20px;">لا يوجد محتوى مطابق</td></tr>`;
     updateStats();
     return;
   }
@@ -205,6 +200,17 @@ function render() {
     podcast: "بودكاست"
   };
 
+  const groupLabels = {
+    job_seekers: "الباحثين عن عمل",
+    teachers: "المعلمين",
+    school_students: "طلاب المدارس",
+    university_students: "طلاب الجامعات",
+    institute_students: "طلاب المعاهد",
+    employees: "الموظفين",
+    parents: "أولياء الامور",
+    career_counselors: "المرشدين المهنيين"
+  };
+
   filtered.forEach(item => {
 
     const tr = document.createElement("tr");
@@ -212,18 +218,33 @@ function render() {
     tr.innerHTML = `
       <td>${String(item.contentNumber).padStart(3,"0")}</td>
       <td>${item.title}</td>
+
       <td>
         <span class="badge">
           ${labels[item.contentType] || "-"}
         </span>
       </td>
+
+      <td>
+        ${
+          item.targetGroup
+            ? `<span class="badge badge--group">
+                 ${groupLabels[item.targetGroup] || ""}
+               </span>`
+            : "-"
+        }
+      </td>
+
       <td>${renderAttachment(item.attachment)}</td>
+
       <td>
         <button onclick="toggleUsed('${item.id}')" class="btn btn--ghost">
           ${item.isUsed ? "✓ مستخدم" : "تم استخدامه"}
         </button>
       </td>
+
       <td>${item.isUsed ? "مستخدم" : "غير مستخدم"}</td>
+
       <td>
         <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
         <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
