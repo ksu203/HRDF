@@ -90,8 +90,10 @@ async function uploadToSupabase(file) {
 
 function updateStats() {
 
-  const total = state.items.length;
-  const used = state.items.filter(i => i.isUsed).length;
+  const total = Array.isArray(state.items) ? state.items.length : 0;
+  const used = Array.isArray(state.items)
+    ? state.items.filter(i => i.isUsed).length
+    : 0;
 
   const totalEl = document.getElementById("statTotal");
   const usedEl = document.getElementById("statUsed");
@@ -109,7 +111,13 @@ function updateTypeStats() {
 
   container.innerHTML = "";
 
+  if (!Array.isArray(state.items) || state.items.length === 0) {
+    container.innerHTML = `<div class="type-empty">لا يوجد محتوى</div>`;
+    return;
+  }
+
   const counts = {};
+
   state.items.forEach(item => {
     const type = item.contentType || "other";
     counts[type] = (counts[type] || 0) + 1;
@@ -134,8 +142,8 @@ function updateTypeStats() {
     box.style.cursor = "pointer";
 
     box.innerHTML = `
-      <span>${labels[key]}</span>
-      <span class="count">${value}</span>
+      <span class="type-name">${labels[key]}</span>
+      <span class="type-count">${value}</span>
     `;
 
     box.addEventListener("click", () => {
