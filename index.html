@@ -188,6 +188,66 @@
     </form>
   </div>
 </div>
+
+  // --- إعدادات الربط مع Supabase ---
+const supabaseUrl = 'YOUR_SUPABASE_URL';
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+const supabase = supabasejs.createClient(supabaseUrl, supabaseKey);
+
+// --- القاموس العربي للأنواع (للموائمة مع التصميم) ---
+const typeMap = {
+  article: "مقال",
+  video: "فيديو",
+  images: "صور",
+  infographic: "انفوجرافيك",
+  audio: "صوت",
+  press: "لقاء صحفي",
+  podcast: "بودكاست"
+};
+
+// --- دالة تصدير البيانات إلى إكسل ---
+function exportToExcel() {
+  if (state.items.length === 0) return alert("لا يوجد بيانات لتصديرها");
+  
+  const data = state.items.map(item => ({
+    "رقم المحتوى": item.contentNumber,
+    "العنوان": item.title,
+    "نوع المحتوى": typeMap[item.contentType] || item.contentType,
+    "الفئة المستهدفة": item.targetGroup || "غير محدد",
+    "تاريخ الإضافة": new Date(item.created_at).toLocaleDateString('ar-SA')
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "المحتوى");
+  XLSX.utils.writeFile(workbook, "إحصائيات_مبادرة_إرشاد.xlsx");
+}
+
+// --- تحديث دالة Render لتحسين المظهر ---
+function render() {
+  const tbody = document.getElementById("rows");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  state.items.forEach(item => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><span class="badge">${item.contentNumber}</span></td>
+      <td style="font-weight:700;">${item.title}</td>
+      <td><span class="badge" style="background:rgba(0,166,101,0.1); color:var(--green);">${typeMap[item.contentType]}</span></td>
+      <td><span class="badge--group">${item.targetGroup || "-"}</span></td>
+      <td><a href="${item.fileUrl}" target="_blank">🔗 عرض</a></td>
+      <td>${item.isUsed ? '✅ مستخدم' : '⏳ متاح'}</td>
+      <td><span class="status-dot"></span> نشط</td>
+      <td>
+        <button class="btn-action" onclick="deleteItem('${item.id}')">🗑️</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+  updateStats();
+}
+  
   
 </body>
 </html>
