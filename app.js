@@ -344,28 +344,39 @@ if (formEl) {
 
 
 // =============================
-// Modal
+// Modal Controls
 // =============================
 
-const modal = $("#modal");
-
 function openModal() {
+  const modal = document.getElementById("modal");
+  if (!modal) return;
+
+  const form = document.getElementById("form");
+  if (form) form.reset();
+
+  const idField = document.getElementById("id");
+  if (idField) idField.value = "";
+
   modal.classList.add("active");
 }
 
 function closeModal() {
+  const modal = document.getElementById("modal");
+  if (!modal) return;
+
   modal.classList.remove("active");
-  $("#form").reset();
-  $("#id").value = "";
 }
 
-$("#btnNew")?.addEventListener("click", openModal);
-$("#btnNew2")?.addEventListener("click", openModal);
-$("#btnClose")?.addEventListener("click", closeModal);
+// ربط الأزرار
+document.getElementById("btnNew")?.addEventListener("click", openModal);
+document.getElementById("btnNew2")?.addEventListener("click", openModal);
+document.getElementById("btnClose")?.addEventListener("click", closeModal);
 
-modal?.addEventListener("click", function(e) {
-  if (e.target.classList.contains("modal__backdrop"))
+// إغلاق عند الضغط خارج المودال
+document.getElementById("modal")?.addEventListener("click", function (e) {
+  if (e.target.classList.contains("modal__backdrop")) {
     closeModal();
+  }
 });
 
 // =============================
