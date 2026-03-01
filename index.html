@@ -32,10 +32,9 @@
   </div>
 </header>
 
-
 <div class="shell">
   <main class="main">
-    
+
 <!-- Toolbar -->
 <section class="toolbar">
   <div class="toolbar__left">
@@ -53,7 +52,6 @@
   </div>
 </section>
 
-
 <!-- Stats -->
 <section class="grid">
 
@@ -69,50 +67,53 @@
     <div class="card__sub">عدد العناصر التي تم استخدامها</div>
   </article>
 
-  <article class="card card--stat card--wide">
-  <div class="stats-card">
-  <h3>إحصاء حسب نوع المحتوى</h3>
+  <!-- كرت إحصاء النوع -->
+  <article class="card card--stat">
+    <h3 style="margin-bottom:20px;">إحصاء حسب نوع المحتوى</h3>
 
-  <div class="stats-grid">
+    <div class="stats-grid">
 
-    <div class="stats-item">
-      <span>مقال</span>
-      <span class="stats-number">3</span>
+      <div class="stats-item">
+        <span>مقال</span>
+        <span class="stats-number">3</span>
+      </div>
+
+      <div class="stats-item">
+        <span>فيديو</span>
+        <span class="stats-number">2</span>
+      </div>
+
+      <div class="stats-item">
+        <span>صور</span>
+        <span class="stats-number">2</span>
+      </div>
+
+      <div class="stats-item">
+        <span>انفوجرافيك</span>
+        <span class="stats-number">0</span>
+      </div>
+
+      <div class="stats-item">
+        <span>صوت</span>
+        <span class="stats-number">0</span>
+      </div>
+
+      <div class="stats-item">
+        <span>لقاء صحفي</span>
+        <span class="stats-number">0</span>
+      </div>
+
+      <div class="stats-item">
+        <span>بودكاست</span>
+        <span class="stats-number">0</span>
+      </div>
+
     </div>
+  </article>
 
-    <div class="stats-item">
-      <span>فيديو</span>
-      <span class="stats-number">2</span>
-    </div>
+</section>
+<!-- نهاية grid -->
 
-    <div class="stats-item">
-      <span>صور</span>
-      <span class="stats-number">2</span>
-    </div>
-
-    <div class="stats-item">
-      <span>انفوجرافيك</span>
-      <span class="stats-number">0</span>
-    </div>
-
-    <div class="stats-item">
-      <span>صوت</span>
-      <span class="stats-number">0</span>
-    </div>
-
-    <div class="stats-item">
-      <span>لقاء صحفي</span>
-      <span class="stats-number">0</span>
-    </div>
-
-    <div class="stats-item">
-      <span>بودكاست</span>
-      <span class="stats-number">0</span>
-    </div>
-
-  </div>
-</div>
-    
 <!-- Table -->
 <section class="panel">
 
@@ -125,25 +126,24 @@
     </div>
   </div>
 
-<div class="tableWrap">
-  <table class="table">
-   <thead>
-  <tr>
-    <th>رقم</th>
-    <th>العنوان</th>
-    <th>نوع المحتوى</th>
-    <th>الفئة المستهدفة</th>
-    <th>المرفق</th>
-    <th>حالة استخدام المرفق</th>
-    <th>الحالة</th>
-    <th>إجراءات</th>
-  </tr>
-</thead>
-    
-    <tbody id="rows"></tbody>
-  </table>
-</div>
-  
+  <div class="tableWrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>رقم</th>
+          <th>العنوان</th>
+          <th>نوع المحتوى</th>
+          <th>الفئة المستهدفة</th>
+          <th>المرفق</th>
+          <th>حالة استخدام المرفق</th>
+          <th>الحالة</th>
+          <th>إجراءات</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
   <div class="empty" id="emptyState" hidden>
     <div class="empty__icon">📁</div>
     <div class="empty__title">لا يوجد محتوى</div>
@@ -154,77 +154,6 @@
 
 </main>
 </div>
-
-
-<!-- Modal -->
-<div class="modal" id="modal" aria-hidden="true">
-  <div class="modal__backdrop" data-close="true"></div>
-
-  <div class="modal__dialog">
-    <div class="modal__head">
-      <h3>إضافة / تعديل محتوى</h3>
-      <button class="iconBtn" id="btnClose">✕</button>
-    </div>
-
-    <form class="modal__body" id="form">
-
-      <input type="hidden" id="id" />
-
-      <div class="formGrid">
-
-        <div class="field">
-          <label class="label">رقم المحتوى</label>
-          <input class="input" id="number" disabled />
-        </div>
-
-        <div class="field field--full">
-          <label class="label">العنوان</label>
-          <input class="input" id="title" required />
-        </div>
-
-        <div class="field">
-          <label class="label">نوع المحتوى</label>
-          <select class="input input--select" id="contentType" required>
-            <option value="article">مقال</option>
-            <option value="video">فيديو</option>
-            <option value="images">صور</option>
-            <option value="infographic">انفوجرافيك</option>
-            <option value="audio">صوت</option>
-            <option value="press">لقاء صحفي</option>
-            <option value="podcast">بودكاست</option>
-          </select>
-        </div>
-<div class="field">
-  <label class="label">الفئة المستهدفة</label>
-  <select class="input input--select" id="targetGroup">
-    <option value="">— بدون تحديد —</option>
-    <option value="job_seekers">الباحثين عن عمل</option>
-    <option value="teachers">المعلمين</option>
-    <option value="school_students">طلاب المدارس</option>
-    <option value="university_students">طلاب الجامعات</option>
-    <option value="institute_students">طلاب المعاهد</option>
-    <option value="employees">الموظفين</option>
-    <option value="parents">أولياء الامور</option>
-    <option value="career_counselors">المرشدين المهنيين</option>
-  </select>
-</div>
-        
-        <div class="field">
-          <label class="label">تحميل المرفق</label>
-          <input class="input" id="attachmentFile" type="file" />
-        </div>
-
-      </div>
-
-      <div class="modal__foot">
-        <button class="btn btn--ghost" type="button" data-close="true">إلغاء</button>
-        <button class="btn btn--primary" type="submit">حفظ</button>
-      </div>
-
-    </form>
-  </div>
-</div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./app.js"></script>
