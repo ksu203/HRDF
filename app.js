@@ -265,18 +265,21 @@ function render() {
     });
   }
 
-  // =============================
-  // Update Statistics (الجزء المهم)
-  // =============================
-  const total = state.items.length;
-  const used = state.items.filter(x => x.isUsed).length;
+// =============================
+// Update Statistics
+// =============================
+const total = state.items.length;
+const used = state.items.filter(x => x.isUsed).length;
 
-  const statTotalEl = document.getElementById("statTotal");
-  const statUsedEl = document.getElementById("statUsed");
+const statTotalEl = document.getElementById("statTotal");
+const statUsedEl = document.getElementById("statUsed");
 
-  if (statTotalEl) statTotalEl.textContent = total;
-  if (statUsedEl) statUsedEl.textContent = used;
+if (statTotalEl) statTotalEl.textContent = total;
+if (statUsedEl) statUsedEl.textContent = used;
+
+updateTypeStats();   // هذا السطر مهم
 }
+
 
 // =============================
 // Actions
