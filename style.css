@@ -252,3 +252,17 @@ body {
   font-size: 0.85rem;
   border: 1px solid #e2e8f0;
 }
+.usage-select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #d0d7de;
+  font-weight: 600;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.usage-select:focus {
+  outline: none;
+  border-color: #005187;
+}
