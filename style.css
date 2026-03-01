@@ -17,6 +17,9 @@
   --white: #ffffff;
   --border: #e5e7eb;
 }
+html {
+  font-size: 87.5%;  /* يعادل تقريباً 14px بدلاً من 16px */
+}
 
 /* ===================================== */
 /* Base & Typography                     */
@@ -31,22 +34,22 @@ body {
   font-family: 'Tajawal', sans-serif;
   background: var(--bg);
   color: #1f2937;
-  font-size: 18px;
-  line-height: 1.8;
+  font-size: 15px;   /* كان 18 */
+  line-height: 1.6;  /* كان 1.8 */
   letter-spacing: -0.2px;
 }
 
 /* Headings */
 
 h1 {
-  font-size: 34px;
+  font-size: 30px;
   font-weight: 900;
   margin: 0;
   color: var(--blue);
 }
 
 h2 {
-  font-size: 26px;
+  font-size: 23px;
   font-weight: 800;
   margin-bottom: 20px;
   color: var(--blue);
