@@ -292,23 +292,19 @@ $("#targetGroup").value = item.targetGroup || "";
 // Submit
 // =============================
 
-// =============================
-// Submit
-// =============================
-
-const formEl = $("#form");
+const formEl = document.getElementById("form");
 
 if (formEl) {
-  formEl.addEventListener("submit", async (e) => {
-
+  formEl.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const idField = $("#id").value;
+    const idField = document.getElementById("id").value;
     const isEdit = Boolean(idField);
     const id = isEdit ? idField : uid();
 
     const prev = state.items.find(x => x.id === id);
-    const file = $("#attachmentFile").files?.[0] || null;
+    const fileInput = document.getElementById("attachmentFile");
+    const file = fileInput?.files?.[0] || null;
 
     let attachment = isEdit ? prev?.attachment : null;
 
@@ -320,9 +316,9 @@ if (formEl) {
     const item = {
       id,
       contentNumber: isEdit ? prev.contentNumber : getNextNumber(),
-      title: $("#title").value.trim(),
-      contentType: $("#contentType").value,
-      targetGroup: $("#targetGroup").value || null,
+      title: document.getElementById("title").value.trim(),
+      contentType: document.getElementById("contentType").value,
+      targetGroup: document.getElementById("targetGroup").value || null,
       attachment,
       isUsed: isEdit ? prev.isUsed : false,
       createdAt: isEdit ? prev.createdAt : nowISO(),
@@ -338,10 +334,8 @@ if (formEl) {
     saveLocal();
     render();
     closeModal();
-
   });
 }
-
 
 // =============================
 // Modal Controls
