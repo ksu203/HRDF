@@ -1,30 +1,19 @@
 // =============================
-// Supabase Configuration
+// Storage
 // =============================
 
-const SUPABASE_URL = "https://ygruefrffbpatidtldxd.supabase.co";
-const SUPABASE_KEY = "sb_publishable_8GpUTVWD4YNPJA3jFnrlDA_8fLTBTS2";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const STORAGE_KEY = "hrdf_irshad_content_clean";
+
+let state = {
+  items: []
+};
 
 // =============================
-// Helpers & State
+// Helpers
 // =============================
-
-const $ = (sel, root = document) => root.querySelector(sel);
-
-const STORAGE_KEY = "hrdf_irshad_content_v7";
-const COUNTER_KEY = "hrdf_irshad_content_counter_v5";
-
-let activeTypeFilter = "all";
-
-const state = { items: [] };
 
 function uid() {
-  return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
-}
-
-function nowISO() {
-  return new Date().toISOString();
+  return "id_" + Date.now() + "_" + Math.random().toString(16).slice(2);
 }
 
 function saveLocal() {
@@ -33,55 +22,49 @@ function saveLocal() {
 
 function loadLocal() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try { return JSON.parse(raw) || []; } catch { return []; }
-}
-
-function getNextNumber() {
-  const raw = localStorage.getItem(COUNTER_KEY);
-  const n = raw ? parseInt(raw, 10) : 0;
-  const next = Number.isFinite(n) ? (n + 1) : 1;
-  localStorage.setItem(COUNTER_KEY, String(next));
-  return next;
+  return raw ? JSON.parse(raw) : [];
 }
 
 // =============================
-// Supabase Upload
+// Render
 // =============================
 
-async function uploadToSupabase(file) {
+function render() {
 
-  const extension = file.name.split('.').pop();
-  const fileName = `${Date.now()}_${Math.random()
-    .toString(36)
-    .substring(2, 10)}.${extension}`;
+  const tbody = document.getElementById("rows");
+  if (!tbody) return;
 
-  try {
-    const { error } = await supabaseClient.storage
-      .from("media")
-      .upload(fileName, file, { cacheControl: "3600", upsert: false });
+  tbody.innerHTML = "";
 
-    if (error) {
-      alert(error.message);
-      return null;
-    }
+  if (state.items.length === 0) {
+    tbody.innerHTML =
+      `<tr>
+        <td colspan="8" style="text-align:center;padding:20px;">
+          لا يوجد محتوى
+        </td>
+      </tr>`;
+  } else {
+    state.items.forEach(item => {
 
-    const { data } = supabaseClient.storage
-      .from("media")
-      .getPublicUrl(fileName);
+      const tr = document.createElement("tr");
 
-    return {
-      name: file.name,
-      mime: file.type || "",
-      size: file.size || 0,
-      url: data.publicUrl,
-      uploadedAt: nowISO()
-    };
+      tr.innerHTML = `
+        <td>${item.contentNumber}</td>
+        <td>${item.title}</td>
+        <td>${item.contentType}</td>
+        <td>${item.targetGroup || "-"}</td>
+        <td>-</td>
+        <td>-</td>
+        <td>
+          <button onclick="deleteItem('${item.id}')">حذف</button>
+        </td>
+      `;
 
-  } catch (err) {
-    alert("حدث خطأ أثناء رفع الملف");
-    return null;
+      tbody.appendChild(tr);
+    });
   }
+
+  updateStats();
 }
 
 // =============================
@@ -90,319 +73,101 @@ async function uploadToSupabase(file) {
 
 function updateStats() {
 
-  const total = Array.isArray(state.items) ? state.items.length : 0;
-  const used = Array.isArray(state.items)
-    ? state.items.filter(i => i.isUsed).length
-    : 0;
-
   const totalEl = document.getElementById("statTotal");
   const usedEl = document.getElementById("statUsed");
+  const typeStats = document.getElementById("typeStats");
 
-  if (totalEl) totalEl.textContent = total;
-  if (usedEl) usedEl.textContent = used;
+  if (totalEl) totalEl.textContent = state.items.length;
+  if (usedEl) usedEl.textContent = 0;
 
-  updateTypeStats();
-}
+  if (!typeStats) return;
 
-function updateTypeStats() {
-
-  const container = document.getElementById("typeStats");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  if (!Array.isArray(state.items) || state.items.length === 0) {
-    container.innerHTML = `<div class="type-empty">لا يوجد محتوى</div>`;
-    return;
-  }
+  typeStats.innerHTML = "";
 
   const counts = {};
 
-  state.items.forEach(item => {
-    const type = item.contentType || "other";
-    counts[type] = (counts[type] || 0) + 1;
+  state.items.forEach(i => {
+    counts[i.contentType] = (counts[i.contentType] || 0) + 1;
   });
 
-  const labels = {
-    article: "مقال",
-    video: "فيديو",
-    images: "صور",
-    infographic: "انفوجرافيك",
-    audio: "صوت",
-    press: "لقاء صحفي",
-    podcast: "بودكاست"
-  };
+  const types = [
+    "article",
+    "video",
+    "images",
+    "infographic",
+    "audio",
+    "press",
+    "podcast"
+  ];
 
-  Object.keys(labels).forEach(key => {
+  types.forEach(type => {
 
-    const value = counts[key] || 0;
+    const div = document.createElement("div");
+    div.className = "stats-item";
 
-    const box = document.createElement("div");
-    box.className = "type-pill";
-    box.style.cursor = "pointer";
-
-    box.innerHTML = `
-      <span class="type-name">${labels[key]}</span>
-      <span class="type-count">${value}</span>
+    div.innerHTML = `
+      <span>${type}</span>
+      <span class="stats-number">${counts[type] || 0}</span>
     `;
 
-    box.addEventListener("click", () => {
-      activeTypeFilter = activeTypeFilter === key ? "all" : key;
-      render();
-    });
-
-    container.appendChild(box);
+    typeStats.appendChild(div);
   });
 }
 
 // =============================
-// Render
+// Add
 // =============================
-function renderAttachment(att) {
-  if (!att || !att.url) return "-";
-  return `<button onclick="window.open('${att.url}','_blank')" class="btn btn--ghost">عرض</button>`;
-}
 
-function render() {
+document.getElementById("form")?.addEventListener("submit", function(e){
 
-  const tbody = document.getElementById("rows");
-  const searchInput = document.getElementById("q");
-  const statsPill = document.getElementById("statsPill");
+  e.preventDefault();
 
-  if (!tbody) return;
+  const title = document.getElementById("title").value.trim();
+  const contentType = document.getElementById("contentType").value;
+  const targetGroup = document.getElementById("targetGroup").value;
 
-  const searchTerm = searchInput?.value?.toLowerCase() || "";
+  if (!title) return;
 
-  tbody.innerHTML = "";
-
-  let filtered = [...state.items];
-
-  if (activeTypeFilter !== "all") {
-    filtered = filtered.filter(i => i.contentType === activeTypeFilter);
-  }
-
-  if (searchTerm) {
-    filtered = filtered.filter(i =>
-      i.title.toLowerCase().includes(searchTerm) ||
-      String(i.contentNumber).includes(searchTerm)
-    );
-  }
-
-  if (statsPill) {
-    statsPill.textContent = `${filtered.length} عنصر`;
-  }
-
-  const labels = {
-    article: "مقال",
-    video: "فيديو",
-    images: "صور",
-    infographic: "انفوجرافيك",
-    audio: "صوت",
-    press: "لقاء صحفي",
-    podcast: "بودكاست"
+  const item = {
+    id: uid(),
+    contentNumber: state.items.length + 1,
+    title,
+    contentType,
+    targetGroup
   };
 
-  const groupLabels = {
-    job_seekers: "الباحثين عن عمل",
-    teachers: "المعلمين",
-    school_students: "طلاب المدارس",
-    university_students: "طلاب الجامعات",
-    institute_students: "طلاب المعاهد",
-    employees: "الموظفين",
-    parents: "أولياء الامور",
-    career_counselors: "المرشدين المهنيين"
-  };
+  state.items.push(item);
 
-  if (filtered.length === 0) {
-    tbody.innerHTML =
-      `<tr>
-        <td colspan="8" style="text-align:center;padding:20px;">
-          لا يوجد محتوى مطابق
-        </td>
-      </tr>`;
-  } else {
-    filtered.forEach(item => {
-
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${String(item.contentNumber).padStart(3,"0")}</td>
-        <td>${item.title}</td>
-
-        <td>
-          <span class="badge">
-            ${labels[item.contentType] || "-"}
-          </span>
-        </td>
-
-        <td>
-          ${
-            item.targetGroup
-              ? `<span class="badge badge--group">
-                   ${groupLabels[item.targetGroup] || ""}
-                 </span>`
-              : "-"
-          }
-        </td>
-
-        <td>${renderAttachment(item.attachment)}</td>
-
-        <td>
-          <select class="usage-select"
-            onchange="changeUsage('${item.id}', this.value)">
-            <option value="false" ${!item.isUsed ? "selected" : ""}>غير مستخدم</option>
-            <option value="true" ${item.isUsed ? "selected" : ""}>مستخدم</option>
-          </select>
-        </td>
-
-        <td>
-          <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
-          <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
-        </td>
-      `;
-
-      tbody.appendChild(tr);
-    });
-  }
-
-// =============================
-// Update Statistics
-// =============================
-const total = state.items.length;
-const used = state.items.filter(x => x.isUsed).length;
-
-const statTotalEl = document.getElementById("statTotal");
-const statUsedEl = document.getElementById("statUsed");
-
-if (statTotalEl) statTotalEl.textContent = total;
-if (statUsedEl) statUsedEl.textContent = used;
-
-updateTypeStats();   // هذا السطر مهم
-}
-
-
-// =============================
-// Actions
-// =============================
-
-function changeUsage(id, value) {
-  const item = state.items.find(x => x.id === id);
-  if (!item) return;
-
-  item.isUsed = value === "true";
   saveLocal();
   render();
-}
-
-function deleteItem(id) {
-  if (!confirm("هل أنت متأكد؟")) return;
-  state.items = state.items.filter(x => x.id !== id);
-  saveLocal();
-  render();
-}
-
-function editItem(id) {
-  const item = state.items.find(x => x.id === id);
-  if (!item) return;
-
-  $("#id").value = item.id;
-  $("#title").value = item.title;
-  $("#contentType").value = item.contentType;
-$("#targetGroup").value = item.targetGroup || "";
-  
-  openModal();
-}
-
-// =============================
-// Submit
-// =============================
-
-const formEl = document.getElementById("form");
-
-if (formEl) {
-  formEl.addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const idField = document.getElementById("id").value;
-    const isEdit = Boolean(idField);
-    const id = isEdit ? idField : uid();
-
-    const prev = state.items.find(x => x.id === id);
-    const fileInput = document.getElementById("attachmentFile");
-    const file = fileInput?.files?.[0] || null;
-
-    let attachment = isEdit ? prev?.attachment : null;
-
-    if (file) {
-      const uploaded = await uploadToSupabase(file);
-      if (uploaded) attachment = uploaded;
-    }
-
-    const item = {
-      id,
-      contentNumber: isEdit ? prev.contentNumber : getNextNumber(),
-      title: document.getElementById("title").value.trim(),
-      contentType: document.getElementById("contentType").value,
-      targetGroup: document.getElementById("targetGroup").value || null,
-      attachment,
-      isUsed: isEdit ? prev.isUsed : false,
-      createdAt: isEdit ? prev.createdAt : nowISO(),
-      updatedAt: nowISO()
-    };
-
-    if (isEdit) {
-      state.items = state.items.map(x => x.id === id ? item : x);
-    } else {
-      state.items.push(item);
-    }
-
-    saveLocal();
-    render();
-    closeModal();
-  });
-}
-
-// =============================
-// Modal Controls
-// =============================
-
-function openModal() {
-  const modal = document.getElementById("modal");
-  if (!modal) return;
-
-  const form = document.getElementById("form");
-  if (form) form.reset();
-
-  const idField = document.getElementById("id");
-  if (idField) idField.value = "";
-
-  modal.classList.add("active");
-}
-
-function closeModal() {
-  const modal = document.getElementById("modal");
-  if (!modal) return;
-
-  modal.classList.remove("active");
-}
-
-// ربط الأزرار
-document.getElementById("btnNew")?.addEventListener("click", openModal);
-document.getElementById("btnNew2")?.addEventListener("click", openModal);
-document.getElementById("btnClose")?.addEventListener("click", closeModal);
-
-// إغلاق عند الضغط خارج المودال
-document.getElementById("modal")?.addEventListener("click", function (e) {
-  if (e.target.classList.contains("modal__backdrop")) {
-    closeModal();
-  }
+  closeModal();
 });
 
 // =============================
-// Search
+// Delete
 // =============================
 
-$("#q")?.addEventListener("input", render);
+function deleteItem(id) {
+  state.items = state.items.filter(i => i.id !== id);
+  saveLocal();
+  render();
+}
+
+// =============================
+// Modal
+// =============================
+
+function openModal() {
+  document.getElementById("modal")?.classList.add("active");
+}
+
+function closeModal() {
+  document.getElementById("modal")?.classList.remove("active");
+}
+
+document.getElementById("btnNew")?.addEventListener("click", openModal);
+document.getElementById("btnNew2")?.addEventListener("click", openModal);
+document.getElementById("btnClose")?.addEventListener("click", closeModal);
 
 // =============================
 // Init
