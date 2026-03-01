@@ -446,3 +446,23 @@ h3 {
   font-weight: 800;
   color: var(--green);
 }
+/* تنسيق زر الحذف البسيط */
+.btn-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: 0.2s;
+}
+.btn-action:hover { transform: scale(1.2); }
+
+/* نقطة الحالة الخضراء */
+.status-dot {
+  height: 10px;
+  width: 10px;
+  background-color: var(--green);
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 5px;
+}
+
