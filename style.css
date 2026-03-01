@@ -73,6 +73,27 @@ h3 {
   align-items: center;
   border-bottom: 3px solid var(--green);
 }
+<button class="btn btn--ghost" onclick="exportToExcel()">
+  <span>📥</span>
+  <span>تصدير Excel</span>
+</button>
+.btn-action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+.btn-action:hover { transform: scale(1.2); }
+.status-dot {
+  height: 8px;
+  width: 8px;
+  background-color: var(--green);
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 5px;
+}
+
 
 .logo {
   height: 70px;
