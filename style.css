@@ -1,169 +1,250 @@
-:root {
-  --blue: #005187;
-  --green: #00a665;
-  --orange: #df7c2e;
-  --orange-light: rgba(223, 124, 46, 0.1); /* درجة برتقالية شفافة */
-  --gray: #6b7280;
-  --white: #ffffff;
-  --border: rgba(0, 81, 135, 0.1); /* حدود ناعمة */
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة إدارة المحتوى</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --blue: #005187;
+            --green: #00a665;
+            --orange: #df7c2e;
+            --orange-bg: #fffbf9;
+            --white: #ffffff;
+            --border: rgba(223, 124, 46, 0.2);
+        }
 
-/* ========================= */
-/* Base & Background */
-/* ========================= */
+        * { box-sizing: border-box; }
 
-* { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Tajawal', sans-serif;
+            /* خلفية برتقالية متدرجة ناعمة جداً وفخمة */
+            background: linear-gradient(135deg, #ffffff 0%, #fff5ee 100%);
+            background-attachment: fixed;
+            color: #1e293b;
+            font-size: 20px; /* خط كبير للرسميات */
+            line-height: 1.6;
+        }
 
-body {
-  margin: 0;
-  font-family: 'Tajawal', sans-serif;
-  /* خلفية متدرجة احترافية تبدأ من الرمادي الفاتح وتنتهي بلمسة برتقالية هادئة */
-  background: linear-gradient(135deg, #f8fafc 0%, rgba(223, 124, 46, 0.08) 100%);
-  background-attachment: fixed;
-  color: #1f2937;
-  font-size: 20px; /* تكبير الخط ليتناسب مع القراءة الرسمية */
-  line-height: 1.8;
-}
+        /* الهيدر: الشعار يمين والعنوان يسار */
+        .topbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 10px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--orange);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
 
-/* ========================= */
-/* Topbar (تحسين الشعار ومكان العنوان) */
-/* ========================= */
+        .logo-container img {
+            height: 95px; /* حجم الشعار */
+            display: block;
+        }
 
-.topbar {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px); /* تأثير زجاجي خلف الشعار */
-  padding: 20px 50px;
-  display: flex;
-  flex-direction: row-reverse; /* عكس الاتجاه لوضع العنوان في مكان مميز */
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid var(--orange-light);
-}
+        .topbar__title h1 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 900;
+            color: var(--blue);
+        }
 
-.logo { 
-  height: 105px; /* تكبير الشعار */
-  transition: 0.3s;
-}
+        .shell { padding: 40px 60px; }
+        .main { max-width: 1400px; margin: auto; }
 
-.topbar__title h1 {
-  margin: 0;
-  font-size: 32px; /* خط رسمي كبير */
-  color: var(--blue);
-  font-weight: 900;
-  border-right: 5px solid var(--orange); /* لمسة جمالية بجانب العنوان */
-  padding-right: 15px;
-}
+        /* أزرار التحكم */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
 
-/* ========================= */
-/* KPI Cards (تطوير بطاقات الإحصاء) */
-/* ========================= */
+        /* زر إضافة محتوى - ضخم وواضح */
+        .btn--primary {
+            background: linear-gradient(45deg, var(--green), #00c176);
+            color: white;
+            padding: 18px 45px;
+            font-size: 22px;
+            font-weight: 900;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 166, 101, 0.2);
+            transition: 0.3s;
+        }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 25px;
-  margin-bottom: 50px;
-}
+        .btn--primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 166, 101, 0.3);
+        }
 
-.card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  padding: 35px;
-  border-radius: 24px;
-  border: 1px solid var(--white);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-  position: relative;
-  overflow: hidden;
-  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+        /* مدخلات البحث والخيارات الشفافة */
+        .input-group { display: flex; gap: 15px; }
+        
+        .input, .usage-select {
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 2px solid var(--border);
+            background: rgba(255, 255, 255, 0.7);
+            font-family: 'Tajawal';
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--blue);
+            transition: 0.3s;
+        }
 
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 8px;
-  height: 100%;
-  background: var(--blue); /* عمود جانبي أزرق للفخامة */
-}
+        .usage-select { background: rgba(223, 124, 46, 0.08); cursor: pointer; }
 
-.card:hover {
-  transform: translateY(-10px);
-  background: white;
-  box-shadow: 0 20px 40px rgba(223, 124, 46, 0.1);
-  border-color: var(--orange);
-}
+        .input:focus { outline: none; border-color: var(--orange); background: white; }
 
-.card__value {
-  font-size: 50px;
-  font-weight: 900;
-  color: var(--blue);
-  margin-top: 10px;
-}
+        /* بطاقات الإحصائيات */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
 
-.card__label {
-  font-size: 18px;
-  color: var(--gray);
-  font-weight: 700;
-}
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 25px;
+            border: 1px solid var(--border);
+            transition: 0.4s;
+            text-align: center;
+        }
 
-/* ========================= */
-/* Buttons (تكبير زر محتوى جديد) */
-/* ========================= */
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--orange);
+            box-shadow: 0 20px 40px rgba(223, 124, 46, 0.1);
+        }
 
-.btn--primary {
-  background: linear-gradient(45deg, var(--green), #00c87a);
-  color: white;
-  padding: 18px 40px; /* تكبير الزر */
-  font-size: 20px; /* تكبير الخط */
-  border-radius: 18px;
-  box-shadow: 0 10px 20px rgba(0, 166, 101, 0.2);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: 0.3s;
-}
+        .card__label { color: var(--gray); font-size: 19px; font-weight: 700; }
+        .card__value { font-size: 55px; font-weight: 900; color: var(--blue); display: block; }
 
-.btn--primary:hover {
-  transform: scale(1.05);
-  box-shadow: 0 15px 30px rgba(0, 166, 101, 0.3);
-}
+        /* المودال - في منتصف الشاشة */
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none; /* مخفي */
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
 
-/* ========================= */
-/* Inputs & Selects (مربعات شفافة وجميلة) */
-/* ========================= */
+        .modal.active { display: flex; }
 
-.input, .usage-select {
-  padding: 15px 25px;
-  border-radius: 15px;
-  border: 2px solid var(--border);
-  background: rgba(255, 255, 255, 0.5); /* خلفية شفافة */
-  font-size: 18px;
-  color: var(--blue);
-  font-weight: 600;
-  transition: 0.3s;
-}
+        .modal__backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 51, 135, 0.4);
+            backdrop-filter: blur(8px);
+        }
 
-.usage-select {
-  background: var(--orange-light); /* تلوين خيارات السلكت ببرتقالي شفاف */
-  border-color: transparent;
-  cursor: pointer;
-}
+        .modal__dialog {
+            position: relative;
+            background: white;
+            width: 90%;
+            max-width: 650px;
+            padding: 50px;
+            border-radius: 40px;
+            border-top: 10px solid var(--orange);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.3);
+            z-index: 10001;
+        }
 
-.input:focus, .usage-select:focus {
-  outline: none;
-  background: white;
-  border-color: var(--orange);
-  box-shadow: 0 0 0 4px rgba(223, 124, 46, 0.1);
-}
+        .modal__close {
+            position: absolute;
+            top: 25px;
+            left: 25px; /* لليسار في النظام العربي */
+            background: #f1f5f9;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-/* ========================= */
-/* Modal (تعديل الموضع والزر) */
-/* ========================= */
+        .modal__close:hover { background: #fee2e2; color: #ef4444; }
 
-.modal__dialog {
-  max-width: 700px;
-  border-radius: 35px;
-  border: none;
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2);
-}
+    </style>
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="logo-container">
+            <img src="https://via.placeholder.com/200x95?text=LOGO" alt="الشعار" class="logo">
+        </div>
+        <div class="topbar__title">
+            <h1>منصة إدارة المحتوى</h1>
+        </div>
+    </header>
+
+    <div class="shell">
+        <main class="main">
+            
+            <div class="toolbar">
+                <button class="btn--primary" onclick="toggleModal(true)">+ إضافة محتوى جديد</button>
+                
+                <div class="input-group">
+                    <select class="usage-select">
+                        <option>كل التصنيفات</option>
+                        <option>محتوى مرئي</option>
+                        <option>مقالات</option>
+                    </select>
+                    <input type="text" class="input" placeholder="بحث عن محتوى...">
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <span class="card__label">إجمالي المقالات</span>
+                    <span class="card__value">1,250</span>
+                </div>
+                <div class="card">
+                    <span class="card__label">المحتوى النشط</span>
+                    <span class="card__value">840</span>
+                </div>
+                <div class="card">
+                    <span class="card__label">المشاهدات اليومية</span>
+                    <span class="card__value">15.2K</span>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div class="modal" id="myModal">
+        <div class="modal__backdrop" onclick="toggleModal(false)"></div>
+        <div class="modal__dialog">
+            <button class="modal__close" onclick="toggleModal(false)">✕</button>
+            <h2 style="color: var(--blue); font-weight: 900;">إضافة محتوى جديد</h2>
+            <p>قم بتعبئة البيانات التالية لإضافة المحتوى إلى المنصة...</p>
+            <input type="text" class="input" style="width: 100%; margin-bottom: 20px;" placeholder="عنوان المحتوى">
+            <button class="btn--primary" style="width: 100%;">حفظ ونشر</button>
+        </div>
+    </div>
+
+    <script>
+        // وظيفة لفتح وإغلاق المودال
+        function toggleModal(show) {
+            const modal = document.getElementById('myModal');
+            if (show) {
+                modal.classList.add('active');
+            } else {
+                modal.classList.remove('active');
+            }
+        }
+    </script>
+
+</body>
+</html>
+          
