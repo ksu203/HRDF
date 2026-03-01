@@ -165,30 +165,31 @@ function renderAttachment(att) {
 
 function render() {
 
-  const tbody = $("#rows");
-  const searchTerm = $("#q")?.value?.toLowerCase() || "";
+  const tbody = document.getElementById("rows");
+  const searchInput = document.getElementById("q");
+  const statsPill = document.getElementById("statsPill");
 
   if (!tbody) return;
+
+  const searchTerm = searchInput?.value?.toLowerCase() || "";
+
   tbody.innerHTML = "";
 
   let filtered = [...state.items];
 
-  if (activeTypeFilter !== "all")
+  if (activeTypeFilter !== "all") {
     filtered = filtered.filter(i => i.contentType === activeTypeFilter);
+  }
 
-  if (searchTerm)
+  if (searchTerm) {
     filtered = filtered.filter(i =>
       i.title.toLowerCase().includes(searchTerm) ||
       String(i.contentNumber).includes(searchTerm)
     );
+  }
 
-  $("#statsPill").textContent = `${filtered.length} عنصر`;
-
-  if (filtered.length === 0) {
-    tbody.innerHTML =
-      `<tr><td colspan="8" style="text-align:center;padding:20px;">لا يوجد محتوى مطابق</td></tr>`;
-    updateStats();
-    return;
+  if (statsPill) {
+    statsPill.textContent = `${filtered.length} عنصر`;
   }
 
   const labels = {
@@ -212,48 +213,69 @@ function render() {
     career_counselors: "المرشدين المهنيين"
   };
 
-  filtered.forEach(item => {
+  if (filtered.length === 0) {
+    tbody.innerHTML =
+      `<tr>
+        <td colspan="8" style="text-align:center;padding:20px;">
+          لا يوجد محتوى مطابق
+        </td>
+      </tr>`;
+  } else {
+    filtered.forEach(item => {
 
-    const tr = document.createElement("tr");
+      const tr = document.createElement("tr");
 
-    tr.innerHTML = `
-      <td>${String(item.contentNumber).padStart(3,"0")}</td>
-      <td>${item.title}</td>
+      tr.innerHTML = `
+        <td>${String(item.contentNumber).padStart(3,"0")}</td>
+        <td>${item.title}</td>
 
-      <td>
-        <span class="badge">
-          ${labels[item.contentType] || "-"}
-        </span>
-      </td>
+        <td>
+          <span class="badge">
+            ${labels[item.contentType] || "-"}
+          </span>
+        </td>
 
-      <td>
-        ${
-          item.targetGroup
-            ? `<span class="badge badge--group">
-                 ${groupLabels[item.targetGroup] || ""}
-               </span>`
-            : "-"
-        }
-      </td>
+        <td>
+          ${
+            item.targetGroup
+              ? `<span class="badge badge--group">
+                   ${groupLabels[item.targetGroup] || ""}
+                 </span>`
+              : "-"
+          }
+        </td>
 
-      <td>${renderAttachment(item.attachment)}</td>
+        <td>${renderAttachment(item.attachment)}</td>
 
-    <td>
-  <select class="usage-select" onchange="changeUsage('${item.id}', this.value)">
-    <option value="false" ${!item.isUsed ? "selected" : ""}>غير مستخدم</option>
-    <option value="true" ${item.isUsed ? "selected" : ""}>مستخدم</option>
-  </select>
-</td>
-      <td>
-        <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
-        <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
-      </td>
-    `;
+        <td>
+          <select class="usage-select"
+            onchange="changeUsage('${item.id}', this.value)">
+            <option value="false" ${!item.isUsed ? "selected" : ""}>غير مستخدم</option>
+            <option value="true" ${item.isUsed ? "selected" : ""}>مستخدم</option>
+          </select>
+        </td>
 
-    tbody.appendChild(tr);
-  });
+        <td>
+          <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
+          <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
+        </td>
+      `;
 
-  updateStats();
+      tbody.appendChild(tr);
+    });
+  }
+
+  // =============================
+  // Update Statistics (الجزء المهم)
+  // =============================
+  const total = state.items.length;
+  const used = state.items.filter(x => x.isUsed).length;
+
+  const statTotalEl = document.getElementById("statTotal");
+  const statUsedEl = document.getElementById("statUsed");
+
+  if (statTotalEl) statTotalEl.textContent = total;
+  if (statUsedEl) statUsedEl.textContent = used;
 }
 
 // =============================
