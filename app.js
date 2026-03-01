@@ -238,14 +238,12 @@ function render() {
 
       <td>${renderAttachment(item.attachment)}</td>
 
-      <td>
-        <button onclick="toggleUsed('${item.id}')" class="btn btn--ghost">
-          ${item.isUsed ? "✓ مستخدم" : "تم استخدامه"}
-        </button>
-      </td>
-
-      <td>${item.isUsed ? "مستخدم" : "غير مستخدم"}</td>
-
+    <td>
+  <select class="usage-select" onchange="changeUsage('${item.id}', this.value)">
+    <option value="false" ${!item.isUsed ? "selected" : ""}>غير مستخدم</option>
+    <option value="true" ${item.isUsed ? "selected" : ""}>مستخدم</option>
+  </select>
+</td>
       <td>
         <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
         <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
@@ -262,10 +260,11 @@ function render() {
 // Actions
 // =============================
 
-function toggleUsed(id) {
+function changeUsage(id, value) {
   const item = state.items.find(x => x.id === id);
   if (!item) return;
-  item.isUsed = !item.isUsed;
+
+  item.isUsed = value === "true";
   saveLocal();
   render();
 }
