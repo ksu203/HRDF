@@ -292,44 +292,56 @@ $("#targetGroup").value = item.targetGroup || "";
 // Submit
 // =============================
 
-$("#form").addEventListener("submit", async (e) => {
+// =============================
+// Submit
+// =============================
 
-  e.preventDefault();
+const formEl = $("#form");
 
-  const idField = $("#id").value;
-  const isEdit = Boolean(idField);
-  const id = isEdit ? idField : uid();
+if (formEl) {
+  formEl.addEventListener("submit", async (e) => {
 
-  const prev = state.items.find(x => x.id === id);
-  const file = $("#attachmentFile").files?.[0] || null;
+    e.preventDefault();
 
-  let attachment = isEdit ? prev?.attachment : null;
+    const idField = $("#id").value;
+    const isEdit = Boolean(idField);
+    const id = isEdit ? idField : uid();
 
-  if (file) {
-    const uploaded = await uploadToSupabase(file);
-    if (uploaded) attachment = uploaded;
-  }
+    const prev = state.items.find(x => x.id === id);
+    const file = $("#attachmentFile").files?.[0] || null;
 
-  const item = {
-    id,
-    contentNumber: isEdit ? prev.contentNumber : getNextNumber(),
-    title: $("#title").value.trim(),
-    contentType: $("#contentType").value,
-    targetGroup: $("#targetGroup").value || null,  // ✅ هنا تم تصحيحها
-    attachment,
-    isUsed: isEdit ? prev.isUsed : false,
-    createdAt: isEdit ? prev.createdAt : nowISO(),
-    updatedAt: nowISO()
-  };
+    let attachment = isEdit ? prev?.attachment : null;
 
-  const idx = state.items.findIndex(x => x.id === id);
-  if (idx >= 0) state.items[idx] = item;
-  else state.items.unshift(item);
+    if (file) {
+      const uploaded = await uploadToSupabase(file);
+      if (uploaded) attachment = uploaded;
+    }
 
-  saveLocal();
-  render();
-  closeModal();
-});
+    const item = {
+      id,
+      contentNumber: isEdit ? prev.contentNumber : getNextNumber(),
+      title: $("#title").value.trim(),
+      contentType: $("#contentType").value,
+      targetGroup: $("#targetGroup").value || null,
+      attachment,
+      isUsed: isEdit ? prev.isUsed : false,
+      createdAt: isEdit ? prev.createdAt : nowISO(),
+      updatedAt: nowISO()
+    };
+
+    if (isEdit) {
+      state.items = state.items.map(x => x.id === id ? item : x);
+    } else {
+      state.items.push(item);
+    }
+
+    saveLocal();
+    render();
+    closeModal();
+
+  });
+}
+
 
 // =============================
 // Modal
