@@ -158,5 +158,75 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./app.js"></script>
 
+  <!-- Modal -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal__backdrop" data-close="true"></div>
+
+  <div class="modal__dialog">
+    <div class="modal__head">
+      <h3>إضافة / تعديل محتوى</h3>
+      <button class="iconBtn" id="btnClose">✕</button>
+    </div>
+
+    <form class="modal__body" id="form">
+
+      <input type="hidden" id="id" />
+
+      <div class="formGrid">
+
+        <div class="field">
+          <label class="label">رقم المحتوى</label>
+          <input class="input" id="number" disabled />
+        </div>
+
+        <div class="field field--full">
+          <label class="label">العنوان</label>
+          <input class="input" id="title" required />
+        </div>
+
+        <div class="field">
+          <label class="label">نوع المحتوى</label>
+          <select class="input input--select" id="contentType" required>
+            <option value="article">مقال</option>
+            <option value="video">فيديو</option>
+            <option value="images">صور</option>
+            <option value="infographic">انفوجرافيك</option>
+            <option value="audio">صوت</option>
+            <option value="press">لقاء صحفي</option>
+            <option value="podcast">بودكاست</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="label">الفئة المستهدفة</label>
+          <select class="input input--select" id="targetGroup">
+            <option value="">— بدون تحديد —</option>
+            <option value="job_seekers">الباحثين عن عمل</option>
+            <option value="teachers">المعلمين</option>
+            <option value="school_students">طلاب المدارس</option>
+            <option value="university_students">طلاب الجامعات</option>
+            <option value="institute_students">طلاب المعاهد</option>
+            <option value="employees">الموظفين</option>
+            <option value="parents">أولياء الامور</option>
+            <option value="career_counselors">المرشدين المهنيين</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="label">تحميل المرفق</label>
+          <input class="input" id="attachmentFile" type="file" />
+        </div>
+
+      </div>
+
+      <div class="modal__foot">
+        <button class="btn btn--ghost" type="button" data-close="true">إلغاء</button>
+        <button class="btn btn--primary" type="submit">حفظ</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+  
 </body>
 </html>
