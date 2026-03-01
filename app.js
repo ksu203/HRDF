@@ -71,49 +71,84 @@ function render() {
 // Stats
 // =============================
 
-function updateStats() {
+// 1. إعدادات الربط مع Supabase
+const supabaseUrl = 'YOUR_SUPABASE_URL'; 
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+const supabase = supabasejs.createClient(supabaseUrl, supabaseKey);
 
-  const totalEl = document.getElementById("statTotal");
-  const usedEl = document.getElementById("statUsed");
-  const typeStats = document.getElementById("typeStats");
+let state = { items: [] };
 
-  if (totalEl) totalEl.textContent = state.items.length;
-  if (usedEl) usedEl.textContent = 0;
+// 2. قاموس المصطلحات لتعريب الأنواع في الواجهة
+const typeMap = {
+  article: "مقال",
+  video: "فيديو",
+  images: "صور",
+  infographic: "انفوجرافيك",
+  audio: "صوت",
+  press: "لقاء صحفي",
+  podcast: "بودكاست"
+};
 
-  if (!typeStats) return;
+// 3. دالة جلب البيانات من Supabase (المزامنة الوظيفية)
+async function fetchData() {
+  const { data, error } = await supabase
+    .from('content') // تأكد أن اسم الجدول في Supabase هو content
+    .select('*')
+    .order('created_at', { ascending: false });
 
-  typeStats.innerHTML = "";
-
-  const counts = {};
-
-  state.items.forEach(i => {
-    counts[i.contentType] = (counts[i.contentType] || 0) + 1;
-  });
-
-  const types = [
-    "article",
-    "video",
-    "images",
-    "infographic",
-    "audio",
-    "press",
-    "podcast"
-  ];
-
-  types.forEach(type => {
-
-    const div = document.createElement("div");
-    div.className = "stats-item";
-
-    div.innerHTML = `
-      <span>${type}</span>
-      <span class="stats-number">${counts[type] || 0}</span>
-    `;
-
-    typeStats.appendChild(div);
-  });
+  if (error) {
+    console.error('Error fetching:', error);
+  } else {
+    state.items = data;
+    render();
+  }
 }
 
+// 4. دالة تصدير الإكسل (Excel Export)
+function exportToExcel() {
+  if (state.items.length === 0) return alert("لا يوجد بيانات لتصديرها");
+  
+  const dataToExport = state.items.map(item => ({
+    "رقم المحتوى": item.contentNumber,
+    "العنوان": item.title,
+    "نوع المحتوى": typeMap[item.contentType] || item.contentType,
+    "الفئة المستهدفة": item.targetGroup || "غير محدد",
+    "الحالة": item.isUsed ? "مستخدم" : "متاح"
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "المحتوى");
+  XLSX.utils.writeFile(workbook, "إحصائيات_إرشاد_HRDF.xlsx");
+}
+
+// 5. دالة العرض (التحسين التصميمي)
+function render() {
+  const tbody = document.getElementById("rows");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  state.items.forEach(item => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><span class="badge">${item.contentNumber || '0'}</span></td>
+      <td style="font-weight:700; color:var(--blue);">${item.title}</td>
+      <td><span class="badge" style="background:rgba(0,166,101,0.1); color:var(--green);">${typeMap[item.contentType] || item.contentType}</span></td>
+      <td><span class="badge--group">${item.targetGroup || "-"}</span></td>
+      <td>${item.fileUrl ? `<a href="${item.fileUrl}" target="_blank" style="text-decoration:none;">🔗 عرض</a>` : '-'}</td>
+      <td>${item.isUsed ? '✅ مستخدم' : '⏳ متاح'}</td>
+      <td><span class="status-dot"></span> نشط</td>
+      <td>
+        <button class="btn-action" onclick="deleteItem('${item.id}')" title="حذف">🗑️</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+  updateStats();
+}
+
+// استدعاء البيانات عند تشغيل الصفحة
+fetchData();
 // =============================
 // Add
 // =============================
