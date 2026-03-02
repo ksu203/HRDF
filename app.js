@@ -324,26 +324,26 @@ $("#btnNew")?.addEventListener("click", openModal);
 $("#btnNew2")?.addEventListener("click", openModal);
 $("#btnClose")?.addEventListener("click", closeModal);
 
-document.querySelectorAll("[data-close]").forEach(el =>
-  el.addEventListener("click", closeModal)
-);
+document.querySelectorAll("[data-close]").forEach(el => {
+  el.addEventListener("click", closeModal);
+});
 
 // =============================
-// Type Modal (عرض حسب النوع)
+// Type Modal
 // =============================
 
 function openTypeModal(typeKey, typeLabel) {
   const filtered = state.items.filter(i => i.contentType === typeKey);
 
-  const modalContent = document.createElement("div");
-  modalContent.className = "modal active";
+  const wrapper = document.createElement("div");
+  wrapper.className = "modal active";
 
-  modalContent.innerHTML = `
-    <div class="modal__backdrop" onclick="this.closest('.modal').remove()"></div>
+  wrapper.innerHTML = `
+    <div class="modal__backdrop"></div>
     <div class="modal__dialog">
       <div class="modal__head">
         <h3>المواضيع الخاصة بـ ${typeLabel}</h3>
-        <button class="iconBtn" onclick="this.closest('.modal').remove()">✕</button>
+        <button class="iconBtn">✕</button>
       </div>
       <div class="modal__body">
         ${
@@ -351,16 +351,20 @@ function openTypeModal(typeKey, typeLabel) {
             ? "<p>لا يوجد محتوى في هذا التصنيف</p>"
             : `<ul style="line-height:2;">
                 ${filtered.map(i => `<li>${i.title}</li>`).join("")}
-               </ul>`
+              </ul>`
         }
       </div>
     </div>
   `;
 
-  document.body.appendChild(modalContent);
-}
-  
+  wrapper.querySelector(".modal__backdrop")
+    .addEventListener("click", () => wrapper.remove());
 
+  wrapper.querySelector(".iconBtn")
+    .addEventListener("click", () => wrapper.remove());
+
+  document.body.appendChild(wrapper);
+}
 // =============================
 // Search
 // =============================
