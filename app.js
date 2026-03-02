@@ -117,29 +117,24 @@ function updateTypeStats() {
     podcast: "بودكاست"
   };
 
-  Object.keys(labels).forEach(key => {
-    const value = counts[key] || 0;
+ Object.keys(labels).forEach(key => {
+  const value = counts[key] || 0;
 
-    const div = document.createElement("div");
-    div.className = "stats-item";
-    div.innerHTML = `
-      <span>${labels[key]}</span>
-      <span class="stats-number">${value}</span>
-    `;
+  const div = document.createElement("div");
+  div.className = "stats-item";
+  div.style.cursor = "pointer";
 
-    container.appendChild(div);
+  div.innerHTML = `
+    <span>${labels[key]}</span>
+    <span class="stats-number">${value}</span>
+  `;
+
+  div.addEventListener("click", () => {
+    openTypeModal(key, labels[key]);
   });
-}
 
-function updateStats() {
-  const total = state.items.length;
-  const used = state.items.filter(i => i.isUsed).length;
-
-  $("#statTotal").textContent = total;
-  $("#statUsed").textContent = used;
-
-  updateTypeStats(); // مهم
-}
+  container.appendChild(div);
+});
 
 // =============================
 // Render
@@ -332,6 +327,39 @@ $("#btnClose")?.addEventListener("click", closeModal);
 document.querySelectorAll("[data-close]").forEach(el =>
   el.addEventListener("click", closeModal)
 );
+
+// =============================
+// Type Modal (عرض حسب النوع)
+// =============================
+
+function openTypeModal(typeKey, typeLabel) {
+  const filtered = state.items.filter(i => i.contentType === typeKey);
+
+  const modalContent = document.createElement("div");
+  modalContent.className = "modal active";
+
+  modalContent.innerHTML = `
+    <div class="modal__backdrop" onclick="this.closest('.modal').remove()"></div>
+    <div class="modal__dialog">
+      <div class="modal__head">
+        <h3>المواضيع الخاصة بـ ${typeLabel}</h3>
+        <button class="iconBtn" onclick="this.closest('.modal').remove()">✕</button>
+      </div>
+      <div class="modal__body">
+        ${
+          filtered.length === 0
+            ? "<p>لا يوجد محتوى في هذا التصنيف</p>"
+            : `<ul style="line-height:2;">
+                ${filtered.map(i => `<li>${i.title}</li>`).join("")}
+               </ul>`
+        }
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modalContent);
+}
+  
 
 // =============================
 // Search
