@@ -52,17 +52,14 @@ function getNextNumber() {
 // =============================
 
 async function uploadToSupabase(file) {
-
-  // استخراج الامتداد فقط
   const extension = file.name.split('.').pop();
 
-  // إنشاء اسم آمن بالكامل (لا يعتمد على اسم المستخدم)
   const fileName = `${Date.now()}_${Math.random()
     .toString(36)
     .substring(2, 10)}.${extension}`;
 
   try {
-    const { data, error } = await supabaseClient.storage
+    const { error } = await supabaseClient.storage
       .from("media")
       .upload(fileName, file, {
         cacheControl: "3600",
@@ -80,7 +77,7 @@ async function uploadToSupabase(file) {
       .getPublicUrl(fileName);
 
     return {
-      name: file.name,   // نحفظ الاسم الأصلي للعرض فقط
+      name: file.name,
       mime: file.type || "",
       size: file.size || 0,
       url: publicData.publicUrl,
@@ -92,7 +89,8 @@ async function uploadToSupabase(file) {
     alert("حدث خطأ أثناء رفع الملف");
     return null;
   }
-  } 
+}
+
 // =============================
 // Stats
 // =============================
@@ -103,74 +101,6 @@ function updateStats() {
 
   $("#statTotal").textContent = total;
   $("#statUsed").textContent = used;
-
-  updateTypeStats();
-}
-
-function updateTypeStats() {
-  const container = $("#typeStats");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const counts = {};
-  state.items.forEach(item => {
-    const type = item.contentType || "other";
-    counts[type] = (counts[type] || 0) + 1;
-  });
-
-  const labels = {
-    article: "مقال",
-    video: "فيديو",
-    images: "صور",
-    infographic: "انفوجرافيك",
-    audio: "صوت",
-    press: "لقاء صحفي",
-    podcast: "بودكاست"
-  };
-
-  const colors = {
-    article: "#0B6B3A",
-    video: "#2563eb",
-    images: "#9333ea",
-    infographic: "#f59e0b",
-    audio: "#14b8a6",
-    press: "#ef4444",
-    podcast: "#6366f1"
-  };
-
-  Object.keys(labels).forEach(key => {
-    const value = counts[key] || 0;
-
-    const box = document.createElement("div");
-    box.style.cursor = "pointer";
-    box.style.padding = "8px 14px";
-    box.style.borderRadius = "20px";
-    box.style.display = "flex";
-    box.style.gap = "8px";
-    box.style.alignItems = "center";
-    box.style.fontWeight = "600";
-    box.style.background = activeTypeFilter === key ? colors[key] : "#f3f6f5";
-    box.style.color = activeTypeFilter === key ? "#fff" : "#0B6B3A";
-
-    box.innerHTML = `
-      <span>${labels[key]}</span>
-      <span style="
-        background:${activeTypeFilter === key ? "rgba(255,255,255,0.3)" : colors[key]};
-        color:#fff;
-        padding:2px 8px;
-        border-radius:12px;">
-        ${value}
-      </span>
-    `;
-
-    box.addEventListener("click", () => {
-      activeTypeFilter = activeTypeFilter === key ? "all" : key;
-      render();
-    });
-
-    container.appendChild(box);
-  });
 }
 
 // =============================
@@ -205,7 +135,12 @@ function render() {
   $("#statsPill").textContent = `${filtered.length} عنصر`;
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;">لا يوجد محتوى مطابق</td></tr>`;
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align:center;padding:20px;">
+          لا يوجد محتوى مطابق
+        </td>
+      </tr>`;
     updateStats();
     return;
   }
@@ -240,24 +175,16 @@ function render() {
           font-weight:600;
           font-size:0.8rem;">
           ${labels[item.contentType] || "-"}
-<tr>
-<td>رقم</td>
-<td>عنوان</td>
-<td>نوع</td>
-<td>الفئة المستهدفة</td>
-<td>المرفق</td>
-<td>زر الاستخدام</td>
-<td>الحالة</td>
-<td>الإجراءات</td>
-</tr>
         </span>
       </td>
+      <td>${item.targetGroup || "-"}</td>
       <td>${renderAttachment(item.attachment)}</td>
       <td>
         <button onclick="toggleUsed('${item.id}')" class="btn btn--ghost">
           ${item.isUsed ? "✓ مستخدم" : "تم استخدامه"}
         </button>
       </td>
+      <td>${item.isUsed ? "مستخدم" : "غير مستخدم"}</td>
       <td>
         <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
         <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
@@ -297,6 +224,7 @@ function editItem(id) {
   $("#id").value = item.id;
   $("#title").value = item.title;
   $("#contentType").value = item.contentType || "article";
+  $("#targetGroup").value = item.targetGroup || "";
 
   openModal();
 }
@@ -327,6 +255,7 @@ $("#form").addEventListener("submit", async (e) => {
     contentNumber: isEdit ? prev.contentNumber : getNextNumber(),
     title: $("#title").value.trim(),
     contentType: $("#contentType").value,
+    targetGroup: $("#targetGroup").value,
     attachment,
     isUsed: isEdit ? prev.isUsed : false,
     createdAt: isEdit ? prev.createdAt : nowISO(),
