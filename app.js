@@ -136,6 +136,18 @@ function updateTypeStats() {
   container.appendChild(div);
 });
 }
+function updateStats() {
+  const total = state.items.length;
+  const used = state.items.filter(i => i.isUsed).length;
+
+  const totalEl = $("#statTotal");
+  const usedEl = $("#statUsed");
+
+  if (totalEl) totalEl.textContent = total;
+  if (usedEl) usedEl.textContent = used;
+
+  updateTypeStats();
+}
 
 // =============================
 // Render
