@@ -135,6 +135,7 @@ function updateTypeStats() {
 
   container.appendChild(div);
 });
+}
 
 // =============================
 // Render
