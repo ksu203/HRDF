@@ -2,20 +2,19 @@
 /* Google Font - Tajawal                */
 /* ===================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap');
 
 /* ===================================== */
-/* Root Variables                       */
+/* Root Variables - HRDF Inspired       */
 /* ===================================== */
 
 :root {
-  --blue: #005187;
-  --green: #00a665;
-  --orange: #df7c2e;
+  --blue: #003f6b;
+  --green: #007a4d;
   --gray: #6b7280;
-  --bg: #f6f8fb;
+  --bg: #f4f6f9;
   --white: #ffffff;
-  --border: #e5e7eb;
+  --border: #d9dee5;
 }
 
 /* ===================================== */
@@ -40,22 +39,22 @@ body {
 /* ===================================== */
 
 h1 {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 26px;
+  font-weight: 700;
   margin: 0;
   color: var(--blue);
 }
 
 h2 {
-  font-size: 22px;
-  font-weight: 800;
-  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
   color: var(--blue);
 }
 
 h3 {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 600;
   color: var(--blue);
 }
 
@@ -65,21 +64,20 @@ h3 {
 
 .topbar {
   background: var(--white);
-  padding: 20px 30px;
+  padding: 18px 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 3px solid var(--green);
+  border-bottom: 2px solid var(--green);
 }
 
 .logo {
-  height: 55px;
+  height: 50px;
 }
 
 .kicker {
-  color: var(--gray);
   font-size: 14px;
-  font-weight: 500;
+  color: var(--gray);
 }
 
 /* ===================================== */
@@ -87,7 +85,7 @@ h3 {
 /* ===================================== */
 
 .shell {
-  padding: 30px;
+  padding: 25px;
 }
 
 .main {
@@ -103,7 +101,7 @@ h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 35px;
+  margin-bottom: 30px;
   flex-wrap: wrap;
   gap: 15px;
 }
@@ -113,20 +111,17 @@ h3 {
 /* ===================================== */
 
 .input {
-  padding: 14px 16px;
-  border-radius: 14px;
+  padding: 12px 14px;
+  border-radius: 6px;
   border: 1px solid var(--border);
   background: var(--white);
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 14px;
   min-width: 200px;
-  transition: all 0.2s ease;
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(0,166,101,0.12);
+  border-color: var(--blue);
 }
 
 /* ===================================== */
@@ -135,24 +130,18 @@ h3 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 25px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 35px;
 }
 
 .card {
   background: var(--white);
-  padding: 28px;
-  border-radius: 18px;
+  padding: 22px;
+  border-radius: 6px;
   border: 1px solid var(--border);
-  box-shadow: 0 8px 20px rgba(0,81,135,0.04);
-  transition: 0.25s ease;
+  box-shadow: none;
   position: relative;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0,81,135,0.07);
 }
 
 .card::before {
@@ -162,20 +151,19 @@ h3 {
   right: 0;
   height: 4px;
   width: 100%;
-  background: linear-gradient(to left, var(--green), var(--orange));
-  border-radius: 18px 18px 0 0;
+  background: var(--green);
+  border-radius: 6px 6px 0 0;
 }
 
 .card__value {
-  font-size: 44px;
-  font-weight: 900;
-  margin: 15px 0 5px;
+  font-size: 36px;
+  font-weight: 700;
+  margin: 10px 0 5px;
   color: var(--green);
 }
 
 .card__label {
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 14px;
   color: var(--gray);
 }
 
@@ -185,16 +173,16 @@ h3 {
 
 .panel {
   background: var(--white);
-  padding: 30px;
-  border-radius: 18px;
+  padding: 25px;
+  border-radius: 6px;
   border: 1px solid var(--border);
-  box-shadow: 0 8px 20px rgba(0,81,135,0.04);
+  box-shadow: none;
 }
 
 .panel__title {
-  margin: 0 0 20px;
-  font-size: 22px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
   color: var(--blue);
 }
 
@@ -217,21 +205,20 @@ h3 {
   text-align: right;
   background: var(--blue);
   color: white;
-  padding: 14px;
-  font-weight: 700;
+  padding: 12px;
+  font-weight: 600;
 }
 
 .table tbody tr {
   border-bottom: 1px solid var(--border);
-  transition: background 0.2s ease;
-}
-
-.table tbody tr:hover {
-  background: rgba(0,166,101,0.05);
 }
 
 .table td {
-  padding: 14px;
+  padding: 12px;
+}
+
+.table tbody tr:hover {
+  background: #eef3f8;
 }
 
 /* ===================================== */
@@ -239,16 +226,12 @@ h3 {
 /* ===================================== */
 
 .btn {
-  padding: 10px 22px;
-  border-radius: 12px;
+  padding: 8px 18px;
+  border-radius: 4px;
   border: none;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
-  transition: 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .btn--primary {
@@ -257,7 +240,7 @@ h3 {
 }
 
 .btn--primary:hover {
-  background: #009c5f;
+  background: #006842;
 }
 
 .btn--ghost {
@@ -278,16 +261,15 @@ h3 {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px 20px;
+  gap: 10px 20px;
 }
 
 .stats-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  font-size: 15px;
+  font-size: 14px;
   padding: 6px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.04);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .stats-item:last-child {
@@ -295,8 +277,7 @@ h3 {
 }
 
 .stats-number {
-  font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--green);
 }
 
@@ -319,18 +300,18 @@ h3 {
 .modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0,0,0,0.4);
 }
 
 .modal__dialog {
   position: relative;
   background: var(--white);
   width: 95%;
-  max-width: 650px;
-  padding: 35px;
-  border-radius: 20px;
-  border-top: 6px solid var(--orange);
-  box-shadow: 0 30px 70px rgba(0,0,0,0.18);
+  max-width: 600px;
+  padding: 25px;
+  border-radius: 6px;
+  border-top: 4px solid var(--green);
+  box-shadow: none;
   z-index: 10;
 }
 
@@ -339,5 +320,5 @@ h3 {
 /* ===================================== */
 
 @media (max-width: 1100px) {
-  .shell { padding: 20px; }
+  .shell { padding: 15px; }
 }
