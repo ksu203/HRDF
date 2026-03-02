@@ -205,7 +205,7 @@ function render() {
   $("#statsPill").textContent = `${filtered.length} عنصر`;
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;">لا يوجد محتوى مطابق</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;">لا يوجد محتوى مطابق</td></tr>`;
     updateStats();
     return;
   }
@@ -240,6 +240,16 @@ function render() {
           font-weight:600;
           font-size:0.8rem;">
           ${labels[item.contentType] || "-"}
+<tr>
+<td>رقم</td>
+<td>عنوان</td>
+<td>نوع</td>
+<td>الفئة المستهدفة</td>
+<td>المرفق</td>
+<td>زر الاستخدام</td>
+<td>الحالة</td>
+<td>الإجراءات</td>
+</tr>
         </span>
       </td>
       <td>${renderAttachment(item.attachment)}</td>
