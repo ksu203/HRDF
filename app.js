@@ -95,6 +95,42 @@ async function uploadToSupabase(file) {
 // Stats
 // =============================
 
+function updateTypeStats() {
+  const container = $("#typeStats");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const counts = {};
+  state.items.forEach(item => {
+    const type = item.contentType || "other";
+    counts[type] = (counts[type] || 0) + 1;
+  });
+
+  const labels = {
+    article: "مقال",
+    video: "فيديو",
+    images: "صور",
+    infographic: "انفوجرافيك",
+    audio: "صوت",
+    press: "لقاء صحفي",
+    podcast: "بودكاست"
+  };
+
+  Object.keys(labels).forEach(key => {
+    const value = counts[key] || 0;
+
+    const div = document.createElement("div");
+    div.className = "stats-item";
+    div.innerHTML = `
+      <span>${labels[key]}</span>
+      <span class="stats-number">${value}</span>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
 function updateStats() {
   const total = state.items.length;
   const used = state.items.filter(i => i.isUsed).length;
@@ -102,7 +138,7 @@ function updateStats() {
   $("#statTotal").textContent = total;
   $("#statUsed").textContent = used;
 
-  updateTypeStats();
+  updateTypeStats(); // مهم
 }
 
 // =============================
