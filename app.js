@@ -101,6 +101,8 @@ function updateStats() {
 
   $("#statTotal").textContent = total;
   $("#statUsed").textContent = used;
+
+  updateTypeStats();
 }
 
 // =============================
