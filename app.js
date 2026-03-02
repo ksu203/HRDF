@@ -148,6 +148,45 @@ function updateStats() {
 
   updateTypeStats();
 }
+function updateTargetStats() {
+  const container = $("#targetStats");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const counts = {};
+  state.items.forEach(item => {
+    const group = item.targetGroup || "none";
+    counts[group] = (counts[group] || 0) + 1;
+  });
+
+  const labels = {
+    job_seekers: "الباحثين عن عمل",
+    teachers: "المعلمين",
+    school_students: "طلاب المدارس",
+    university_students: "طلاب الجامعات",
+    institute_students: "طلاب المعاهد",
+    employees: "الموظفين",
+    parents: "أولياء الامور",
+    career_counselors: "المرشدين المهنيين",
+    none: "غير محدد"
+  };
+
+  Object.keys(labels).forEach(key => {
+    const value = counts[key] || 0;
+
+    const div = document.createElement("div");
+    div.className = "stats-item";
+
+    div.innerHTML = `
+      <span>${labels[key]}</span>
+      <span class="stats-number">${value}</span>
+    `;
+
+    container.appendChild(div);
+  });
+}
+updateTargetStats(); // ← أضف هذا السطر
 
 // =============================
 // Render
