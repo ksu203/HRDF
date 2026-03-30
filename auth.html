@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>تسجيل الدخول | HRDF</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -12,182 +11,158 @@
     body {
       font-family: 'Tajawal', sans-serif;
       background: #f0f4f8;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
     }
-    .container {
+    .card {
       background: white;
-      padding: 40px;
       border-radius: 16px;
+      padding: 40px;
+      width: 420px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 420px;
     }
-    .logo { text-align: center; margin-bottom: 24px; }
+    .logo { text-align: center; margin-bottom: 16px; }
     .logo img { width: 80px; }
-    h2 { text-align: center; color: #0B6B3A; margin-bottom: 8px; }
-    .subtitle { text-align: center; color: #666; margin-bottom: 32px; font-size: 14px; }
-    .tabs {
-      display: flex;
-      margin-bottom: 24px;
-      border-bottom: 2px solid #eee;
-    }
+    h2 { text-align: center; color: #0B6B3A; margin-bottom: 4px; font-size: 22px; }
+    .sub { text-align: center; color: #888; font-size: 13px; margin-bottom: 28px; }
+    .tabs { display: flex; border-bottom: 2px solid #eee; margin-bottom: 24px; }
     .tab {
       flex: 1;
       padding: 10px;
       text-align: center;
       cursor: pointer;
-      color: #666;
+      color: #888;
       font-size: 15px;
-      transition: all 0.2s;
-    }
-    .tab.active {
-      color: #0B6B3A;
-      border-bottom: 2px solid #0B6B3A;
+      border-bottom: 2px solid transparent;
       margin-bottom: -2px;
-      font-weight: 700;
     }
-    .form-group { margin-bottom: 16px; }
-    label { display: block; margin-bottom: 6px; color: #333; font-size: 14px; }
-    input {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-family: 'Tajawal', sans-serif;
-      font-size: 15px;
-      transition: border 0.2s;
+    .tab.on { color: #0B6B3A; border-bottom-color: #0B6B3A; font-weight: 700; }
+    .panel { display: none; }
+    .panel.on { display: block; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; margin-bottom: 5px; font-size: 14px; color: #444; }
+    .field input {
+      width: 100%; padding: 11px 14px;
+      border: 1px solid #ddd; border-radius: 8px;
+      font-family: 'Tajawal', sans-serif; font-size: 15px;
     }
-    input:focus { outline: none; border-color: #0B6B3A; }
+    .field input:focus { outline: none; border-color: #0B6B3A; }
     .btn {
-      width: 100%;
-      padding: 13px;
-      background: #0B6B3A;
-      color: white;
-      border: none;
-      border-radius: 8px;
+      width: 100%; padding: 12px;
+      background: #0B6B3A; color: white;
+      border: none; border-radius: 8px;
       font-family: 'Tajawal', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.2s;
+      font-size: 16px; font-weight: 700;
+      cursor: pointer; margin-top: 6px;
     }
     .btn:hover { background: #094d2a; }
-    .message {
-      margin-top: 16px;
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 14px;
-      display: none;
-    }
-    .message.success { background: #d4edda; color: #155724; display: block; }
-    .message.error { background: #f8d7da; color: #721c24; display: block; }
-    .panel { display: none; }
-    .panel.active { display: block; }
+    .msg { margin-top: 14px; padding: 11px; border-radius: 8px; text-align: center; font-size: 14px; display: none; }
+    .msg.ok { background: #d4edda; color: #155724; display: block; }
+    .msg.err { background: #f8d7da; color: #721c24; display: block; }
   </style>
 </head>
 <body>
-<div class="container">
-  <div class="logo">
-    <img src="./hrdf-logo.png" alt="HRDF">
-  </div>
+<div class="card">
+  <div class="logo"><img src="./hrdf-logo.png" alt="HRDF"></div>
   <h2>مبادرة الإرشاد المهني</h2>
-  <p class="subtitle">منصة إدارة المحتوى</p>
+  <p class="sub">منصة إدارة المحتوى</p>
 
- <div class="tabs">
-    <div class="tab active" id="tab-login" onclick="switchTab('login')">تسجيل الدخول</div>
-    <div class="tab" id="tab-register" onclick="switchTab('register')">حساب جديد</div>
-</div>
-
-  <div class="panel active" id="login-panel">
-    <div class="form-group">
-      <label>البريد الإلكتروني</label>
-      <input type="email" id="login-email" placeholder="example@email.com">
-    </div>
-    <div class="form-group">
-      <label>كلمة المرور</label>
-      <input type="password" id="login-password" placeholder="••••••••">
-    </div>
-    <button class="btn" onclick="login()">دخول</button>
-    <div class="message" id="login-message"></div>
+  <div class="tabs">
+    <div class="tab on" id="t1">تسجيل الدخول</div>
+    <div class="tab" id="t2">حساب جديد</div>
   </div>
 
-  <div class="panel" id="register-panel">
-    <div class="form-group">
-      <label>الاسم الكامل</label>
-      <input type="text" id="reg-name" placeholder="الاسم الكامل">
-    </div>
-    <div class="form-group">
+  <!-- تسجيل الدخول -->
+  <div class="panel on" id="p1">
+    <div class="field">
       <label>البريد الإلكتروني</label>
-      <input type="email" id="reg-email" placeholder="example@email.com">
+      <input type="email" id="l-email" placeholder="example@email.com">
     </div>
-    <div class="form-group">
+    <div class="field">
       <label>كلمة المرور</label>
-      <input type="password" id="reg-password" placeholder="••••••••">
+      <input type="password" id="l-pass" placeholder="••••••••">
     </div>
-    <button class="btn" onclick="register()">إنشاء حساب</button>
-    <div class="message" id="register-message"></div>
+    <button class="btn" id="btn-login">دخول</button>
+    <div class="msg" id="l-msg"></div>
+  </div>
+
+  <!-- حساب جديد -->
+  <div class="panel" id="p2">
+    <div class="field">
+      <label>الاسم الكامل</label>
+      <input type="text" id="r-name" placeholder="الاسم الكامل">
+    </div>
+    <div class="field">
+      <label>البريد الإلكتروني</label>
+      <input type="email" id="r-email" placeholder="example@email.com">
+    </div>
+    <div class="field">
+      <label>كلمة المرور</label>
+      <input type="password" id="r-pass" placeholder="••••••••">
+    </div>
+    <button class="btn" id="btn-register">إنشاء حساب</button>
+    <div class="msg" id="r-msg"></div>
   </div>
 </div>
 
 <script>
-  const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
- function switchTab(tab) {
-    document.getElementById('tab-login').classList.remove('active');
-    document.getElementById('tab-register').classList.remove('active');
-    document.getElementById('login-panel').classList.remove('active');
-    document.getElementById('register-panel').classList.remove('active');
-    
-    if (tab === 'login') {
-        document.getElementById('tab-login').classList.add('active');
-        document.getElementById('login-panel').classList.add('active');
-    } else {
-        document.getElementById('tab-register').classList.add('active');
-        document.getElementById('register-panel').classList.add('active');
-    }
-}
+// التبويب
+document.getElementById('t1').addEventListener('click', function() {
+  document.getElementById('t1').className = 'tab on';
+  document.getElementById('t2').className = 'tab';
+  document.getElementById('p1').className = 'panel on';
+  document.getElementById('p2').className = 'panel';
+});
 
-  async function login() {
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    const msg = document.getElementById('login-message');
-    msg.className = 'message';
+document.getElementById('t2').addEventListener('click', function() {
+  document.getElementById('t2').className = 'tab on';
+  document.getElementById('t1').className = 'tab';
+  document.getElementById('p2').className = 'panel on';
+  document.getElementById('p1').className = 'panel';
+});
 
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      msg.className = 'message error';
-      msg.textContent = 'خطأ في البريد الإلكتروني أو كلمة المرور';
-    } else {
-      msg.className = 'message success';
-      msg.textContent = 'تم تسجيل الدخول بنجاح، جاري التحويل...';
-      setTimeout(() => window.location.href = './index.html', 1500);
-    }
+// تسجيل الدخول
+document.getElementById('btn-login').addEventListener('click', async function() {
+  var email = document.getElementById('l-email').value;
+  var pass = document.getElementById('l-pass').value;
+  var msg = document.getElementById('l-msg');
+  msg.className = 'msg';
+  var res = await sb.auth.signInWithPassword({ email: email, password: pass });
+  if (res.error) {
+    msg.className = 'msg err';
+    msg.textContent = 'خطأ في البريد الإلكتروني أو كلمة المرور';
+  } else {
+    msg.className = 'msg ok';
+    msg.textContent = 'تم تسجيل الدخول، جاري التحويل...';
+    setTimeout(function(){ window.location.href = './index.html'; }, 1500);
   }
+});
 
-  async function register() {
-    const name = document.getElementById('reg-name').value;
-    const email = document.getElementById('reg-email').value;
-    const password = document.getElementById('reg-password').value;
-    const msg = document.getElementById('register-message');
-    msg.className = 'message';
-
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) {
-      msg.className = 'message error';
-      msg.textContent = 'حدث خطأ، تأكد من البيانات وحاول مجدداً';
-    } else {
-      await supabase.from('profiles').update({ full_name: name }).eq('id', data.user.id);
-      msg.className = 'message success';
-      msg.textContent = 'تم إنشاء الحساب! في انتظار منح الصلاحية من المشرف';
+// إنشاء حساب
+document.getElementById('btn-register').addEventListener('click', async function() {
+  var name = document.getElementById('r-name').value;
+  var email = document.getElementById('r-email').value;
+  var pass = document.getElementById('r-pass').value;
+  var msg = document.getElementById('r-msg');
+  msg.className = 'msg';
+  var res = await sb.auth.signUp({ email: email, password: pass });
+  if (res.error) {
+    msg.className = 'msg err';
+    msg.textContent = 'حدث خطأ، تأكد من البيانات وحاول مجدداً';
+  } else {
+    if (res.data && res.data.user) {
+      await sb.from('profiles').update({ full_name: name }).eq('id', res.data.user.id);
     }
+    msg.className = 'msg ok';
+    msg.textContent = 'تم إنشاء الحساب! في انتظار منح الصلاحية من المشرف';
   }
+});
 </script>
 </body>
 </html>
