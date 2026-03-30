@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لوحة التحكم | HRDF</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; }
+    
+    /* الهيدر */
+    .header {
+      background: #0B6B3A; color: white;
+      padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .header h1 { font-size: 18px; }
+    .header button {
+      background: rgba(255,255,255,0.2); color: white;
+      border: none; padding: 8px 16px; border-radius: 8px;
+      font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px;
+    }
+
+    /* التبويبات */
+    .nav {
+      background: white; border-bottom: 2px solid #eee;
+      display: flex; padding: 0 28px;
+    }
+    .nav-tab {
+      padding: 14px 20px; cursor: pointer;
+      color: #888; font-size: 15px;
+      border-bottom: 2px solid transparent; margin-bottom: -2px;
+    }
+    .nav-tab.on { color: #0B6B3A; border-bottom-color: #0B6B3A; font-weight: 700; }
+
+    /* المحتوى */
+    .content { padding: 28px; max-width: 1100px; margin: 0 auto; }
+    .section { display: none; }
+    .section.on { display: block; }
+
+    /* البطاقات */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card {
+      background: white; border-radius: 12px; padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;
+    }
+    .stat-card .num { font-size: 36px; font-weight: 700; color: #0B6B3A; }
+    .stat-card .lbl { color: #888; font-size: 14px; margin-top: 4px; }
+
+    /* الجداول */
+    .card {
+      background: white; border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px; border-bottom: 1px solid #eee;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-header h3 { font-size: 16px; color: #333; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #f8f9fa; padding: 12px 16px; text-align: right; font-size: 13px; color: #666; }
+    td { padding: 12px 16px; border-top: 1px solid #f0f0f0; font-size: 14px; }
+    tr:hover td { background: #fafafa; }
+
+    /* الأزرار */
+    .btn { padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 14px; }
+    .btn-green { background: #0B6B3A; color: white; }
+    .btn-blue { background: #0066cc; color: white; }
+    .btn-red { background: #dc3545; color: white; }
+    .btn-gray { background: #6c757d; color: white; }
+    .btn:hover { opacity: 0.85; }
+
+    /* الشارات */
+    .badge {
+      padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700;
+    }
+    .badge-pending { background: #fff3cd; color: #856404; }
+    .badge-viewer { background: #cce5ff; color: #004085; }
+    .badge-editor { background: #d4edda; color: #155724; }
+    .badge-admin { background: #0B6B3A; color: white; }
+
+    /* النموذج */
+    .modal-bg {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .modal-bg.on { display: flex; }
+    .modal {
+      background: white; border-radius: 16px;
+      padding: 28px; width: 480px; max-width: 95vw;
+    }
+    .modal h3 { margin-bottom: 20px; color: #333; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; margin-bottom: 5px; font-size: 14px; color: #444; }
+    .field input, .field select {
+      width: 100%; padding: 10px 14px;
+      border: 1px solid #ddd; border-radius: 8px;
+      font-family: 'Tajawal', sans-serif; font-size: 14px;
+    }
+    .modal-btns { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+    .empty { text-align: center; padding: 40px; color: #aaa; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚙️ لوحة تحكم المشرف — HRDF</h1>
+  <button id="btn-logout">تسجيل الخروج</button>
+</div>
+
+<div class="nav">
+  <div class="nav-tab on" id="nt1">المستخدمون</div>
+  <div class="nav-tab" id="nt2">المحتوى</div>
+  <div class="nav-tab" id="nt3">التصنيفات</div>
+</div>
+
+<div class="content">
+
+  <!-- قسم المستخدمين -->
+  <div class="section on" id="s1">
+    <div class="stats" id="stats-box">
+      <div class="stat-card"><div class="num" id="cnt-total">-</div><div class="lbl">إجمالي المستخدمين</div></div>
+      <div class="stat-card"><div class="num" id="cnt-pending">-</div><div class="lbl">في انتظار الموافقة</div></div>
+      <div class="stat-card"><div class="num" id="cnt-active">-</div><div class="lbl">مفعّلون</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>قائمة المستخدمين</h3>
+      </div>
+      <table>
+        <thead><tr><th>البريد الإلكتروني</th><th>الاسم</th><th>الدور</th><th>إجراءات</th></tr></thead>
+        <tbody id="users-table"><tr><td colspan="4" class="empty">جاري التحميل...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- قسم المحتوى -->
+  <div class="section" id="s2">
+    <div class="card">
+      <div class="card-header">
+        <h3>قائمة المحتوى</h3>
+        <button class="btn btn-green" id="btn-add-content">+ إضافة محتوى</button>
+      </div>
+      <table>
+        <thead><tr><th>العنوان</th><th>النوع</th><th>الفئة المستهدفة</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+        <tbody id="content-table"><tr><td colspan="5" class="empty">جاري التحميل...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- قسم التصنيفات -->
+  <div class="section" id="s3">
+    <div class="card">
+      <div class="card-header">
+        <h3>التصنيفات</h3>
+        <button class="btn btn-green" id="btn-add-cat">+ إضافة تصنيف</button>
+      </div>
+      <table>
+        <thead><tr><th>اسم التصنيف</th><th>تاريخ الإنشاء</th><th>إجراءات</th></tr></thead>
+        <tbody id="cat-table"><tr><td colspan="3" class="empty">جاري التحميل...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- نافذة تغيير الصلاحية -->
+<div class="modal-bg" id="modal-role">
+  <div class="modal">
+    <h3>تغيير صلاحية المستخدم</h3>
+    <div class="field">
+      <label>البريد الإلكتروني</label>
+      <input type="text" id="role-email" readonly>
+    </div>
+    <div class="field">
+      <label>الدور الجديد</label>
+      <select id="role-select">
+        <option value="pending">pending — في الانتظار</option>
+        <option value="viewer">viewer — قراءة فقط</option>
+        <option value="editor">editor — قراءة ورفع ملفات</option>
+        <option value="admin">admin — مشرف كامل</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-gray" id="close-role">إلغاء</button>
+      <button class="btn btn-green" id="save-role">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة إضافة/تعديل محتوى -->
+<div class="modal-bg" id="modal-content">
+  <div class="modal">
+    <h3 id="content-modal-title">إضافة محتوى جديد</h3>
+    <div class="field"><label>العنوان</label><input type="text" id="c-title"></div>
+    <div class="field">
+      <label>نوع المحتوى</label>
+      <select id="c-type">
+        <option value="مقال">مقال</option>
+        <option value="فيديو">فيديو</option>
+        <option value="صور">صور</option>
+        <option value="انفوجرافيك">انفوجرافيك</option>
+        <option value="صوت">صوت</option>
+        <option value="بودكاست">بودكاست</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>الفئة المستهدفة</label>
+      <select id="c-audience">
+        <option value="الباحثين عن عمل">الباحثين عن عمل</option>
+        <option value="المعلمين">المعلمين</option>
+        <option value="طلاب المدارس">طلاب المدارس</option>
+        <option value="طلاب الجامعات">طلاب الجامعات</option>
+        <option value="طلاب المعاهد">طلاب المعاهد</option>
+        <option value="الموظفين">الموظفين</option>
+        <option value="أولياء الأمور">أولياء الأمور</option>
+        <option value="المرشدين المهنيين">المرشدين المهنيين</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>الحالة</label>
+      <select id="c-status">
+        <option value="active">نشط</option>
+        <option value="inactive">غير نشط</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-gray" id="close-content">إلغاء</button>
+      <button class="btn btn-green" id="save-content">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة إضافة تصنيف -->
+<div class="modal-bg" id="modal-cat">
+  <div class="modal">
+    <h3>إضافة تصنيف جديد</h3>
+    <div class="field"><label>اسم التصنيف</label><input type="text" id="cat-name"></div>
+    <div class="modal-btns">
+      <button class="btn btn-gray" id="close-cat">إلغاء</button>
+      <button class="btn btn-green" id="save-cat">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUserId = null;
+let editContentId = null;
+
+// التحقق من تسجيل الدخول
+async function checkAuth() {
+  const { data } = await sb.auth.getSession();
+  if (!data.session) { window.location.href = './auth.html'; return; }
+  currentUserId = data.session.user.id;
+  const { data: profile } = await sb.from('profiles').select('role').eq('id', currentUserId).single();
+  if (!profile || profile.role !== 'admin') {
+    alert('ليس لديك صلاحية الدخول على هذه الصفحة');
+    window.location.href = './auth.html';
+  }
+}
+
+// التبويبات
+function setupTabs() {
+  var tabs = [
+    { tab: 'nt1', sec: 's1', load: loadUsers },
+    { tab: 'nt2', sec: 's2', load: loadContent },
+    { tab: 'nt3', sec: 's3', load: loadCategories }
+  ];
+  tabs.forEach(function(t) {
+    document.getElementById(t.tab).addEventListener('click', function() {
+      tabs.forEach(function(x) {
+        document.getElementById(x.tab).className = 'nav-tab';
+        document.getElementById(x.sec).className = 'section';
+      });
+      document.getElementById(t.tab).className = 'nav-tab on';
+      document.getElementById(t.sec).className = 'section on';
+      t.load();
+    });
+  });
+}
+
+// تسجيل الخروج
+document.getElementById('btn-logout').addEventListener('click', async function() {
+  await sb.auth.signOut();
+  window.location.href = './auth.html';
+});
+
+// ===== المستخدمون =====
+async function loadUsers() {
+  var { data } = await sb.from('profiles').select('*');
+  if (!data) return;
+  document.getElementById('cnt-total').textContent = data.length;
+  document.getElementById('cnt-pending').textContent = data.filter(function(u){ return u.role === 'pending'; }).length;
+  document.getElementById('cnt-active').textContent = data.filter(function(u){ return u.role !== 'pending'; }).length;
+  var html = '';
+  data.forEach(function(u) {
+    var badge = '<span class="badge badge-' + u.role + '">' + u.role + '</span>';
+    html += '<tr><td>' + (u.email || '-') + '</td><td>' + (u.full_name || '-') + '</td><td>' + badge + '</td>';
+    html += '<td><button class="btn btn-blue" onclick="openRoleModal(\'' + u.id + '\',\'' + u.email + '\',\'' + u.role + '\')">تغيير الصلاحية</button></td></tr>';
+  });
+  document.getElementById('users-table').innerHTML = html || '<tr><td colspan="4" class="empty">لا يوجد مستخدمون</td></tr>';
+}
+
+var selectedUserId = null;
+function openRoleModal(id, email, role) {
+  selectedUserId = id;
+  document.getElementById('role-email').value = email;
+  document.getElementById('role-select').value = role;
+  document.getElementById('modal-role').className = 'modal-bg on';
+}
+document.getElementById('close-role').addEventListener('click', function() {
+  document.getElementById('modal-role').className = 'modal-bg';
+});
+document.getElementById('save-role').addEventListener('click', async function() {
+  var role = document.getElementById('role-select').value;
+  await sb.from('profiles').update({ role: role }).eq('id', selectedUserId);
+  document.getElementById('modal-role').className = 'modal-bg';
+  loadUsers();
+});
+
+// ===== المحتوى =====
+async function loadContent() {
+  var { data } = await sb.from('content').select('*');
+  if (!data) return;
+  var html = '';
+  data.forEach(function(c) {
+    var status = c.status === 'active' ? '<span class="badge badge-editor">نشط</span>' : '<span class="badge badge-pending">غير نشط</span>';
+    html += '<tr><td>' + c.title + '</td><td>' + (c.content_type || '-') + '</td><td>' + (c.target_audience || '-') + '</td><td>' + status + '</td>';
+    html += '<td><button class="btn btn-blue" style="margin-left:6px" onclick="openEditContent(' + c.id + ',\'' + c.title + '\',\'' + c.content_type + '\',\'' + c.target_audience + '\',\'' + c.status + '\')">تعديل</button>';
+    html += '<button class="btn btn-red" onclick="deleteContent(' + c.id + ')">حذف</button></td></tr>';
+  });
+  document.getElementById('content-table').innerHTML = html || '<tr><td colspan="5" class="empty">لا يوجد محتوى</td></tr>';
+}
+
+document.getElementById('btn-add-content').addEventListener('click', function() {
+  editContentId = null;
+  document.getElementById('content-modal-title').textContent = 'إضافة محتوى جديد';
+  document.getElementById('c-title').value = '';
+  document.getElementById('modal-content').className = 'modal-bg on';
+});
+document.getElementById('close-content').addEventListener('click', function() {
+  document.getElementById('modal-content').className = 'modal-bg';
+});
+function openEditContent(id, title, type, audience, status) {
+  editContentId = id;
+  document.getElementById('content-modal-title').textContent = 'تعديل المحتوى';
+  document.getElementById('c-title').value = title;
+  document.getElementById('c-type').value = type;
+  document.getElementById('c-audience').value = audience;
+  document.getElementById('c-status').value = status;
+  document.getElementById('modal-content').className = 'modal-bg on';
+}
+document.getElementById('save-content').addEventListener('click', async function() {
+  var obj = {
+    title: document.getElementById('c-title').value,
+    content_type: document.getElementById('c-type').value,
+    target_audience: document.getElementById('c-audience').value,
+    status: document.getElementById('c-status').value,
+    created_by: currentUserId
+  };
+  if (editContentId) {
+    await sb.from('content').update(obj).eq('id', editContentId);
+  } else {
+    await sb.from('content').insert(obj);
+  }
+  document.getElementById('modal-content').className = 'modal-bg';
+  loadContent();
+});
+async function deleteContent(id) {
+  if (!confirm('هل أنت متأكد من حذف هذا المحتوى؟')) return;
+  await sb.from('content').delete().eq('id', id);
+  loadContent();
+}
+
+// ===== التصنيفات =====
+async function loadCategories() {
+  var { data } = await sb.from('categories').select('*');
+  if (!data) return;
+  var html = '';
+  data.forEach(function(c) {
+    var date = new Date(c.created_at).toLocaleDateString('ar-SA');
+    html += '<tr><td>' + c.name + '</td><td>' + date + '</td>';
+    html += '<td><button class="btn btn-red" onclick="deleteCat(' + c.id + ')">حذف</button></td></tr>';
+  });
+  document.getElementById('cat-table').innerHTML = html || '<tr><td colspan="3" class="empty">لا توجد تصنيفات</td></tr>';
+}
+
+document.getElementById('btn-add-cat').addEventListener('click', function() {
+  document.getElementById('cat-name').value = '';
+  document.getElementById('modal-cat').className = 'modal-bg on';
+});
+document.getElementById('close-cat').addEventListener('click', function() {
+  document.getElementById('modal-cat').className = 'modal-bg';
+});
+document.getElementById('save-cat').addEventListener('click', async function() {
+  var name = document.getElementById('cat-name').value;
+  if (!name) return;
+  await sb.from('categories').insert({ name: name });
+  document.getElementById('modal-cat').className = 'modal-bg';
+  loadCategories();
+});
+async function deleteCat(id) {
+  if (!confirm('هل أنت متأكد من حذف هذا التصنيف؟')) return;
+  await sb.from('categories').delete().eq('id', id);
+  loadCategories();
+}
+
+// البدء
+async function init() {
+  await checkAuth();
+  setupTabs();
+  loadUsers();
+}
+init();
+</script>
+</body>
+</html>
