@@ -9,8 +9,6 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; }
-    
-    /* الهيدر */
     .header {
       background: #0B6B3A; color: white;
       padding: 14px 28px;
@@ -22,8 +20,6 @@
       border: none; padding: 8px 16px; border-radius: 8px;
       font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px;
     }
-
-    /* التبويبات */
     .nav {
       background: white; border-bottom: 2px solid #eee;
       display: flex; padding: 0 28px;
@@ -34,13 +30,9 @@
       border-bottom: 2px solid transparent; margin-bottom: -2px;
     }
     .nav-tab.on { color: #0B6B3A; border-bottom-color: #0B6B3A; font-weight: 700; }
-
-    /* المحتوى */
     .content { padding: 28px; max-width: 1100px; margin: 0 auto; }
     .section { display: none; }
     .section.on { display: block; }
-
-    /* البطاقات */
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
     .stat-card {
       background: white; border-radius: 12px; padding: 20px;
@@ -48,8 +40,6 @@
     }
     .stat-card .num { font-size: 36px; font-weight: 700; color: #0B6B3A; }
     .stat-card .lbl { color: #888; font-size: 14px; margin-top: 4px; }
-
-    /* الجداول */
     .card {
       background: white; border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden;
@@ -63,25 +53,17 @@
     th { background: #f8f9fa; padding: 12px 16px; text-align: right; font-size: 13px; color: #666; }
     td { padding: 12px 16px; border-top: 1px solid #f0f0f0; font-size: 14px; }
     tr:hover td { background: #fafafa; }
-
-    /* الأزرار */
     .btn { padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 14px; }
     .btn-green { background: #0B6B3A; color: white; }
     .btn-blue { background: #0066cc; color: white; }
     .btn-red { background: #dc3545; color: white; }
     .btn-gray { background: #6c757d; color: white; }
     .btn:hover { opacity: 0.85; }
-
-    /* الشارات */
-    .badge {
-      padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700;
-    }
+    .badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
     .badge-pending { background: #fff3cd; color: #856404; }
     .badge-viewer { background: #cce5ff; color: #004085; }
     .badge-editor { background: #d4edda; color: #155724; }
     .badge-admin { background: #0B6B3A; color: white; }
-
-    /* النموذج */
     .modal-bg {
       display: none; position: fixed; inset: 0;
       background: rgba(0,0,0,0.5); z-index: 100;
@@ -91,6 +73,7 @@
     .modal {
       background: white; border-radius: 16px;
       padding: 28px; width: 480px; max-width: 95vw;
+      max-height: 90vh; overflow-y: auto;
     }
     .modal h3 { margin-bottom: 20px; color: #333; }
     .field { margin-bottom: 14px; }
@@ -100,8 +83,17 @@
       border: 1px solid #ddd; border-radius: 8px;
       font-family: 'Tajawal', sans-serif; font-size: 14px;
     }
+    .field input[type="file"] { padding: 8px; }
     .modal-btns { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
     .empty { text-align: center; padding: 40px; color: #aaa; }
+    .progress-bar {
+      width: 100%; height: 6px; background: #eee;
+      border-radius: 4px; margin-top: 8px; display: none;
+    }
+    .progress-bar-fill {
+      height: 100%; background: #0B6B3A;
+      border-radius: 4px; width: 0%; transition: width 0.3s;
+    }
   </style>
 </head>
 <body>
@@ -121,15 +113,13 @@
 
   <!-- قسم المستخدمين -->
   <div class="section on" id="s1">
-    <div class="stats" id="stats-box">
+    <div class="stats">
       <div class="stat-card"><div class="num" id="cnt-total">-</div><div class="lbl">إجمالي المستخدمين</div></div>
       <div class="stat-card"><div class="num" id="cnt-pending">-</div><div class="lbl">في انتظار الموافقة</div></div>
       <div class="stat-card"><div class="num" id="cnt-active">-</div><div class="lbl">مفعّلون</div></div>
     </div>
     <div class="card">
-      <div class="card-header">
-        <h3>قائمة المستخدمين</h3>
-      </div>
+      <div class="card-header"><h3>قائمة المستخدمين</h3></div>
       <table>
         <thead><tr><th>البريد الإلكتروني</th><th>الاسم</th><th>الدور</th><th>إجراءات</th></tr></thead>
         <tbody id="users-table"><tr><td colspan="4" class="empty">جاري التحميل...</td></tr></tbody>
@@ -145,8 +135,8 @@
         <button class="btn btn-green" id="btn-add-content">+ إضافة محتوى</button>
       </div>
       <table>
-        <thead><tr><th>العنوان</th><th>النوع</th><th>الفئة المستهدفة</th><th>الحالة</th><th>إجراءات</th></tr></thead>
-        <tbody id="content-table"><tr><td colspan="5" class="empty">جاري التحميل...</td></tr></tbody>
+        <thead><tr><th>العنوان</th><th>النوع</th><th>الفئة المستهدفة</th><th>الحالة</th><th>الملف</th><th>إجراءات</th></tr></thead>
+        <tbody id="content-table"><tr><td colspan="6" class="empty">جاري التحميل...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -227,6 +217,15 @@
         <option value="inactive">غير نشط</option>
       </select>
     </div>
+    <div class="field">
+      <label>رفع ملف (PDF، صورة، فيديو)</label>
+      <input type="file" id="c-file" accept=".pdf,.jpg,.jpeg,.png,.mp4,.mp3">
+      <small style="color:#888;font-size:12px;margin-top:4px;display:block">الحد الأقصى 50MB</small>
+      <div class="progress-bar" id="upload-progress">
+        <div class="progress-bar-fill" id="upload-progress-fill"></div>
+      </div>
+      <div id="upload-status" style="font-size:13px;margin-top:6px;color:#0B6B3A;"></div>
+    </div>
     <div class="modal-btns">
       <button class="btn btn-gray" id="close-content">إلغاء</button>
       <button class="btn btn-green" id="save-content">حفظ</button>
@@ -253,20 +252,19 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUserId = null;
 let editContentId = null;
+let selectedUserId = null;
 
-// التحقق من تسجيل الدخول
 async function checkAuth() {
-  const { data } = await sb.auth.getSession();
+  var { data } = await sb.auth.getSession();
   if (!data.session) { window.location.href = './auth.html'; return; }
   currentUserId = data.session.user.id;
-  const { data: profile } = await sb.from('profiles').select('role').eq('id', currentUserId).single();
+  var { data: profile } = await sb.from('profiles').select('role').eq('id', currentUserId).single();
   if (!profile || profile.role !== 'admin') {
     alert('ليس لديك صلاحية الدخول على هذه الصفحة');
     window.location.href = './auth.html';
   }
 }
 
-// التبويبات
 function setupTabs() {
   var tabs = [
     { tab: 'nt1', sec: 's1', load: loadUsers },
@@ -286,7 +284,6 @@ function setupTabs() {
   });
 }
 
-// تسجيل الخروج
 document.getElementById('btn-logout').addEventListener('click', async function() {
   await sb.auth.signOut();
   window.location.href = './auth.html';
@@ -308,7 +305,6 @@ async function loadUsers() {
   document.getElementById('users-table').innerHTML = html || '<tr><td colspan="4" class="empty">لا يوجد مستخدمون</td></tr>';
 }
 
-var selectedUserId = null;
 function openRoleModal(id, email, role) {
   selectedUserId = id;
   document.getElementById('role-email').value = email;
@@ -331,23 +327,33 @@ async function loadContent() {
   if (!data) return;
   var html = '';
   data.forEach(function(c) {
-    var status = c.status === 'active' ? '<span class="badge badge-editor">نشط</span>' : '<span class="badge badge-pending">غير نشط</span>';
-    html += '<tr><td>' + c.title + '</td><td>' + (c.content_type || '-') + '</td><td>' + (c.target_audience || '-') + '</td><td>' + status + '</td>';
+    var status = c.status === 'active'
+      ? '<span class="badge badge-editor">نشط</span>'
+      : '<span class="badge badge-pending">غير نشط</span>';
+    var fileLink = c.file_url
+      ? '<a href="' + c.file_url + '" target="_blank" class="btn btn-gray">تحميل</a>'
+      : '-';
+    html += '<tr><td>' + c.title + '</td><td>' + (c.content_type || '-') + '</td><td>' + (c.target_audience || '-') + '</td><td>' + status + '</td><td>' + fileLink + '</td>';
     html += '<td><button class="btn btn-blue" style="margin-left:6px" onclick="openEditContent(' + c.id + ',\'' + c.title + '\',\'' + c.content_type + '\',\'' + c.target_audience + '\',\'' + c.status + '\')">تعديل</button>';
     html += '<button class="btn btn-red" onclick="deleteContent(' + c.id + ')">حذف</button></td></tr>';
   });
-  document.getElementById('content-table').innerHTML = html || '<tr><td colspan="5" class="empty">لا يوجد محتوى</td></tr>';
+  document.getElementById('content-table').innerHTML = html || '<tr><td colspan="6" class="empty">لا يوجد محتوى</td></tr>';
 }
 
 document.getElementById('btn-add-content').addEventListener('click', function() {
   editContentId = null;
   document.getElementById('content-modal-title').textContent = 'إضافة محتوى جديد';
   document.getElementById('c-title').value = '';
+  document.getElementById('c-file').value = '';
+  document.getElementById('upload-status').textContent = '';
+  document.getElementById('upload-progress').style.display = 'none';
   document.getElementById('modal-content').className = 'modal-bg on';
 });
+
 document.getElementById('close-content').addEventListener('click', function() {
   document.getElementById('modal-content').className = 'modal-bg';
 });
+
 function openEditContent(id, title, type, audience, status) {
   editContentId = id;
   document.getElementById('content-modal-title').textContent = 'تعديل المحتوى';
@@ -355,24 +361,73 @@ function openEditContent(id, title, type, audience, status) {
   document.getElementById('c-type').value = type;
   document.getElementById('c-audience').value = audience;
   document.getElementById('c-status').value = status;
+  document.getElementById('c-file').value = '';
+  document.getElementById('upload-status').textContent = '';
+  document.getElementById('upload-progress').style.display = 'none';
   document.getElementById('modal-content').className = 'modal-bg on';
 }
+
 document.getElementById('save-content').addEventListener('click', async function() {
+  var title = document.getElementById('c-title').value;
+  if (!title) { alert('يرجى إدخال العنوان'); return; }
+
+  var btn = document.getElementById('save-content');
+  btn.textContent = 'جاري الحفظ...';
+  btn.disabled = true;
+
+  var fileUrl = null;
+  var fileInput = document.getElementById('c-file');
+
+  if (fileInput.files && fileInput.files[0]) {
+    var file = fileInput.files[0];
+    var fileName = Date.now() + '_' + file.name;
+
+    document.getElementById('upload-progress').style.display = 'block';
+    document.getElementById('upload-progress-fill').style.width = '30%';
+    document.getElementById('upload-status').textContent = 'جاري رفع الملف...';
+
+    var { data: uploadData, error: uploadError } = await sb.storage
+      .from('content-files')
+      .upload(fileName, file);
+
+    if (uploadError) {
+      alert('خطأ في رفع الملف: ' + uploadError.message);
+      btn.textContent = 'حفظ';
+      btn.disabled = false;
+      return;
+    }
+
+    document.getElementById('upload-progress-fill').style.width = '100%';
+    document.getElementById('upload-status').textContent = 'تم رفع الملف ✅';
+
+    var { data: urlData } = sb.storage.from('content-files').getPublicUrl(fileName);
+    fileUrl = urlData.publicUrl;
+  }
+
   var obj = {
-    title: document.getElementById('c-title').value,
+    title: title,
     content_type: document.getElementById('c-type').value,
     target_audience: document.getElementById('c-audience').value,
     status: document.getElementById('c-status').value,
     created_by: currentUserId
   };
+  if (fileUrl) obj.file_url = fileUrl;
+
   if (editContentId) {
     await sb.from('content').update(obj).eq('id', editContentId);
   } else {
     await sb.from('content').insert(obj);
   }
+
+  btn.textContent = 'حفظ';
+  btn.disabled = false;
   document.getElementById('modal-content').className = 'modal-bg';
+  document.getElementById('c-file').value = '';
+  document.getElementById('upload-status').textContent = '';
+  document.getElementById('upload-progress').style.display = 'none';
   loadContent();
 });
+
 async function deleteContent(id) {
   if (!confirm('هل أنت متأكد من حذف هذا المحتوى؟')) return;
   await sb.from('content').delete().eq('id', id);
@@ -412,7 +467,6 @@ async function deleteCat(id) {
   loadCategories();
 }
 
-// البدء
 async function init() {
   await checkAuth();
   setupTabs();
