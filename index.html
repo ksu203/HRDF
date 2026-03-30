@@ -196,6 +196,49 @@
 </div> <!-- نهاية modal -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// تحقق من تسجيل الدخول وإظهار زر Admin
+(async function() {
+  const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const { data } = await sb.auth.getSession();
+  
+  if (!data.session) {
+    // غير مسجل — أضف زر تسجيل الدخول
+    var loginBtn = document.createElement('button');
+    loginBtn.className = 'btn btn--ghost';
+    loginBtn.textContent = 'تسجيل الدخول';
+    loginBtn.onclick = function() { window.location.href = './auth.html'; };
+    document.querySelector('.topbar__actions').prepend(loginBtn);
+  } else {
+    // مسجل — تحقق من الدور
+    const userId = data.session.user.id;
+    const { data: profile } = await sb.from('profiles').select('role, full_name, email').eq('id', userId).single();
+    
+    if (profile && profile.role === 'admin') {
+      // أضف زر لوحة التحكم
+      var adminBtn = document.createElement('button');
+      adminBtn.className = 'btn btn--primary';
+      adminBtn.innerHTML = '⚙️ لوحة التحكم';
+      adminBtn.style.marginLeft = '10px';
+      adminBtn.onclick = function() { window.location.href = './admin.html'; };
+      document.querySelector('.topbar__actions').prepend(adminBtn);
+    }
+
+    // أضف زر تسجيل الخروج
+    var logoutBtn = document.createElement('button');
+    logoutBtn.className = 'btn btn--ghost';
+    logoutBtn.textContent = 'خروج';
+    logoutBtn.onclick = async function() {
+      await sb.auth.signOut();
+      window.location.reload();
+    };
+    document.querySelector('.topbar__actions').prepend(logoutBtn);
+  }
+})();
+</script>
 <script src="./app.js"></script>
 
 </body>
