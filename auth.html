@@ -103,7 +103,6 @@
     <div class="tab" onclick="switchTab('register')">حساب جديد</div>
   </div>
 
-  <!-- تسجيل الدخول -->
   <div class="panel active" id="login-panel">
     <div class="form-group">
       <label>البريد الإلكتروني</label>
@@ -117,7 +116,6 @@
     <div class="message" id="login-message"></div>
   </div>
 
-  <!-- التسجيل -->
   <div class="panel" id="register-panel">
     <div class="form-group">
       <label>الاسم الكامل</label>
@@ -137,8 +135,8 @@
 </div>
 
 <script>
-  const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-  const SUPABASE_KEY = 'YOUR_SUPABASE_KEY';
+  const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   function switchTab(tab) {
@@ -190,9 +188,3 @@
 </script>
 </body>
 </html>
-```
-
-5. قبل الحفظ، **استبدل** هذين السطرين ببياناتك:
-```
-YOUR_SUPABASE_URL  ← ضع Project URL الذي حفظته
-YOUR_SUPABASE_KEY  ← ضع Publishable Key الذي حفظته
