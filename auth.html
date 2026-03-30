@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تسجيل الدخول | HRDF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 420px;
+    }
+    .logo { text-align: center; margin-bottom: 24px; }
+    .logo img { width: 80px; }
+    h2 { text-align: center; color: #0B6B3A; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #666; margin-bottom: 32px; font-size: 14px; }
+    .tabs {
+      display: flex;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #eee;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      color: #666;
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+    .tab.active {
+      color: #0B6B3A;
+      border-bottom: 2px solid #0B6B3A;
+      margin-bottom: -2px;
+      font-weight: 700;
+    }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; color: #333; font-size: 14px; }
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 15px;
+      transition: border 0.2s;
+    }
+    input:focus { outline: none; border-color: #0B6B3A; }
+    .btn {
+      width: 100%;
+      padding: 13px;
+      background: #0B6B3A;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #094d2a; }
+    .message {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+      display: none;
+    }
+    .message.success { background: #d4edda; color: #155724; display: block; }
+    .message.error { background: #f8d7da; color: #721c24; display: block; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">
+    <img src="./hrdf-logo.png" alt="HRDF">
+  </div>
+  <h2>مبادرة الإرشاد المهني</h2>
+  <p class="subtitle">منصة إدارة المحتوى</p>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('login')">تسجيل الدخول</div>
+    <div class="tab" onclick="switchTab('register')">حساب جديد</div>
+  </div>
+
+  <!-- تسجيل الدخول -->
+  <div class="panel active" id="login-panel">
+    <div class="form-group">
+      <label>البريد الإلكتروني</label>
+      <input type="email" id="login-email" placeholder="example@email.com">
+    </div>
+    <div class="form-group">
+      <label>كلمة المرور</label>
+      <input type="password" id="login-password" placeholder="••••••••">
+    </div>
+    <button class="btn" onclick="login()">دخول</button>
+    <div class="message" id="login-message"></div>
+  </div>
+
+  <!-- التسجيل -->
+  <div class="panel" id="register-panel">
+    <div class="form-group">
+      <label>الاسم الكامل</label>
+      <input type="text" id="reg-name" placeholder="الاسم الكامل">
+    </div>
+    <div class="form-group">
+      <label>البريد الإلكتروني</label>
+      <input type="email" id="reg-email" placeholder="example@email.com">
+    </div>
+    <div class="form-group">
+      <label>كلمة المرور</label>
+      <input type="password" id="reg-password" placeholder="••••••••">
+    </div>
+    <button class="btn" onclick="register()">إنشاء حساب</button>
+    <div class="message" id="register-message"></div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+  const SUPABASE_KEY = 'YOUR_SUPABASE_KEY';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    if (tab === 'login') {
+      document.querySelectorAll('.tab')[0].classList.add('active');
+      document.getElementById('login-panel').classList.add('active');
+    } else {
+      document.querySelectorAll('.tab')[1].classList.add('active');
+      document.getElementById('register-panel').classList.add('active');
+    }
+  }
+
+  async function login() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    const msg = document.getElementById('login-message');
+    msg.className = 'message';
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      msg.className = 'message error';
+      msg.textContent = 'خطأ في البريد الإلكتروني أو كلمة المرور';
+    } else {
+      msg.className = 'message success';
+      msg.textContent = 'تم تسجيل الدخول بنجاح، جاري التحويل...';
+      setTimeout(() => window.location.href = './index.html', 1500);
+    }
+  }
+
+  async function register() {
+    const name = document.getElementById('reg-name').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const msg = document.getElementById('register-message');
+    msg.className = 'message';
+
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    if (error) {
+      msg.className = 'message error';
+      msg.textContent = 'حدث خطأ، تأكد من البيانات وحاول مجدداً';
+    } else {
+      await supabase.from('profiles').update({ full_name: name }).eq('id', data.user.id);
+      msg.className = 'message success';
+      msg.textContent = 'تم إنشاء الحساب! في انتظار منح الصلاحية من المشرف';
+    }
+  }
+</script>
+</body>
+</html>
+```
+
+5. قبل الحفظ، **استبدل** هذين السطرين ببياناتك:
+```
+YOUR_SUPABASE_URL  ← ضع Project URL الذي حفظته
+YOUR_SUPABASE_KEY  ← ضع Publishable Key الذي حفظته
