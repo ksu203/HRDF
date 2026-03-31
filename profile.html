@@ -137,10 +137,16 @@ function renderProfile(isOwnProfile, isAdmin) {
     ? '<img src="' + p.avatar_url + '" alt="صورة شخصية">'
     : name.charAt(0).toUpperCase();
 
-  var uploadBtn = isOwnProfile ? `
-    <label class="avatar-upload-btn" for="avatar-input" title="تغيير الصورة">📷</label>
+ var uploadBtn = isOwnProfile ? `
+    <label class="avatar-upload-btn" for="avatar-input" title="تغيير الصورة" style="bottom:4px;left:4px;">📷</label>
     <input class="avatar-upload-input" type="file" id="avatar-input" accept="image/*">
+    ${p.avatar_url ? '<div onclick="removeAvatar()" style="position:absolute;bottom:4px;right:4px;width:32px;height:32px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);font-size:16px;" title="إزالة الصورة">🗑️</div>' : ''}
   ` : '';
+  async function removeAvatar() {
+  if (!confirm('هل تريد إزالة الصورة الشخصية؟')) return;
+  await sb.from('profiles').update({ avatar_url: null }).eq('id', currentUser.id);
+  window.location.reload();
+}
 
   var adminBar = '';
   if (isAdmin && !isOwnProfile) {
