@@ -67,13 +67,11 @@
     .progress-bar { width: 100%; height: 6px; background: #eee; border-radius: 4px; margin-top: 8px; display: none; }
     .progress-bar-fill { height: 100%; background: #0B6B3A; border-radius: 4px; width: 0%; transition: width 0.3s; }
     .notif-badge { background: #dc3545; color: white; border-radius: 50%; padding: 2px 7px; font-size: 12px; margin-right: 6px; }
-    .form-section { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 28px; max-width: 500px; margin: 0 auto; }
-    .form-section h3 { font-size: 18px; color: #333; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #e8f5ef; }
-    .form-field { margin-bottom: 16px; }
-    .form-field label { display: block; margin-bottom: 6px; font-size: 14px; color: #444; font-weight: 600; }
-    .form-field input, .form-field select { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
-    .form-field input:focus, .form-field select:focus { outline: none; border-color: #0B6B3A; }
-    .create-msg { margin-top: 14px; padding: 12px; border-radius: 10px; text-align: center; font-size: 14px; display: none; }
+    .add-user-form { display: none; padding: 24px; border-top: 1px solid #eee; }
+    .add-user-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .add-user-field label { display: block; margin-bottom: 5px; font-size: 14px; color: #444; font-weight: 600; }
+    .add-user-field input, .add-user-field select { width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
+    .add-user-field input:focus, .add-user-field select:focus { outline: none; border-color: #0B6B3A; }
   </style>
 </head>
 <body>
@@ -88,12 +86,11 @@
   <div class="nav-tab" id="nt2">المحتوى</div>
   <div class="nav-tab" id="nt3">التصنيفات</div>
   <div class="nav-tab" id="nt4">🔔 الإشعارات <span class="notif-badge" id="notif-count" style="display:none">0</span></div>
-  <div class="nav-tab" id="nt5">➕ إضافة مشرف</div>
 </div>
 
 <div class="content">
 
- <!-- المستخدمون -->
+  <!-- المستخدمون -->
   <div class="section on" id="s1">
     <div class="stats">
       <div class="stat-card"><div class="num" id="cnt-total">-</div><div class="lbl">إجمالي المستخدمين</div></div>
@@ -101,42 +98,43 @@
       <div class="stat-card"><div class="num" id="cnt-active">-</div><div class="lbl">مفعّلون</div></div>
     </div>
 
-    <!-- نموذج إضافة حساب جديد -->
+    <!-- إضافة حساب جديد -->
     <div class="card" style="margin-bottom:24px;">
-      <div class="card-header" id="add-user-header" style="cursor:pointer;" onclick="toggleAddUser()">
+      <div class="card-header" style="cursor:pointer;" id="toggle-add-user">
         <h3>➕ إضافة حساب جديد</h3>
-        <span id="add-user-arrow">▼</span>
+        <span id="add-user-arrow" style="color:#0B6B3A;font-weight:700;">▼ فتح</span>
       </div>
-      <div id="add-user-form" style="display:none;padding:24px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-          <div class="field">
-            <label style="display:block;margin-bottom:5px;font-size:14px;color:#444;font-weight:600;">الاسم الكامل *</label>
-            <input type="text" id="new-admin-name" placeholder="اسم المستخدم" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;">
+      <div class="add-user-form" id="add-user-form">
+        <div class="add-user-grid">
+          <div class="add-user-field">
+            <label>الاسم الكامل *</label>
+            <input type="text" id="new-admin-name" placeholder="اسم المستخدم">
           </div>
-          <div class="field">
-            <label style="display:block;margin-bottom:5px;font-size:14px;color:#444;font-weight:600;">البريد الإلكتروني *</label>
-            <input type="email" id="new-admin-email" placeholder="example@email.com" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;">
+          <div class="add-user-field">
+            <label>البريد الإلكتروني *</label>
+            <input type="email" id="new-admin-email" placeholder="example@email.com">
           </div>
-          <div class="field">
-            <label style="display:block;margin-bottom:5px;font-size:14px;color:#444;font-weight:600;">كلمة المرور *</label>
-            <input type="password" id="new-admin-pass" placeholder="6 أحرف على الأقل" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;">
+          <div class="add-user-field">
+            <label>كلمة المرور *</label>
+            <input type="password" id="new-admin-pass" placeholder="6 أحرف على الأقل">
           </div>
-          <div class="field">
-            <label style="display:block;margin-bottom:5px;font-size:14px;color:#444;font-weight:600;">الصلاحية *</label>
-            <select id="new-admin-role" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;">
+          <div class="add-user-field">
+            <label>الصلاحية *</label>
+            <select id="new-admin-role">
               <option value="admin">admin — مشرف كامل</option>
               <option value="editor">editor — محرر</option>
               <option value="viewer">viewer — قارئ</option>
             </select>
           </div>
         </div>
-        <div style="margin-top:16px;display:flex;align-items:center;gap:12px;">
+        <div style="margin-top:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
           <button class="btn btn-green" id="btn-create-admin" style="padding:10px 28px;font-size:15px;">➕ إنشاء الحساب</button>
           <div id="create-admin-msg" style="font-size:14px;display:none;padding:8px 16px;border-radius:8px;"></div>
         </div>
       </div>
     </div>
 
+    <!-- قائمة المستخدمين -->
     <div class="card">
       <div class="card-header"><h3>قائمة المستخدمين</h3></div>
       <table>
@@ -182,35 +180,6 @@
         <thead><tr><th>العنوان</th><th>النوع</th><th>رُفع بواسطة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
         <tbody id="notif-table"><tr><td colspan="5" class="empty">جاري التحميل...</td></tr></tbody>
       </table>
-    </div>
-  </div>
-
-  <!-- إضافة مشرف -->
-  <div class="section" id="s5">
-    <div class="form-section">
-      <h3>➕ إضافة حساب جديد</h3>
-      <div class="form-field">
-        <label>الاسم الكامل *</label>
-        <input type="text" id="new-admin-name" placeholder="اسم المستخدم">
-      </div>
-      <div class="form-field">
-        <label>البريد الإلكتروني *</label>
-        <input type="email" id="new-admin-email" placeholder="example@email.com">
-      </div>
-      <div class="form-field">
-        <label>كلمة المرور *</label>
-        <input type="password" id="new-admin-pass" placeholder="6 أحرف على الأقل">
-      </div>
-      <div class="form-field">
-        <label>الصلاحية *</label>
-        <select id="new-admin-role">
-          <option value="admin">admin — مشرف كامل</option>
-          <option value="editor">editor — محرر</option>
-          <option value="viewer">viewer — قارئ</option>
-        </select>
-      </div>
-      <button class="btn btn-green" id="btn-create-admin" style="width:100%;padding:13px;font-size:16px;margin-top:8px;">➕ إنشاء الحساب</button>
-      <div class="create-msg" id="create-admin-msg"></div>
     </div>
   </div>
 
@@ -336,8 +305,7 @@ function setupTabs() {
     { tab: 'nt1', sec: 's1', load: loadUsers },
     { tab: 'nt2', sec: 's2', load: loadContent },
     { tab: 'nt3', sec: 's3', load: loadCategories },
-    { tab: 'nt4', sec: 's4', load: loadNotifications },
-    { tab: 'nt5', sec: 's5', load: function(){} }
+    { tab: 'nt4', sec: 's4', load: loadNotifications }
   ];
   tabs.forEach(function(t) {
     document.getElementById(t.tab).addEventListener('click', function() {
@@ -357,6 +325,19 @@ document.getElementById('btn-logout').addEventListener('click', async function()
   window.location.href = './auth.html';
 });
 
+// ===== فتح/إغلاق نموذج إضافة مستخدم =====
+document.getElementById('toggle-add-user').addEventListener('click', function() {
+  var form = document.getElementById('add-user-form');
+  var arrow = document.getElementById('add-user-arrow');
+  if (form.style.display === 'none' || form.style.display === '') {
+    form.style.display = 'block';
+    arrow.textContent = '▲ إغلاق';
+  } else {
+    form.style.display = 'none';
+    arrow.textContent = '▼ فتح';
+  }
+});
+
 // ===== المستخدمون =====
 async function loadUsers() {
   var { data } = await sb.from('profiles').select('*');
@@ -367,7 +348,7 @@ async function loadUsers() {
   var html = '';
   data.forEach(function(u) {
     var badge = '<span class="badge badge-' + u.role + '">' + u.role + '</span>';
-    html += '<tr><td>' + (u.email || '-') + '</td><td>' + (u.full_name || '-') + '</td><td>' + badge + '</td>';
+    html += '<tr><td>' + (u.email||'-') + '</td><td>' + (u.full_name||'-') + '</td><td>' + badge + '</td>';
     html += '<td>';
     html += '<button class="btn btn-blue" onclick="openRoleModal(\'' + u.id + '\',\'' + (u.email||'') + '\',\'' + u.role + '\')">تغيير الصلاحية</button>';
     html += '<button class="btn btn-gray" onclick="window.location.href=\'./profile.html?id=' + u.id + '\'">الملف الشخصي</button>';
@@ -389,6 +370,55 @@ document.getElementById('save-role').addEventListener('click', async function() 
   var role = document.getElementById('role-select').value;
   await sb.from('profiles').update({ role: role }).eq('id', selectedUserId);
   document.getElementById('modal-role').className = 'modal-bg';
+  loadUsers();
+});
+
+// ===== إضافة حساب جديد =====
+document.getElementById('btn-create-admin').addEventListener('click', async function() {
+  var email = document.getElementById('new-admin-email').value.trim();
+  var pass = document.getElementById('new-admin-pass').value;
+  var name = document.getElementById('new-admin-name').value.trim();
+  var role = document.getElementById('new-admin-role').value;
+  var msg = document.getElementById('create-admin-msg');
+  msg.style.display = 'none';
+
+  if (!email || !pass || !name) {
+    msg.style.display = 'block';
+    msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
+    msg.textContent = 'يرجى ملء جميع الحقول';
+    return;
+  }
+  if (pass.length < 6) {
+    msg.style.display = 'block';
+    msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
+    msg.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+    return;
+  }
+
+  var btn = document.getElementById('btn-create-admin');
+  btn.textContent = 'جاري الإنشاء...'; btn.disabled = true;
+
+  var { data, error } = await sb.auth.signUp({ email: email, password: pass });
+
+  if (error) {
+    msg.style.display = 'block';
+    msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
+    msg.textContent = 'خطأ: ' + error.message;
+    btn.textContent = '➕ إنشاء الحساب'; btn.disabled = false;
+    return;
+  }
+
+  if (data && data.user) {
+    await sb.from('profiles').update({ full_name: name, role: role }).eq('id', data.user.id);
+  }
+
+  msg.style.display = 'block';
+  msg.style.background = '#d4edda'; msg.style.color = '#155724';
+  msg.textContent = '✅ تم إنشاء الحساب بنجاح! البريد: ' + email;
+  document.getElementById('new-admin-email').value = '';
+  document.getElementById('new-admin-pass').value = '';
+  document.getElementById('new-admin-name').value = '';
+  btn.textContent = '➕ إنشاء الحساب'; btn.disabled = false;
   loadUsers();
 });
 
@@ -577,54 +607,6 @@ async function checkNotifications() {
   badge.style.display = count > 0 ? 'inline' : 'none';
   if (count > 0) badge.textContent = count;
 }
-
-// ===== إضافة مشرف =====
-document.getElementById('btn-create-admin').addEventListener('click', async function() {
-  var email = document.getElementById('new-admin-email').value.trim();
-  var pass = document.getElementById('new-admin-pass').value;
-  var name = document.getElementById('new-admin-name').value.trim();
-  var role = document.getElementById('new-admin-role').value;
-  var msg = document.getElementById('create-admin-msg');
-  msg.style.display = 'none';
-
-  if (!email || !pass || !name) {
-    msg.style.display = 'block';
-    msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
-    msg.textContent = 'يرجى ملء جميع الحقول';
-    return;
-  }
-  if (pass.length < 6) {
-    msg.style.display = 'block';
-    msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
-    msg.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
-    return;
-  }
-
-  var btn = document.getElementById('btn-create-admin');
-  btn.textContent = 'جاري الإنشاء...'; btn.disabled = true;
-
-  var { data, error } = await sb.auth.signUp({ email: email, password: pass });
-
-  if (error) {
-    msg.style.display = 'block';
-    msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
-    msg.textContent = 'خطأ: ' + error.message;
-    btn.textContent = '➕ إنشاء الحساب'; btn.disabled = false;
-    return;
-  }
-
-  if (data && data.user) {
-    await sb.from('profiles').update({ full_name: name, role: role }).eq('id', data.user.id);
-  }
-
-  msg.style.display = 'block';
-  msg.style.background = '#d4edda'; msg.style.color = '#155724';
-  msg.textContent = '✅ تم إنشاء الحساب بنجاح! البريد: ' + email;
-  document.getElementById('new-admin-email').value = '';
-  document.getElementById('new-admin-pass').value = '';
-  document.getElementById('new-admin-name').value = '';
-  btn.textContent = '➕ إنشاء الحساب'; btn.disabled = false;
-});
 
 async function init() {
   await checkAuth();
