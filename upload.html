@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>رفع محتوى | HRDF</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; min-height: 100vh; }
+    .header { background: #0B6B3A; color: white; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+    .header h1 { font-size: 18px; }
+    .header-btns { display: flex; gap: 10px; }
+    .header button { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px; }
+    .container { max-width: 700px; margin: 40px auto; padding: 0 20px 60px; }
+    .card { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
+    .card-header { background: linear-gradient(135deg, #0B6B3A, #1a9a5c); padding: 24px 32px; color: white; }
+    .card-header h2 { font-size: 22px; margin-bottom: 6px; }
+    .card-header p { opacity: 0.85; font-size: 14px; }
+    .card-body { padding: 32px; }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; margin-bottom: 6px; font-size: 14px; color: #444; font-weight: 600; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid #ddd; border-radius: 10px;
+      font-family: 'Tajawal', sans-serif; font-size: 15px;
+      transition: border 0.2s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #0B6B3A; }
+    .field textarea { resize: vertical; min-height: 140px; }
+    .field input[type="file"] { padding: 10px; background: #f8f9fa; cursor: pointer; }
+    .file-types { font-size: 12px; color: #888; margin-top: 5px; }
+    .btn-submit {
+      width: 100%; padding: 14px;
+      background: #0B6B3A; color: white;
+      border: none; border-radius: 10px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 17px; font-weight: 700;
+      cursor: pointer; margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover { background: #094d2a; }
+    .btn-submit:disabled { background: #aaa; cursor: not-allowed; }
+    .progress-bar { width: 100%; height: 8px; background: #eee; border-radius: 4px; margin-top: 10px; display: none; }
+    .progress-bar-fill { height: 100%; background: #0B6B3A; border-radius: 4px; width: 0%; transition: width 0.3s; }
+    .upload-status { font-size: 14px; margin-top: 8px; color: #0B6B3A; text-align: center; }
+    .success-msg { background: #d4edda; color: #155724; padding: 16px; border-radius: 10px; text-align: center; margin-top: 16px; display: none; font-size: 15px; }
+    .error-msg { background: #f8d7da; color: #721c24; padding: 16px; border-radius: 10px; text-align: center; margin-top: 16px; display: none; font-size: 15px; }
+    .my-uploads { margin-top: 32px; }
+    .my-uploads h3 { font-size: 17px; color: #333; margin-bottom: 16px; }
+    .upload-item { background: #f8f9fa; border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+    .upload-item .info h4 { font-size: 14px; color: #333; }
+    .upload-item .info span { font-size: 12px; color: #888; }
+    .badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .badge-pending { background: #fff3cd; color: #856404; }
+    .badge-reviewed { background: #d4edda; color: #155724; }
+    .badge-hidden { background: #f8d7da; color: #721c24; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📤 رفع محتوى جديد — HRDF</h1>
+  <div class="header-btns">
+    <button onclick="window.location.href='./index.html'">← الرئيسية</button>
+    <button id="btn-logout">خروج</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h2>📤 رفع محتوى جديد</h2>
+      <p>سيتم مراجعة المحتوى من قبل المشرف قبل نشره</p>
+    </div>
+    <div class="card-body">
+
+      <div class="field">
+        <label>عنوان المحتوى *</label>
+        <input type="text" id="u-title" placeholder="أدخل عنوان المحتوى">
+      </div>
+
+      <div class="field">
+        <label>نوع المحتوى *</label>
+        <select id="u-type">
+          <option value="مقال">مقال</option>
+          <option value="فيديو">فيديو</option>
+          <option value="صور">صور</option>
+          <option value="انفوجرافيك">انفوجرافيك</option>
+          <option value="صوت">صوت</option>
+          <option value="بودكاست">بودكاست</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>الفئة المستهدفة</label>
+        <select id="u-audience">
+          <option value="الباحثين عن عمل">الباحثين عن عمل</option>
+          <option value="المعلمين">المعلمين</option>
+          <option value="طلاب المدارس">طلاب المدارس</option>
+          <option value="طلاب الجامعات">طلاب الجامعات</option>
+          <option value="طلاب المعاهد">طلاب المعاهد</option>
+          <option value="الموظفين">الموظفين</option>
+          <option value="أولياء الأمور">أولياء الأمور</option>
+          <option value="المرشدين المهنيين">المرشدين المهنيين</option>
+        </select>
+      </div>
+
+      <div class="field" id="article-field" style="display:none;">
+        <label>نص المقال</label>
+        <textarea id="u-article" placeholder="اكتب أو الصق نص المقال هنا..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>رفع ملف (اختياري)</label>
+        <input type="file" id="u-file" accept=".pdf,.jpg,.jpeg,.png,.mp4,.mp3,.wav">
+        <div class="file-types">PDF، صور، فيديو، صوت — الحد الأقصى 50MB</div>
+        <div class="progress-bar" id="u-progress"><div class="progress-bar-fill" id="u-progress-fill"></div></div>
+        <div class="upload-status" id="u-status"></div>
+      </div>
+
+      <button class="btn-submit" id="btn-upload">📤 رفع المحتوى</button>
+      <div class="success-msg" id="success-msg">✅ تم رفع المحتوى بنجاح! سيتم مراجعته من قبل المشرف.</div>
+      <div class="error-msg" id="error-msg"></div>
+
+    </div>
+  </div>
+
+  <!-- محتواي المرفوع -->
+  <div class="my-uploads">
+    <h3>📋 محتواي المرفوع</h3>
+    <div id="my-uploads-list">جاري التحميل...</div>
+  </div>
+
+</div>
+
+<script>
+const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let currentUserId = null;
+
+async function checkAuth() {
+  var { data } = await sb.auth.getSession();
+  if (!data.session) { window.location.href = './auth.html'; return; }
+  currentUserId = data.session.user.id;
+  var { data: profile } = await sb.from('profiles').select('role').eq('id', currentUserId).single();
+  if (!profile || !['editor', 'admin'].includes(profile.role)) {
+    alert('ليس لديك صلاحية رفع المحتوى');
+    window.location.href = './index.html';
+  }
+}
+
+// إظهار مربع نص المقال
+document.getElementById('u-type').addEventListener('change', function() {
+  document.getElementById('article-field').style.display = this.value === 'مقال' ? 'block' : 'none';
+});
+
+// رفع المحتوى
+document.getElementById('btn-upload').addEventListener('click', async function() {
+  var title = document.getElementById('u-title').value.trim();
+  if (!title) { alert('يرجى إدخال العنوان'); return; }
+
+  var btn = document.getElementById('btn-upload');
+  btn.textContent = 'جاري الرفع...';
+  btn.disabled = true;
+  document.getElementById('success-msg').style.display = 'none';
+  document.getElementById('error-msg').style.display = 'none';
+
+  var fileUrl = null;
+  var fileInput = document.getElementById('u-file');
+
+  if (fileInput.files && fileInput.files[0]) {
+    var file = fileInput.files[0];
+    var fileName = Date.now() + '_' + file.name;
+    document.getElementById('u-progress').style.display = 'block';
+    document.getElementById('u-progress-fill').style.width = '30%';
+    document.getElementById('u-status').textContent = 'جاري رفع الملف...';
+
+    var { error: uploadError } = await sb.storage.from('content-files').upload(fileName, file);
+    if (uploadError) {
+      document.getElementById('error-msg').textContent = 'خطأ في رفع الملف: ' + uploadError.message;
+      document.getElementById('error-msg').style.display = 'block';
+      btn.textContent = '📤 رفع المحتوى';
+      btn.disabled = false;
+      return;
+    }
+
+    document.getElementById('u-progress-fill').style.width = '100%';
+    document.getElementById('u-status').textContent = 'تم رفع الملف ✅';
+    var { data: urlData } = sb.storage.from('content-files').getPublicUrl(fileName);
+    fileUrl = urlData.publicUrl;
+  }
+
+  var contentType = document.getElementById('u-type').value;
+  var obj = {
+    title: title,
+    content_type: contentType,
+    target_audience: document.getElementById('u-audience').value,
+    status: 'active',
+    is_hidden: true,
+    is_reviewed: false,
+    allow_download: true,
+    created_by: currentUserId,
+    article_text: contentType === 'مقال' ? document.getElementById('u-article').value : null
+  };
+  if (fileUrl) obj.file_url = fileUrl;
+
+  var { error } = await sb.from('content').insert(obj);
+
+  if (error) {
+    document.getElementById('error-msg').textContent = 'حدث خطأ: ' + error.message;
+    document.getElementById('error-msg').style.display = 'block';
+  } else {
+    document.getElementById('success-msg').style.display = 'block';
+    document.getElementById('u-title').value = '';
+    document.getElementById('u-article').value = '';
+    document.getElementById('u-file').value = '';
+    document.getElementById('u-progress').style.display = 'none';
+    document.getElementById('u-status').textContent = '';
+    loadMyUploads();
+  }
+
+  btn.textContent = '📤 رفع المحتوى';
+  btn.disabled = false;
+});
+
+// تحميل محتواي
+async function loadMyUploads() {
+  var { data } = await sb.from('content')
+    .select('*')
+    .eq('created_by', currentUserId)
+    .order('created_at', { ascending: false });
+
+  if (!data || data.length === 0) {
+    document.getElementById('my-uploads-list').innerHTML = '<p style="color:#888;text-align:center;padding:20px;">لم ترفع أي محتوى بعد</p>';
+    return;
+  }
+
+  var html = '';
+  data.forEach(function(c) {
+    var date = new Date(c.created_at).toLocaleDateString('ar-SA');
+    var badge = c.is_reviewed
+      ? '<span class="badge badge-reviewed">✓ تمت المراجعة</span>'
+      : '<span class="badge badge-pending">⏳ قيد المراجعة</span>';
+    var visibility = c.is_hidden
+      ? '<span class="badge badge-hidden">مخفي</span>'
+      : '<span class="badge badge-reviewed">ظاهر</span>';
+    html += '<div class="upload-item">';
+    html += '<div class="info"><h4>' + c.title + '</h4><span>' + (c.content_type || '') + ' — ' + date + '</span></div>';
+    html += '<div style="display:flex;gap:6px;flex-wrap:wrap;">' + badge + ' ' + visibility + '</div>';
+    html += '</div>';
+  });
+  document.getElementById('my-uploads-list').innerHTML = html;
+}
+
+document.getElementById('btn-logout').addEventListener('click', async function() {
+  await sb.auth.signOut();
+  window.location.href = './auth.html';
+});
+
+async function init() {
+  await checkAuth();
+  loadMyUploads();
+}
+init();
+</script>
+</body>
+</html>
