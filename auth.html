@@ -186,6 +186,9 @@ document.getElementById('btn-login').addEventListener('click', async function() 
     var userId = res.data.user.id;
     var profileRes = await sb.from('profiles').select('role').eq('id', userId).single();
     var role = profileRes.data ? profileRes.data.role : 'pending';
+  var userId = res.data.user.id;
+    var profileRes = await sb.from('profiles').select('role').eq('id', userId).single();
+    var role = profileRes.data ? profileRes.data.role : 'pending';
     setTimeout(function(){
       if (role === 'admin') {
         window.location.href = './admin.html';
@@ -195,9 +198,7 @@ document.getElementById('btn-login').addEventListener('click', async function() 
         msg.textContent = 'حسابك في انتظار منح الصلاحية من المشرف ⏳';
         msg.className = 'msg err';
       }
-    }, 1500);;
-  }
-});
+    }, 1500);
 
 // إنشاء حساب
 document.getElementById('btn-register').addEventListener('click', async function() {
