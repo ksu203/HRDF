@@ -4,67 +4,65 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>تسجيل الدخول | HRDF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Tajawal', sans-serif;
-      background: #f0f4f8;
+      background: linear-gradient(135deg, #f0f4f8 0%, #e8f5ef 100%);
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
     }
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 40px;
-      width: 420px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    .container {
+      background: white; padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      width: 100%; max-width: 480px;
     }
     .logo { text-align: center; margin-bottom: 16px; }
     .logo img { width: 80px; }
     h2 { text-align: center; color: #0B6B3A; margin-bottom: 4px; font-size: 22px; }
     .sub { text-align: center; color: #888; font-size: 13px; margin-bottom: 28px; }
     .tabs { display: flex; border-bottom: 2px solid #eee; margin-bottom: 24px; }
-    .tab {
-      flex: 1;
-      padding: 10px;
-      text-align: center;
-      cursor: pointer;
-      color: #888;
-      font-size: 15px;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -2px;
-    }
+    .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: #888; font-size: 15px; border-bottom: 2px solid transparent; margin-bottom: -2px; }
     .tab.on { color: #0B6B3A; border-bottom-color: #0B6B3A; font-weight: 700; }
     .panel { display: none; }
     .panel.on { display: block; }
     .field { margin-bottom: 14px; }
-    .field label { display: block; margin-bottom: 5px; font-size: 14px; color: #444; }
-    .field input {
+    .field label { display: block; margin-bottom: 5px; font-size: 14px; color: #444; font-weight: 600; }
+    .field input, .field select {
       width: 100%; padding: 11px 14px;
-      border: 1px solid #ddd; border-radius: 8px;
+      border: 1.5px solid #ddd; border-radius: 10px;
       font-family: 'Tajawal', sans-serif; font-size: 15px;
+      transition: border 0.2s;
     }
-    .field input:focus { outline: none; border-color: #0B6B3A; }
+    .field input:focus, .field select:focus { outline: none; border-color: #0B6B3A; }
+    .section-title {
+      font-size: 13px; color: #0B6B3A; font-weight: 700;
+      margin: 18px 0 12px; padding-bottom: 6px;
+      border-bottom: 1px solid #e8f5ef;
+    }
+    .optional { color: #aaa; font-weight: 400; font-size: 12px; }
     .btn {
-      width: 100%; padding: 12px;
+      width: 100%; padding: 13px;
       background: #0B6B3A; color: white;
-      border: none; border-radius: 8px;
+      border: none; border-radius: 10px;
       font-family: 'Tajawal', sans-serif;
       font-size: 16px; font-weight: 700;
-      cursor: pointer; margin-top: 6px;
+      cursor: pointer; margin-top: 8px;
+      transition: background 0.2s;
     }
     .btn:hover { background: #094d2a; }
-    .msg { margin-top: 14px; padding: 11px; border-radius: 8px; text-align: center; font-size: 14px; display: none; }
+    .msg { margin-top: 14px; padding: 12px; border-radius: 10px; text-align: center; font-size: 14px; display: none; }
     .msg.ok { background: #d4edda; color: #155724; display: block; }
     .msg.err { background: #f8d7da; color: #721c24; display: block; }
   </style>
 </head>
 <body>
-<div class="card">
+<div class="container">
   <div class="logo"><img src="./hrdf-logo.png" alt="HRDF"></div>
   <h2>مبادرة الإرشاد المهني</h2>
   <p class="sub">منصة إدارة المحتوى</p>
@@ -90,18 +88,64 @@
 
   <!-- حساب جديد -->
   <div class="panel" id="p2">
+
+    <div class="section-title">📋 المعلومات الأساسية</div>
+
     <div class="field">
-      <label>الاسم الكامل</label>
+      <label>الاسم الكامل *</label>
       <input type="text" id="r-name" placeholder="الاسم الكامل">
     </div>
     <div class="field">
-      <label>البريد الإلكتروني</label>
+      <label>البريد الإلكتروني *</label>
       <input type="email" id="r-email" placeholder="example@email.com">
     </div>
     <div class="field">
-      <label>كلمة المرور</label>
+      <label>كلمة المرور *</label>
       <input type="password" id="r-pass" placeholder="••••••••">
     </div>
+
+    <div class="section-title">🏢 معلومات العمل</div>
+
+    <div class="field">
+      <label>جهة العمل *</label>
+      <input type="text" id="r-org" placeholder="اسم الجهة أو المؤسسة">
+    </div>
+    <div class="field">
+      <label>المدينة *</label>
+      <select id="r-city">
+        <option value="">— اختر المدينة —</option>
+        <option value="الرياض">الرياض</option>
+        <option value="جدة">جدة</option>
+        <option value="مكة المكرمة">مكة المكرمة</option>
+        <option value="المدينة المنورة">المدينة المنورة</option>
+        <option value="الدمام">الدمام</option>
+        <option value="الخبر">الخبر</option>
+        <option value="الظهران">الظهران</option>
+        <option value="الطائف">الطائف</option>
+        <option value="تبوك">تبوك</option>
+        <option value="أبها">أبها</option>
+        <option value="القصيم">القصيم</option>
+        <option value="حائل">حائل</option>
+        <option value="جازان">جازان</option>
+        <option value="نجران">نجران</option>
+        <option value="الباحة">الباحة</option>
+        <option value="سكاكا">سكاكا</option>
+        <option value="عرعر">عرعر</option>
+        <option value="أخرى">أخرى</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>رقم الهاتف <span class="optional">(سري — يظهر للمشرفين فقط)</span></label>
+      <input type="tel" id="r-phone" placeholder="05xxxxxxxx">
+    </div>
+
+    <div class="section-title">🔗 معلومات اختيارية <span class="optional">(اختياري)</span></div>
+
+    <div class="field">
+      <label>رابط LinkedIn <span class="optional">(اختياري)</span></label>
+      <input type="url" id="r-linkedin" placeholder="https://linkedin.com/in/...">
+    </div>
+
     <button class="btn" id="btn-register">إنشاء حساب</button>
     <div class="msg" id="r-msg"></div>
   </div>
@@ -119,7 +163,6 @@ document.getElementById('t1').addEventListener('click', function() {
   document.getElementById('p1').className = 'panel on';
   document.getElementById('p2').className = 'panel';
 });
-
 document.getElementById('t2').addEventListener('click', function() {
   document.getElementById('t2').className = 'tab on';
   document.getElementById('t1').className = 'tab';
@@ -146,22 +189,42 @@ document.getElementById('btn-login').addEventListener('click', async function() 
 
 // إنشاء حساب
 document.getElementById('btn-register').addEventListener('click', async function() {
-  var name = document.getElementById('r-name').value;
-  var email = document.getElementById('r-email').value;
+  var name = document.getElementById('r-name').value.trim();
+  var email = document.getElementById('r-email').value.trim();
   var pass = document.getElementById('r-pass').value;
+  var org = document.getElementById('r-org').value.trim();
+  var city = document.getElementById('r-city').value;
+  var phone = document.getElementById('r-phone').value.trim();
+  var linkedin = document.getElementById('r-linkedin').value.trim();
   var msg = document.getElementById('r-msg');
   msg.className = 'msg';
+
+  if (!name || !email || !pass || !org || !city) {
+    msg.className = 'msg err';
+    msg.textContent = 'يرجى ملء جميع الحقول المطلوبة (*)';
+    return;
+  }
+
   var res = await sb.auth.signUp({ email: email, password: pass });
   if (res.error) {
     msg.className = 'msg err';
-    msg.textContent = 'حدث خطأ، تأكد من البيانات وحاول مجدداً';
-  } else {
-    if (res.data && res.data.user) {
-      await sb.from('profiles').update({ full_name: name }).eq('id', res.data.user.id);
-    }
-    msg.className = 'msg ok';
-    msg.textContent = 'تم إنشاء الحساب! في انتظار منح الصلاحية من المشرف';
+    msg.textContent = 'حدث خطأ: ' + res.error.message;
+    return;
   }
+
+  // تحديث الملف الشخصي
+  if (res.data && res.data.user) {
+    await sb.from('profiles').update({
+      full_name: name,
+      organization: org,
+      city: city,
+      phone: phone || null,
+      linkedin: linkedin || null
+    }).eq('id', res.data.user.id);
+  }
+
+  msg.className = 'msg ok';
+  msg.textContent = '✅ تم إنشاء الحساب! في انتظار منح الصلاحية من المشرف.';
 });
 </script>
 </body>
