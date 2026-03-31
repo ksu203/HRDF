@@ -217,6 +217,10 @@
         <option value="inactive">غير نشط</option>
       </select>
     </div>
+<div class="field" id="article-text-field" style="display:none;">
+      <label>نص المقال</label>
+      <textarea id="c-article-text" rows="6" style="width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;resize:vertical;" placeholder="اكتب أو الصق نص المقال هنا..."></textarea>
+    </div>
     <div class="field">
       <label>رفع ملف (PDF، صورة، فيديو)</label>
       <input type="file" id="c-file" accept=".pdf,.jpg,.jpeg,.png,.mp4,.mp3">
@@ -274,6 +278,10 @@ function setupTabs() {
   tabs.forEach(function(t) {
     document.getElementById(t.tab).addEventListener('click', function() {
       tabs.forEach(function(x) {
+   document.getElementById('c-type').addEventListener('change', function() {
+    var field = document.getElementById('article-text-field');
+    field.style.display = this.value === 'مقال' ? 'block' : 'none';
+  });
         document.getElementById(x.tab).className = 'nav-tab';
         document.getElementById(x.sec).className = 'section';
       });
@@ -404,12 +412,13 @@ document.getElementById('save-content').addEventListener('click', async function
     fileUrl = urlData.publicUrl;
   }
 
-  var obj = {
+var obj = {
     title: title,
     content_type: document.getElementById('c-type').value,
     target_audience: document.getElementById('c-audience').value,
     status: document.getElementById('c-status').value,
-    created_by: currentUserId
+    created_by: currentUserId,
+    article_text: document.getElementById('c-article-text').value || null
   };
   if (fileUrl) obj.file_url = fileUrl;
 
