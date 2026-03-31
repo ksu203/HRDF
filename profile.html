@@ -9,62 +9,70 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; min-height: 100vh; }
-    .header { background: #0B6B3A; color: white; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
-    .header h1 { font-size: 18px; }
-    .header-btns { display: flex; gap: 10px; }
-    .header button { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px; }
-    .container { max-width: 800px; margin: 40px auto; padding: 0 20px 60px; }
-    .profile-card { background: white; border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 24px; }
-    .profile-header { background: linear-gradient(135deg, #0B6B3A, #1a9a5c); padding: 40px; text-align: center; color: white; position: relative; }
-    .avatar-wrap { position: relative; width: 110px; height: 110px; margin: 0 auto 16px; }
-    .avatar-xl { width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; font-size: 44px; font-weight: 800; border: 4px solid rgba(255,255,255,0.4); overflow: hidden; }
+    .header { background: #0B6B3A; color: white; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .header h1 { font-size: 16px; font-weight: 700; }
+    .header-btns { display: flex; gap: 8px; }
+    .header button { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 13px; white-space: nowrap; }
+    .container { max-width: 700px; margin: 0 auto; padding: 20px 16px 60px; }
+    .profile-card { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 20px; }
+    .profile-header { background: linear-gradient(135deg, #0B6B3A, #1a9a5c); padding: 32px 20px; text-align: center; color: white; position: relative; }
+    .avatar-wrap { position: relative; width: 100px; height: 100px; margin: 0 auto 14px; }
+    .avatar-xl { width: 100px; height: 100px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; font-size: 40px; font-weight: 800; border: 4px solid rgba(255,255,255,0.4); overflow: hidden; }
     .avatar-xl img { width: 100%; height: 100%; object-fit: cover; }
-    .avatar-upload-btn { position: absolute; bottom: 4px; left: 4px; width: 32px; height: 32px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 16px; transition: transform 0.2s; }
-    .avatar-upload-btn:hover { transform: scale(1.1); }
+    .avatar-upload-btn { position: absolute; bottom: 2px; left: 2px; width: 30px; height: 30px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 14px; }
+    .avatar-remove-btn { position: absolute; bottom: 2px; right: 2px; width: 30px; height: 30px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 14px; }
     .avatar-upload-input { display: none; }
-    .avatar-remove-btn { position: absolute; bottom: 4px; right: 4px; width: 32px; height: 32px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 16px; transition: transform 0.2s; }
-    .avatar-remove-btn:hover { transform: scale(1.1); }
-    .profile-header h2 { font-size: 24px; margin-bottom: 6px; }
-    .role-badge { background: rgba(255,255,255,0.2); padding: 5px 16px; border-radius: 20px; font-size: 14px; display: inline-block; }
-    .uploading { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 8px; display: none; }
-    .profile-body { padding: 32px; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
-    .info-item { background: #f8f9fa; border-radius: 12px; padding: 16px; }
-    .info-item .lbl { font-size: 12px; color: #888; margin-bottom: 4px; }
-    .info-item .val { font-size: 15px; color: #333; font-weight: 600; }
+    .uploading { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 6px; display: none; }
+    .profile-header h2 { font-size: 20px; margin-bottom: 6px; }
+    .role-badge { background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 13px; display: inline-block; }
+    .profile-body { padding: 20px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0; }
+    .info-item { background: #f8f9fa; border-radius: 10px; padding: 14px; }
+    .info-item .lbl { font-size: 11px; color: #888; margin-bottom: 3px; }
+    .info-item .val { font-size: 14px; color: #333; font-weight: 600; word-break: break-word; }
     .info-item .val a { color: #0B6B3A; text-decoration: none; }
     .info-item.private { border: 1.5px dashed #ffc107; background: #fffdf0; }
     .info-item.private .lbl::after { content: ' 🔒'; }
-    .edit-card { background: white; border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 32px; margin-bottom: 24px; }
-    .edit-card h3 { font-size: 18px; color: #333; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #e8f5ef; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .edit-card { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 20px; }
+    .edit-card h3 { font-size: 16px; color: #333; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #e8f5ef; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .field { margin-bottom: 0; }
     .field.full { grid-column: 1 / -1; }
-    .field label { display: block; margin-bottom: 6px; font-size: 14px; color: #444; font-weight: 600; }
-    .field input, .field select { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 14px; transition: border 0.2s; }
+    .field label { display: block; margin-bottom: 5px; font-size: 13px; color: #444; font-weight: 600; }
+    .field input, .field select { width: 100%; padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
     .field input:focus, .field select:focus { outline: none; border-color: #0B6B3A; }
-    .save-btn { margin-top: 20px; padding: 12px 32px; background: #0B6B3A; color: white; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .save-btn { margin-top: 16px; padding: 11px 28px; background: #0B6B3A; color: white; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; }
     .save-btn:hover { background: #094d2a; }
-    .msg { margin-top: 14px; padding: 12px; border-radius: 10px; text-align: center; font-size: 14px; display: none; }
+    .msg { margin-top: 12px; padding: 10px; border-radius: 8px; text-align: center; font-size: 14px; display: none; }
     .msg.ok { background: #d4edda; color: #155724; display: block; }
     .msg.err { background: #f8d7da; color: #721c24; display: block; }
-    .content-card { background: white; border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
-    .content-card-header { padding: 20px 28px; border-bottom: 2px solid #e8f5ef; }
-    .content-card-header h3 { font-size: 17px; color: #333; }
-    .content-item { padding: 16px 28px; border-bottom: 1px solid #f5f5f5; display: flex; align-items: center; justify-content: space-between; }
+    .content-card { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
+    .content-card-header { padding: 16px 20px; border-bottom: 2px solid #e8f5ef; }
+    .content-card-header h3 { font-size: 16px; color: #333; }
+    .content-item { padding: 14px 20px; border-bottom: 1px solid #f5f5f5; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
     .content-item:last-child { border-bottom: none; }
-    .content-item .title { font-size: 15px; font-weight: 600; color: #333; }
-    .content-item .meta { font-size: 12px; color: #888; margin-top: 3px; }
-    .badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .content-item .title { font-size: 14px; font-weight: 600; color: #333; }
+    .content-item .meta { font-size: 12px; color: #888; margin-top: 2px; }
+    .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
     .badge-article { background: #e8f5ef; color: #0B6B3A; }
     .badge-video { background: #fff3cd; color: #856404; }
     .badge-images { background: #cce5ff; color: #004085; }
     .badge-default { background: #f0f0f0; color: #555; }
-    .empty { text-align: center; padding: 40px; color: #aaa; }
-    .admin-bar { background: #fff3cd; border: 1.5px solid #ffc107; border-radius: 12px; padding: 14px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-    .admin-bar span { font-size: 14px; color: #856404; font-weight: 600; }
-    .admin-bar select { padding: 8px 14px; border: 1.5px solid #ffc107; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; background: white; cursor: pointer; }
-    .admin-bar button { padding: 8px 20px; background: #0B6B3A; color: white; border: none; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; cursor: pointer; font-weight: 700; }
+    .empty { text-align: center; padding: 32px; color: #aaa; font-size: 14px; }
+    .admin-bar { background: #fff3cd; border: 1.5px solid #ffc107; border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; }
+    .admin-bar-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+    .admin-bar span { font-size: 13px; color: #856404; font-weight: 600; }
+    .admin-bar select { padding: 7px 12px; border: 1.5px solid #ffc107; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; background: white; cursor: pointer; }
+    .admin-bar button { padding: 7px 18px; background: #0B6B3A; color: white; border: none; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; cursor: pointer; font-weight: 700; }
+    .view-btn { padding: 5px 12px; background: #0B6B3A; color: white; border: none; border-radius: 6px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 12px; white-space: nowrap; }
+
+    @media (max-width: 500px) {
+      .info-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: 1; }
+      .profile-header { padding: 24px 16px; }
+      .header h1 { font-size: 14px; }
+    }
   </style>
 </head>
 <body>
@@ -78,9 +86,9 @@
 </div>
 
 <div class="container" id="app">
-  <div style="text-align:center;padding:80px;color:#888;">
-    <div style="font-size:48px;margin-bottom:16px;">⏳</div>
-    <p>جاري تحميل الملف الشخصي...</p>
+  <div style="text-align:center;padding:80px 20px;color:#888;">
+    <div style="font-size:44px;margin-bottom:14px;">⏳</div>
+    <p>جاري التحميل...</p>
   </div>
 </div>
 
@@ -91,7 +99,6 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const params = new URLSearchParams(window.location.search);
 const viewId = params.get('id');
-
 let currentUser = null;
 let currentRole = null;
 let targetProfile = null;
@@ -104,146 +111,78 @@ async function init() {
   var { data } = await sb.auth.getSession();
   if (!data.session) { window.location.href = './auth.html'; return; }
   currentUser = data.session.user;
-
   var { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   if (profile) currentRole = profile.role;
-
   var targetId = viewId || currentUser.id;
   var { data: target } = await sb.from('profiles').select('*').eq('id', targetId).single();
   targetProfile = target;
-
-  var isOwnProfile = targetId === currentUser.id;
-  var isAdmin = currentRole === 'admin';
-
   if (!targetProfile) {
-    document.getElementById('app').innerHTML = '<div style="text-align:center;padding:80px;color:#888;"><div style="font-size:48px;">❌</div><p>لم يتم العثور على الملف الشخصي</p></div>';
+    document.getElementById('app').innerHTML = '<div style="text-align:center;padding:60px 20px;color:#888;"><div style="font-size:44px;">❌</div><p style="margin-top:12px;">لم يتم العثور على الملف الشخصي</p></div>';
     return;
   }
-
-  renderProfile(isOwnProfile, isAdmin);
+  renderProfile(targetId === currentUser.id, currentRole === 'admin');
   loadUserContent(targetId);
 }
 
-function renderProfile(isOwnProfile, isAdmin) {
+function renderProfile(isOwn, isAdmin) {
   var p = targetProfile;
   var name = p.full_name || p.email || 'مجهول';
-
-  var avatarContent = p.avatar_url
-    ? '<img src="' + p.avatar_url + '" alt="صورة شخصية">'
-    : name.charAt(0).toUpperCase();
+  var avatarContent = p.avatar_url ? '<img src="' + p.avatar_url + '">' : name.charAt(0).toUpperCase();
 
   var adminBar = '';
-  if (isAdmin && !isOwnProfile) {
-    adminBar = `
-      <div class="admin-bar">
-        <span>🛡️ أنت تشاهد هذا الملف كمشرف</span>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-          <select id="role-select">
-            <option value="pending" ${p.role==='pending'?'selected':''}>pending — في الانتظار</option>
-            <option value="viewer" ${p.role==='viewer'?'selected':''}>viewer — قارئ</option>
-            <option value="editor" ${p.role==='editor'?'selected':''}>editor — محرر</option>
-            <option value="admin" ${p.role==='admin'?'selected':''}>admin — مشرف</option>
-          </select>
-          <button onclick="changeRole()">تغيير الصلاحية</button>
-        </div>
-      </div>`;
+  if (isAdmin && !isOwn) {
+    adminBar = '<div class="admin-bar"><div class="admin-bar-top"><span>🛡️ تشاهد هذا الملف كمشرف</span><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;"><select id="role-select"><option value="pending" '+(p.role==='pending'?'selected':'')+'>pending — في الانتظار</option><option value="viewer" '+(p.role==='viewer'?'selected':'')+'>viewer — قارئ</option><option value="editor" '+(p.role==='editor'?'selected':'')+'>editor — محرر</option><option value="admin" '+(p.role==='admin'?'selected':'')+'>admin — مشرف</option></select><button onclick="changeRole()">تغيير الصلاحية</button></div></div></div>';
   }
 
   var editForm = '';
-  if (isOwnProfile) {
-    editForm = `
-      <div class="edit-card">
-        <h3>✏️ تعديل معلوماتي</h3>
-        <div class="form-grid">
-          <div class="field"><label>الاسم الكامل</label><input type="text" id="e-name" value="${p.full_name || ''}"></div>
-          <div class="field"><label>جهة العمل</label><input type="text" id="e-org" value="${p.organization || ''}"></div>
-          <div class="field">
-            <label>المدينة</label>
-            <select id="e-city">
-              <option value="">— اختر المدينة —</option>
-              ${cities.map(function(c){ return '<option value="'+c+'" '+(p.city===c?'selected':'')+'>'+c+'</option>'; }).join('')}
-            </select>
-          </div>
-          <div class="field"><label>رقم الهاتف <span style="color:#aaa;font-size:12px;">(سري)</span></label><input type="tel" id="e-phone" value="${p.phone || ''}"></div>
-          <div class="field full"><label>رابط LinkedIn</label><input type="url" id="e-linkedin" value="${p.linkedin || ''}" placeholder="https://linkedin.com/in/..."></div>
-        </div>
-        <button class="save-btn" onclick="saveProfile()">💾 حفظ التغييرات</button>
-        <div class="msg" id="save-msg"></div>
-      </div>`;
+  if (isOwn) {
+    editForm = '<div class="edit-card"><h3>✏️ تعديل معلوماتي</h3><div class="form-grid"><div class="field"><label>الاسم الكامل</label><input type="text" id="e-name" value="'+(p.full_name||'')+'"></div><div class="field"><label>جهة العمل</label><input type="text" id="e-org" value="'+(p.organization||'')+'"></div><div class="field"><label>المدينة</label><select id="e-city"><option value="">— اختر —</option>'+cities.map(function(c){ return '<option value="'+c+'" '+(p.city===c?'selected':'')+'>'+c+'</option>'; }).join('')+'</select></div><div class="field"><label>رقم الهاتف <span style="color:#aaa;font-size:11px;">(سري)</span></label><input type="tel" id="e-phone" value="'+(p.phone||'')+'"></div><div class="field full"><label>رابط LinkedIn</label><input type="url" id="e-linkedin" value="'+(p.linkedin||'')+'" placeholder="https://linkedin.com/in/..."></div></div><button class="save-btn" onclick="saveProfile()">💾 حفظ التغييرات</button><div class="msg" id="save-msg"></div></div>';
   }
 
-  document.getElementById('app').innerHTML = `
-    ${adminBar}
-    <div class="profile-card">
-      <div class="profile-header">
-        <div class="avatar-wrap">
-          <div class="avatar-xl" id="avatar-display">${avatarContent}</div>
-          ${isOwnProfile ? `
-            <label class="avatar-upload-btn" for="avatar-input" title="تغيير الصورة">📷</label>
-            <input class="avatar-upload-input" type="file" id="avatar-input" accept="image/*">
-            ${p.avatar_url ? '<div class="avatar-remove-btn" id="remove-avatar-btn" title="إزالة الصورة">🗑️</div>' : ''}
-          ` : ''}
-        </div>
-        <div class="uploading" id="upload-hint">جاري رفع الصورة...</div>
-        <h2>${name}</h2>
-        <span class="role-badge">${roleMap[p.role] || p.role}</span>
-      </div>
-      <div class="profile-body">
-        <div class="info-grid">
-          <div class="info-item">
-            <div class="lbl">📧 البريد الإلكتروني</div>
-            <div class="val">${p.email || '-'}</div>
-          </div>
-          <div class="info-item">
-            <div class="lbl">🏢 جهة العمل</div>
-            <div class="val">${p.organization || '-'}</div>
-          </div>
-          <div class="info-item">
-            <div class="lbl">📍 المدينة</div>
-            <div class="val">${p.city || '-'}</div>
-          </div>
-          <div class="info-item">
-            <div class="lbl">🔗 LinkedIn</div>
-            <div class="val">${p.linkedin ? '<a href="'+p.linkedin+'" target="_blank">عرض الملف الشخصي ↗</a>' : '-'}</div>
-          </div>
-          ${(isOwnProfile || isAdmin) && p.phone ? `
-          <div class="info-item private">
-            <div class="lbl">📞 رقم الهاتف</div>
-            <div class="val">${p.phone}</div>
-          </div>` : ''}
-        </div>
-      </div>
-    </div>
-    ${editForm}
-    <div class="content-card">
-      <div class="content-card-header"><h3>📋 المحتوى المرفوع</h3></div>
-      <div id="content-list"><div class="empty">جاري التحميل...</div></div>
-    </div>
-  `;
+  document.getElementById('app').innerHTML =
+    adminBar +
+    '<div class="profile-card">' +
+      '<div class="profile-header">' +
+        '<div class="avatar-wrap">' +
+          '<div class="avatar-xl" id="avatar-display">' + avatarContent + '</div>' +
+          (isOwn ? '<label class="avatar-upload-btn" for="avatar-input" title="تغيير الصورة">📷</label><input class="avatar-upload-input" type="file" id="avatar-input" accept="image/*">' + (p.avatar_url ? '<div class="avatar-remove-btn" id="remove-avatar-btn" title="إزالة">🗑️</div>' : '') : '') +
+        '</div>' +
+        '<div class="uploading" id="upload-hint">جاري رفع الصورة...</div>' +
+        '<h2>' + name + '</h2>' +
+        '<span class="role-badge">' + (roleMap[p.role] || p.role) + '</span>' +
+      '</div>' +
+      '<div class="profile-body">' +
+        '<div class="info-grid">' +
+          '<div class="info-item"><div class="lbl">📧 البريد الإلكتروني</div><div class="val">' + (p.email||'-') + '</div></div>' +
+          '<div class="info-item"><div class="lbl">🏢 جهة العمل</div><div class="val">' + (p.organization||'-') + '</div></div>' +
+          '<div class="info-item"><div class="lbl">📍 المدينة</div><div class="val">' + (p.city||'-') + '</div></div>' +
+          '<div class="info-item"><div class="lbl">🔗 LinkedIn</div><div class="val">' + (p.linkedin ? '<a href="'+p.linkedin+'" target="_blank">عرض ↗</a>' : '-') + '</div></div>' +
+          ((isOwn || isAdmin) && p.phone ? '<div class="info-item private"><div class="lbl">📞 رقم الهاتف</div><div class="val">' + p.phone + '</div></div>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    editForm +
+    '<div class="content-card"><div class="content-card-header"><h3>📋 المحتوى المرفوع</h3></div><div id="content-list"><div class="empty">جاري التحميل...</div></div></div>';
 
-  // رفع الصورة
-  if (isOwnProfile) {
+  if (isOwn) {
     document.getElementById('avatar-input').addEventListener('change', async function() {
       var file = this.files[0];
       if (!file) return;
-      if (file.size > 2 * 1024 * 1024) { alert('حجم الصورة يجب أن يكون أقل من 2MB'); return; }
+      if (file.size > 2*1024*1024) { alert('حجم الصورة يجب أن يكون أقل من 2MB'); return; }
       document.getElementById('upload-hint').style.display = 'block';
       var fileName = 'avatar_' + currentUser.id + '_' + Date.now() + '.' + file.name.split('.').pop();
       var { error } = await sb.storage.from('avatars').upload(fileName, file, { upsert: true });
-      if (error) { alert('خطأ في رفع الصورة: ' + error.message); document.getElementById('upload-hint').style.display = 'none'; return; }
+      if (error) { alert('خطأ: ' + error.message); document.getElementById('upload-hint').style.display = 'none'; return; }
       var { data: urlData } = sb.storage.from('avatars').getPublicUrl(fileName);
-      var avatarUrl = urlData.publicUrl;
-      await sb.from('profiles').update({ avatar_url: avatarUrl }).eq('id', currentUser.id);
-      document.getElementById('avatar-display').innerHTML = '<img src="' + avatarUrl + '" alt="صورة شخصية">';
+      await sb.from('profiles').update({ avatar_url: urlData.publicUrl }).eq('id', currentUser.id);
+      document.getElementById('avatar-display').innerHTML = '<img src="' + urlData.publicUrl + '">';
       document.getElementById('upload-hint').style.display = 'none';
       setTimeout(function(){ window.location.reload(); }, 500);
     });
-
-    // حذف الصورة
     var removeBtn = document.getElementById('remove-avatar-btn');
     if (removeBtn) {
       removeBtn.addEventListener('click', async function() {
-        if (!confirm('هل تريد إزالة الصورة الشخصية؟')) return;
+        if (!confirm('هل تريد إزالة الصورة؟')) return;
         await sb.from('profiles').update({ avatar_url: null }).eq('id', currentUser.id);
         window.location.reload();
       });
@@ -262,7 +201,7 @@ async function saveProfile() {
     linkedin: document.getElementById('e-linkedin').value || null
   }).eq('id', currentUser.id);
   msg.className = 'msg ok';
-  msg.textContent = '✅ تم حفظ التغييرات بنجاح!';
+  msg.textContent = '✅ تم الحفظ بنجاح!';
   setTimeout(function(){ window.location.reload(); }, 1500);
 }
 
@@ -275,7 +214,7 @@ async function changeRole() {
 
 async function loadUserContent(userId) {
   var { data } = await sb.from('content').select('*').eq('created_by', userId).order('created_at', { ascending: false });
-  if (!data || data.length === 0) {
+  if (!data || !data.length) {
     document.getElementById('content-list').innerHTML = '<div class="empty">لم يتم رفع أي محتوى بعد</div>';
     return;
   }
@@ -284,7 +223,7 @@ async function loadUserContent(userId) {
     var date = new Date(c.created_at).toLocaleDateString('ar-SA');
     var cls = typeMap[c.content_type] || 'badge-default';
     var status = c.is_hidden ? '🙈 مخفي' : '👁 ظاهر';
-    html += '<div class="content-item"><div><div class="title">' + c.title + '</div><div class="meta">' + date + ' — ' + status + '</div></div><div style="display:flex;gap:8px;align-items:center;"><span class="badge ' + cls + '">' + (c.content_type||'-') + '</span><button onclick="window.location.href=\'./view.html?id=' + c.id + '\'" style="padding:5px 12px;background:#0B6B3A;color:white;border:none;border-radius:6px;cursor:pointer;font-family:\'Tajawal\',sans-serif;font-size:13px;">عرض</button></div></div>';
+    html += '<div class="content-item"><div><div class="title">' + c.title + '</div><div class="meta">' + date + ' · ' + status + '</div></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><span class="badge ' + cls + '">' + (c.content_type||'-') + '</span><button class="view-btn" onclick="window.location.href=\'./view.html?id=' + c.id + '\'">عرض</button></div></div>';
   });
   document.getElementById('content-list').innerHTML = html;
 }
