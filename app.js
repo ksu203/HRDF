@@ -2,9 +2,9 @@
 // Supabase Configuration
 // =============================
 
-const SUPABASE_URL = "https://ygruefrffbpatidtldxd.supabase.co";
-const SUPABASE_KEY = "sb_publishable_8GpUTVWD4YNPJA3jFnrlDA_8fLTBTS2";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL = "https://fmsxnznoynnhcwvstheu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // =============================
 // Helpers & State
@@ -12,83 +12,44 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const $ = (sel, root = document) => root.querySelector(sel);
 
-const STORAGE_KEY = "hrdf_irshad_content_v5";
-const COUNTER_KEY = "hrdf_irshad_content_counter_v3";
-
 let activeTypeFilter = "all";
+let currentUser = null;
+let currentRole = null;
 
-const state = {
-  items: []
-};
+const state = { items: [] };
 
-function uid() {
-  return "id_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
-}
+// =============================
+// Auth Check
+// =============================
 
-function nowISO() {
-  return new Date().toISOString();
-}
-
-function saveLocal() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
-}
-
-function loadLocal() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
-  try { return JSON.parse(raw) || []; } catch { return []; }
-}
-
-function getNextNumber() {
-  const raw = localStorage.getItem(COUNTER_KEY);
-  const n = raw ? parseInt(raw, 10) : 0;
-  const next = Number.isFinite(n) ? (n + 1) : 1;
-  localStorage.setItem(COUNTER_KEY, String(next));
-  return next;
+async function checkAuth() {
+  const { data } = await sb.auth.getSession();
+  if (!data.session) return;
+  currentUser = data.session.user;
+  const { data: profile } = await sb.from('profiles').select('role').eq('id', currentUser.id).single();
+  if (profile) currentRole = profile.role;
 }
 
 // =============================
-// Supabase Upload
+// Load Content from Supabase
 // =============================
 
-async function uploadToSupabase(file) {
-  const extension = file.name.split('.').pop();
+async function loadFromSupabase() {
+  const { data, error } = await sb.from('content').select('*').order('id', { ascending: false });
+  if (error) { console.error(error); return []; }
+  return data || [];
+}
 
-  const fileName = `${Date.now()}_${Math.random()
-    .toString(36)
-    .substring(2, 10)}.${extension}`;
+// =============================
+// Upload File
+// =============================
 
-  try {
-    const { error } = await supabaseClient.storage
-      .from("media")
-      .upload(fileName, file, {
-        cacheControl: "3600",
-        upsert: false
-      });
-
-    if (error) {
-      console.error("Upload error:", error);
-      alert(error.message);
-      return null;
-    }
-
-    const { data: publicData } = supabaseClient.storage
-      .from("media")
-      .getPublicUrl(fileName);
-
-    return {
-      name: file.name,
-      mime: file.type || "",
-      size: file.size || 0,
-      url: publicData.publicUrl,
-      uploadedAt: new Date().toISOString()
-    };
-
-  } catch (err) {
-    console.error(err);
-    alert("حدث خطأ أثناء رفع الملف");
-    return null;
-  }
+async function uploadFile(file) {
+  const fileName = Date.now() + '_' + file.name;
+  const { error } = await sb.storage.from('content-files').upload(fileName, file);
+  if (error) { alert('خطأ في رفع الملف: ' + error.message); return null; }
+  const { data } = sb.storage.from('content-files').getPublicUrl(fileName);
+  return data.publicUrl;
 }
 
 // =============================
@@ -98,184 +59,136 @@ async function uploadToSupabase(file) {
 function updateTypeStats() {
   const container = $("#typeStats");
   if (!container) return;
-
   container.innerHTML = "";
 
   const counts = {};
   state.items.forEach(item => {
-    const type = item.contentType || "other";
+    const type = item.content_type || "other";
     counts[type] = (counts[type] || 0) + 1;
   });
 
   const labels = {
-    article: "مقال",
-    video: "فيديو",
-    images: "صور",
-    infographic: "انفوجرافيك",
-    audio: "صوت",
-    press: "لقاء صحفي",
-    podcast: "بودكاست"
-  };
-
- Object.keys(labels).forEach(key => {
-  const value = counts[key] || 0;
-
-  const div = document.createElement("div");
-  div.className = "stats-item";
-  div.style.cursor = "pointer";
-
-  div.innerHTML = `
-    <span>${labels[key]}</span>
-    <span class="stats-number">${value}</span>
-  `;
-
-  div.addEventListener("click", () => {
-    openTypeModal(key, labels[key]);
-  });
-
-  container.appendChild(div);
-});
-}
-function updateStats() {
-  const total = state.items.length;
-  const used = state.items.filter(i => i.isUsed).length;
-
-  const totalEl = $("#statTotal");
-  const usedEl = $("#statUsed");
-
-  if (totalEl) totalEl.textContent = total;
-  if (usedEl) usedEl.textContent = used;
-
-  updateTypeStats();
-}
-function updateTargetStats() {
-  const container = $("#targetStats");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const counts = {};
-  state.items.forEach(item => {
-    const group = item.targetGroup || "none";
-    counts[group] = (counts[group] || 0) + 1;
-  });
-
-  const labels = {
-    job_seekers: "الباحثين عن عمل",
-    teachers: "المعلمين",
-    school_students: "طلاب المدارس",
-    university_students: "طلاب الجامعات",
-    institute_students: "طلاب المعاهد",
-    employees: "الموظفين",
-    parents: "أولياء الامور",
-    career_counselors: "المرشدين المهنيين",
-    none: "غير محدد"
+    "مقال": "مقال", "فيديو": "فيديو", "صور": "صور",
+    "انفوجرافيك": "انفوجرافيك", "صوت": "صوت",
+    "لقاء صحفي": "لقاء صحفي", "بودكاست": "بودكاست"
   };
 
   Object.keys(labels).forEach(key => {
     const value = counts[key] || 0;
-
     const div = document.createElement("div");
     div.className = "stats-item";
-
-    div.innerHTML = `
-      <span>${labels[key]}</span>
-      <span class="stats-number">${value}</span>
-    `;
-
+    div.style.cursor = "pointer";
+    div.innerHTML = `<span>${labels[key]}</span><span class="stats-number">${value}</span>`;
+    div.addEventListener("click", () => openTypeModal(key, labels[key]));
     container.appendChild(div);
   });
 }
-updateTargetStats(); // ← أضف هذا السطر
+
+function updateTargetStats() {
+  const container = $("#targetStats");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const counts = {};
+  state.items.forEach(item => {
+    const group = item.target_audience || "غير محدد";
+    counts[group] = (counts[group] || 0) + 1;
+  });
+
+  const labels = [
+    "الباحثين عن عمل", "المعلمين", "طلاب المدارس",
+    "طلاب الجامعات", "طلاب المعاهد", "الموظفين",
+    "أولياء الأمور", "المرشدين المهنيين", "غير محدد"
+  ];
+
+  labels.forEach(key => {
+    const value = counts[key] || 0;
+    const div = document.createElement("div");
+    div.className = "stats-item";
+    div.innerHTML = `<span>${key}</span><span class="stats-number">${value}</span>`;
+    container.appendChild(div);
+  });
+}
+
+function updateStats() {
+  const total = state.items.length;
+  const used = state.items.filter(i => i.status === 'used').length;
+  const totalEl = $("#statTotal");
+  const usedEl = $("#statUsed");
+  if (totalEl) totalEl.textContent = total;
+  if (usedEl) usedEl.textContent = used;
+  updateTypeStats();
+  updateTargetStats();
+}
 
 // =============================
 // Render
 // =============================
 
-function renderAttachment(att) {
-  if (!att || !att.url) return "-";
-  return `<button onclick="window.open('${att.url}','_blank')" class="btn btn--ghost">عرض</button>`;
+function renderAttachment(url) {
+  if (!url) return "-";
+  return `<button onclick="window.open('${url}','_blank')" class="btn btn--ghost">عرض</button>`;
 }
 
 function render() {
   const tbody = $("#rows");
   const searchTerm = $("#q")?.value?.toLowerCase() || "";
-
   if (!tbody) return;
   tbody.innerHTML = "";
 
   let filtered = state.items;
 
   if (activeTypeFilter !== "all") {
-    filtered = filtered.filter(i => i.contentType === activeTypeFilter);
+    filtered = filtered.filter(i => i.content_type === activeTypeFilter);
   }
 
   if (searchTerm) {
     filtered = filtered.filter(i =>
       i.title.toLowerCase().includes(searchTerm) ||
-      String(i.contentNumber).includes(searchTerm)
+      String(i.id).includes(searchTerm)
     );
   }
 
   $("#statsPill").textContent = `${filtered.length} عنصر`;
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="8" style="text-align:center;padding:20px;">
-          لا يوجد محتوى مطابق
-        </td>
-      </tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;">لا يوجد محتوى مطابق</td></tr>`;
     updateStats();
     return;
   }
 
-  const labels = {
-    article: "مقال",
-    video: "فيديو",
-    images: "صور",
-    infographic: "انفوجرافيك",
-    audio: "صوت",
-    press: "لقاء صحفي",
-    podcast: "بودكاست"
-  };
-
-  filtered.forEach(item => {
+  filtered.forEach((item, index) => {
     const tr = document.createElement("tr");
-
-    if (item.isUsed) {
+    if (item.status === 'used') {
       tr.style.background = "#f0f8f5";
       tr.style.opacity = "0.8";
     }
 
+    const canEdit = currentRole === 'admin' || currentRole === 'editor';
+
     tr.innerHTML = `
-      <td>${String(item.contentNumber).padStart(3,"0")}</td>
+      <td>${String(index + 1).padStart(3, "0")}</td>
       <td>${item.title}</td>
       <td>
-        <span style="
-          padding:4px 10px;
-          border-radius:14px;
-          background:#e8f5ef;
-          color:#0B6B3A;
-          font-weight:600;
-          font-size:0.8rem;">
-          ${labels[item.contentType] || "-"}
+        <span style="padding:4px 10px;border-radius:14px;background:#e8f5ef;color:#0B6B3A;font-weight:600;font-size:0.8rem;">
+          ${item.content_type || "-"}
         </span>
       </td>
-      <td>${item.targetGroup || "-"}</td>
-      <td>${renderAttachment(item.attachment)}</td>
+      <td>${item.target_audience || "-"}</td>
+      <td>${renderAttachment(item.file_url)}</td>
       <td>
-        <button onclick="toggleUsed('${item.id}')" class="btn btn--ghost">
-          ${item.isUsed ? "✓ مستخدم" : "تم استخدامه"}
-        </button>
+        ${canEdit ? `<button onclick="toggleUsed(${item.id})" class="btn btn--ghost">
+          ${item.status === 'used' ? "✓ مستخدم" : "تم استخدامه"}
+        </button>` : (item.status === 'used' ? "✓ مستخدم" : "غير مستخدم")}
       </td>
-      <td>${item.isUsed ? "مستخدم" : "غير مستخدم"}</td>
+      <td>${item.status === 'used' ? "مستخدم" : "غير مستخدم"}</td>
       <td>
-        <button onclick="editItem('${item.id}')" class="btn btn--secondary">تعديل</button>
-        <button onclick="deleteItem('${item.id}')" class="btn btn--danger">حذف</button>
+        ${currentRole === 'admin' ? `
+          <button onclick="editItem(${item.id})" class="btn btn--secondary">تعديل</button>
+          <button onclick="deleteItem(${item.id})" class="btn btn--danger">حذف</button>
+        ` : '-'}
       </td>
     `;
-
     tbody.appendChild(tr);
   });
 
@@ -286,31 +199,29 @@ function render() {
 // Actions
 // =============================
 
-function toggleUsed(id) {
+async function toggleUsed(id) {
   const item = state.items.find(x => x.id === id);
   if (!item) return;
-
-  item.isUsed = !item.isUsed;
-  saveLocal();
+  const newStatus = item.status === 'used' ? 'active' : 'used';
+  await sb.from('content').update({ status: newStatus }).eq('id', id);
+  item.status = newStatus;
   render();
 }
 
-function deleteItem(id) {
+async function deleteItem(id) {
   if (!confirm("هل أنت متأكد؟")) return;
+  await sb.from('content').delete().eq('id', id);
   state.items = state.items.filter(x => x.id !== id);
-  saveLocal();
   render();
 }
 
 function editItem(id) {
   const item = state.items.find(x => x.id === id);
   if (!item) return;
-
   $("#id").value = item.id;
   $("#title").value = item.title;
-  $("#contentType").value = item.contentType || "article";
-  $("#targetGroup").value = item.targetGroup || "";
-
+  $("#contentType").value = item.content_type || "article";
+  $("#targetGroup").value = item.target_audience || "";
   openModal();
 }
 
@@ -323,37 +234,32 @@ $("#form").addEventListener("submit", async (e) => {
 
   const idField = $("#id").value;
   const isEdit = Boolean(idField);
-  const id = isEdit ? idField : uid();
-
-  const prev = state.items.find(x => x.id === id);
   const file = $("#attachmentFile").files?.[0] || null;
 
-  let attachment = isEdit ? prev?.attachment : null;
-
+  let fileUrl = null;
   if (file) {
-    const uploaded = await uploadToSupabase(file);
-    if (uploaded) attachment = uploaded;
+    fileUrl = await uploadFile(file);
+    if (!fileUrl) return;
   }
 
-  const item = {
-    id,
-    contentNumber: isEdit ? prev.contentNumber : getNextNumber(),
+  const obj = {
     title: $("#title").value.trim(),
-    contentType: $("#contentType").value,
-    targetGroup: $("#targetGroup").value,
-    attachment,
-    isUsed: isEdit ? prev.isUsed : false,
-    createdAt: isEdit ? prev.createdAt : nowISO(),
-    updatedAt: nowISO()
+    content_type: $("#contentType").value,
+    target_audience: $("#targetGroup").value,
+    created_by: currentUser?.id
   };
 
-  const idx = state.items.findIndex(x => x.id === id);
-  if (idx >= 0) state.items[idx] = item;
-  else state.items.unshift(item);
+  if (fileUrl) obj.file_url = fileUrl;
 
-  saveLocal();
-  render();
+  if (isEdit) {
+    await sb.from('content').update(obj).eq('id', idField);
+  } else {
+    obj.status = 'active';
+    await sb.from('content').insert(obj);
+  }
+
   closeModal();
+  await init();
 });
 
 // =============================
@@ -362,10 +268,7 @@ $("#form").addEventListener("submit", async (e) => {
 
 const modal = $("#modal");
 
-function openModal() {
-  modal.classList.add("active");
-}
-
+function openModal() { modal.classList.add("active"); }
 function closeModal() {
   modal.classList.remove("active");
   $("#form").reset();
@@ -375,7 +278,6 @@ function closeModal() {
 $("#btnNew")?.addEventListener("click", openModal);
 $("#btnNew2")?.addEventListener("click", openModal);
 $("#btnClose")?.addEventListener("click", closeModal);
-
 document.querySelectorAll("[data-close]").forEach(el => {
   el.addEventListener("click", closeModal);
 });
@@ -385,11 +287,9 @@ document.querySelectorAll("[data-close]").forEach(el => {
 // =============================
 
 function openTypeModal(typeKey, typeLabel) {
-  const filtered = state.items.filter(i => i.contentType === typeKey);
-
+  const filtered = state.items.filter(i => i.content_type === typeKey);
   const wrapper = document.createElement("div");
   wrapper.className = "modal active";
-
   wrapper.innerHTML = `
     <div class="modal__backdrop"></div>
     <div class="modal__dialog">
@@ -398,25 +298,18 @@ function openTypeModal(typeKey, typeLabel) {
         <button class="iconBtn">✕</button>
       </div>
       <div class="modal__body">
-        ${
-          filtered.length === 0
-            ? "<p>لا يوجد محتوى في هذا التصنيف</p>"
-            : `<ul style="line-height:2;">
-                ${filtered.map(i => `<li>${i.title}</li>`).join("")}
-              </ul>`
+        ${filtered.length === 0
+          ? "<p>لا يوجد محتوى في هذا التصنيف</p>"
+          : `<ul style="line-height:2;">${filtered.map(i => `<li>${i.title}</li>`).join("")}</ul>`
         }
       </div>
     </div>
   `;
-
-  wrapper.querySelector(".modal__backdrop")
-    .addEventListener("click", () => wrapper.remove());
-
-  wrapper.querySelector(".iconBtn")
-    .addEventListener("click", () => wrapper.remove());
-
+  wrapper.querySelector(".modal__backdrop").addEventListener("click", () => wrapper.remove());
+  wrapper.querySelector(".iconBtn").addEventListener("click", () => wrapper.remove());
   document.body.appendChild(wrapper);
 }
+
 // =============================
 // Search
 // =============================
@@ -427,8 +320,16 @@ $("#q")?.addEventListener("input", render);
 // Init
 // =============================
 
-function init() {
-  state.items = loadLocal();
+async function init() {
+  await checkAuth();
+  state.items = await loadFromSupabase();
+
+  // إخفاء زر إضافة محتوى لغير Admin
+  if (currentRole !== 'admin') {
+    $("#btnNew") && ($("#btnNew").style.display = 'none');
+    $("#btnNew2") && ($("#btnNew2").style.display = 'none');
+  }
+
   render();
 }
 
