@@ -183,10 +183,12 @@ function render() {
       </td>
       <td>${item.status === 'used' ? "مستخدم" : "غير مستخدم"}</td>
       <td>
+   <td>
+        <button onclick="window.location.href='./view.html?id=${item.id}'" class="btn btn--primary">عرض</button>
         ${currentRole === 'admin' ? `
           <button onclick="editItem(${item.id})" class="btn btn--secondary">تعديل</button>
           <button onclick="deleteItem(${item.id})" class="btn btn--danger">حذف</button>
-        ` : '-'}
+        ` : ''}
       </td>
     `;
     tbody.appendChild(tr);
