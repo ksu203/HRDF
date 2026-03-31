@@ -283,6 +283,18 @@ function renderTopbar(profile) {
     b2.onclick = function(){ window.location.href = './upload.html'; };
     actions.appendChild(b2);
   }
+
+  // أيقونة حسابي
+  var name = profile.full_name || currentUser.email || 'حسابي';
+  var initial = name.charAt(0);
+  var b4 = document.createElement('div');
+  b4.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 14px;border-radius:10px;border:2px solid #0B6B3A;transition:all 0.2s;';
+  b4.innerHTML = '<div style="width:32px;height:32px;border-radius:50%;background:#0B6B3A;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">' + initial + '</div><span style="font-size:14px;font-weight:600;color:#0B6B3A;">' + name.split(' ')[0] + '</span>';
+  b4.onmouseover = function(){ this.style.background='#e8f5ef'; };
+  b4.onmouseout = function(){ this.style.background='transparent'; };
+  b4.onclick = function(){ window.location.href = './profile.html'; };
+  actions.appendChild(b4);
+
   var b3 = document.createElement('button');
   b3.className = 'btn btn--ghost'; b3.textContent = 'خروج';
   b3.onclick = async function(){ await sb.auth.signOut(); window.location.reload(); };
