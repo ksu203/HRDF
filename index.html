@@ -257,7 +257,7 @@ async function checkAuth() {
   var { data } = await sb.auth.getSession();
   if (!data.session) { renderTopbar(null); return; }
   currentUser = data.session.user;
-  var { data: profile } = await sb.from('profiles').select('role, full_name').eq('id', currentUser.id).single();
+  var { data: profile } = await sb.from('profiles').select('role, full_name, avatar_url').eq('id', currentUser.id).single();
   if (profile) currentRole = profile.role;
   renderTopbar(profile);
 }
@@ -289,7 +289,7 @@ function renderTopbar(profile) {
   var initial = name.charAt(0);
   var b4 = document.createElement('div');
   b4.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 14px;border-radius:10px;border:2px solid #0B6B3A;transition:all 0.2s;';
-  b4.innerHTML = '<div style="width:32px;height:32px;border-radius:50%;background:#0B6B3A;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">' + initial + '</div><span style="font-size:14px;font-weight:600;color:#0B6B3A;">' + name.split(' ')[0] + '</span>';
+  var avatarHtml = profile.avatar_url   ? '<img src="' + profile.avatar_url + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">'   : '<div style="width:32px;height:32px;border-radius:50%;background:#0B6B3A;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">' + initial + '</div>'; b4.innerHTML = avatarHtml + '<span style="font-size:14px;font-weight:600;color:#0B6B3A;">' + name.split(' ')[0] + '</span>';
   b4.onmouseover = function(){ this.style.background='#e8f5ef'; };
   b4.onmouseout = function(){ this.style.background='transparent'; };
   b4.onclick = function(){ window.location.href = './profile.html'; };
