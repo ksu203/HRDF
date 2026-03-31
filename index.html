@@ -11,75 +11,31 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; color: #333; }
-
-    /* ===== الهيدر ===== */
-    .topbar {
-      background: white;
-      border-bottom: 3px solid #0B6B3A;
-      padding: 0 32px;
-      display: flex; align-items: center; justify-content: space-between;
-      min-height: 70px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    }
+    .topbar { background: white; border-bottom: 3px solid #0B6B3A; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; min-height: 70px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
     .topbar__brand { display: flex; align-items: center; gap: 16px; }
     .topbar__logo { height: 48px; }
     .topbar__title .kicker { font-size: 11px; color: #888; letter-spacing: 1px; }
     .topbar__title h1 { font-size: 20px; font-weight: 800; color: #0B6B3A; }
     .topbar__actions { display: flex; align-items: center; gap: 10px; }
-    .btn {
-      padding: 9px 20px; border-radius: 10px; border: none;
-      font-family: 'Tajawal', sans-serif; font-size: 14px;
-      font-weight: 700; cursor: pointer; transition: all 0.2s;
-    }
+    .btn { padding: 9px 20px; border-radius: 10px; border: none; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
     .btn--primary { background: #0B6B3A; color: white; }
     .btn--primary:hover { background: #094d2a; }
     .btn--ghost { background: transparent; color: #0B6B3A; border: 2px solid #0B6B3A; }
     .btn--ghost:hover { background: #0B6B3A; color: white; }
-
-    /* ===== Hero ===== */
-    .hero {
-      background: linear-gradient(135deg, #0B6B3A 0%, #1a9a5c 100%);
-      padding: 48px 32px 56px;
-      color: white; text-align: center;
-    }
+    .hero { background: linear-gradient(135deg, #0B6B3A 0%, #1a9a5c 100%); padding: 48px 32px 56px; color: white; text-align: center; }
     .hero h2 { font-size: 32px; font-weight: 800; margin-bottom: 10px; }
     .hero p { font-size: 16px; opacity: 0.88; max-width: 500px; margin: 0 auto 28px; }
-    .hero-stats {
-      display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;
-    }
-    .hero-stat { text-align: center; }
+    .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
     .hero-stat .num { font-size: 40px; font-weight: 800; }
     .hero-stat .lbl { font-size: 13px; opacity: 0.8; margin-top: 2px; }
-
-    /* ===== الشل ===== */
     .shell { max-width: 1200px; margin: 0 auto; padding: 32px 24px 60px; }
-
-    /* ===== شريط البحث ===== */
-    .search-bar {
-      background: white; border-radius: 14px;
-      padding: 16px 20px; margin-bottom: 28px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .search-bar input {
-      flex: 1; border: none; outline: none;
-      font-family: 'Tajawal', sans-serif; font-size: 15px; color: #333;
-    }
-    .search-bar .icon { color: #0B6B3A; font-size: 20px; }
-    .pill {
-      background: #e8f5ef; color: #0B6B3A;
-      padding: 5px 14px; border-radius: 20px;
-      font-size: 13px; font-weight: 700;
-    }
-
-    /* ===== الإحصائيات ===== */
+    .search-bar { background: white; border-radius: 14px; padding: 16px 20px; margin-bottom: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 12px; }
+    .search-bar input { flex: 1; border: none; outline: none; font-family: 'Tajawal', sans-serif; font-size: 15px; color: #333; }
+    .pill { background: #e8f5ef; color: #0B6B3A; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
     .stats-section { margin-bottom: 32px; }
     .stats-section h3 { font-size: 17px; color: #333; margin-bottom: 16px; font-weight: 700; }
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-    .stat-card {
-      background: white; border-radius: 14px; padding: 20px 24px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
+    .stat-card { background: white; border-radius: 14px; padding: 20px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
     .stat-card h4 { font-size: 14px; color: #888; margin-bottom: 14px; font-weight: 600; }
     .progress-item { margin-bottom: 12px; }
     .progress-item:last-child { margin-bottom: 0; }
@@ -88,42 +44,21 @@
     .progress-label strong { font-size: 13px; color: #0B6B3A; font-weight: 700; }
     .progress-bar { height: 8px; background: #e8f5ef; border-radius: 10px; overflow: hidden; }
     .progress-fill { height: 100%; background: linear-gradient(90deg, #0B6B3A, #1a9a5c); border-radius: 10px; transition: width 0.8s ease; }
-
-    /* ===== قائمة المحتوى ===== */
     .content-section h3 { font-size: 17px; color: #333; margin-bottom: 16px; font-weight: 700; }
-    .content-table-wrap {
-      background: white; border-radius: 14px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden;
-    }
+    .content-table-wrap { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
     thead tr { background: #f8fffe; }
     th { padding: 14px 16px; text-align: right; font-size: 13px; color: #666; font-weight: 700; border-bottom: 2px solid #e8f5ef; }
     td { padding: 14px 16px; border-bottom: 1px solid #f5f5f5; font-size: 14px; vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #fafffe; }
-
-    /* الكاتب */
     .author-cell { display: flex; align-items: center; gap: 10px; }
-    .avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: linear-gradient(135deg, #0B6B3A, #1a9a5c);
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 14px; font-weight: 700; flex-shrink: 0;
-    }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0B6B3A, #1a9a5c); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 700; flex-shrink: 0; }
     .author-info h5 { font-size: 13px; font-weight: 700; color: #333; }
     .author-info span { font-size: 11px; color: #888; }
-    .btn-author {
-      padding: 4px 10px; border-radius: 6px; border: 1px solid #0B6B3A;
-      color: #0B6B3A; background: transparent; font-size: 12px;
-      cursor: pointer; font-family: 'Tajawal', sans-serif; transition: all 0.2s;
-    }
+    .btn-author { padding: 4px 10px; border-radius: 6px; border: 1px solid #0B6B3A; color: #0B6B3A; background: transparent; font-size: 12px; cursor: pointer; font-family: 'Tajawal', sans-serif; transition: all 0.2s; }
     .btn-author:hover { background: #0B6B3A; color: white; }
-
-    /* الشارات */
-    .badge {
-      padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700;
-      display: inline-block;
-    }
+    .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-block; }
     .badge-article { background: #e8f5ef; color: #0B6B3A; }
     .badge-video { background: #fff3cd; color: #856404; }
     .badge-images { background: #cce5ff; color: #004085; }
@@ -131,58 +66,38 @@
     .badge-audio { background: #e2d9f3; color: #4a235a; }
     .badge-podcast { background: #fde8d8; color: #7d3c00; }
     .badge-default { background: #f0f0f0; color: #555; }
-
-    /* أزرار الإجراءات */
     .action-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-    .btn-view {
-      padding: 6px 14px; border-radius: 8px; border: none;
-      background: #0B6B3A; color: white; font-size: 13px;
-      cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700;
-      transition: background 0.2s;
-    }
+    .btn-view { padding: 6px 14px; border-radius: 8px; border: none; background: #0B6B3A; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
     .btn-view:hover { background: #094d2a; }
-    .btn-edit {
-      padding: 6px 14px; border-radius: 8px; border: none;
-      background: #0066cc; color: white; font-size: 13px;
-      cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700;
-    }
-    .btn-delete {
-      padding: 6px 14px; border-radius: 8px; border: none;
-      background: #dc3545; color: white; font-size: 13px;
-      cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700;
-    }
-
-    /* حالة فارغة */
+    .btn-edit { padding: 6px 14px; border-radius: 8px; border: none; background: #0066cc; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
+    .btn-delete { padding: 6px 14px; border-radius: 8px; border: none; background: #dc3545; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
     .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
     .empty-state .icon { font-size: 56px; margin-bottom: 14px; }
-    .empty-state p { font-size: 15px; }
 
     /* نافذة بيانات الكاتب */
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
     .modal-bg.on { display: flex; }
-    .modal { background: white; border-radius: 20px; padding: 36px; width: 400px; max-width: 95vw; text-align: center; }
-    .modal .avatar-lg {
-      width: 80px; height: 80px; border-radius: 50%;
-      background: linear-gradient(135deg, #0B6B3A, #1a9a5c);
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 32px; font-weight: 700;
-      margin: 0 auto 16px;
-    }
-    .modal h3 { font-size: 20px; color: #333; margin-bottom: 6px; }
-    .modal p { color: #888; font-size: 14px; margin-bottom: 6px; }
-    .modal .close-btn {
-      margin-top: 20px; padding: 10px 28px;
-      background: #0B6B3A; color: white; border: none;
-      border-radius: 10px; font-family: 'Tajawal', sans-serif;
-      font-size: 15px; cursor: pointer;
-    }
+    .modal-author { background: white; border-radius: 20px; width: 420px; max-width: 95vw; overflow: hidden; }
+    .modal-author-header { background: linear-gradient(135deg, #0B6B3A, #1a9a5c); padding: 32px; text-align: center; color: white; }
+    .avatar-lg { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: 700; margin: 0 auto 14px; border: 3px solid rgba(255,255,255,0.5); }
+    .modal-author-header h3 { font-size: 20px; margin-bottom: 4px; }
+    .modal-author-header .role-badge { background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 13px; display: inline-block; }
+    .modal-author-body { padding: 24px; }
+    .info-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .icon { font-size: 18px; width: 28px; text-align: center; }
+    .info-row .label { font-size: 12px; color: #888; }
+    .info-row .value { font-size: 14px; color: #333; font-weight: 600; }
+    .info-row a { color: #0B6B3A; text-decoration: none; }
+    .modal-author-footer { padding: 16px 24px; background: #f8f9fa; text-align: center; }
+    .close-btn { padding: 10px 32px; background: #0B6B3A; color: white; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 15px; cursor: pointer; font-weight: 700; }
 
-    /* المودال القديم */
-    .modal-old { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
-    .modal-old.active { display: flex; }
-    .modal-old__dialog { background: white; border-radius: 16px; padding: 28px; width: 520px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
-    .modal-old__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-    .modal-old__head h3 { font-size: 18px; color: #333; }
+    /* نافذة التعديل */
+    .modal-edit { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+    .modal-edit.active { display: flex; }
+    .modal-edit__dialog { background: white; border-radius: 16px; padding: 28px; width: 520px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
+    .modal-edit__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .modal-edit__head h3 { font-size: 18px; color: #333; }
     .iconBtn { background: none; border: none; font-size: 18px; cursor: pointer; color: #888; }
     .formGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .field { margin-bottom: 0; }
@@ -190,15 +105,11 @@
     .label { display: block; margin-bottom: 5px; font-size: 13px; color: #555; font-weight: 600; }
     .input { width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
     .input:focus { outline: none; border-color: #0B6B3A; }
-    .input--select { appearance: none; }
-    .modal-old__foot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-    .btn--secondary { background: #0066cc; color: white; }
-    .btn--danger { background: #dc3545; color: white; }
+    .modal-edit__foot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
   </style>
 </head>
 <body>
 
-<!-- الهيدر -->
 <header class="topbar">
   <div class="topbar__brand">
     <img class="topbar__logo" src="./hrdf-logo.png" alt="HRDF">
@@ -210,7 +121,6 @@
   <div class="topbar__actions" id="topbar-actions"></div>
 </header>
 
-<!-- Hero -->
 <div class="hero">
   <h2>بنك المحتوى المهني</h2>
   <p>منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل</p>
@@ -222,30 +132,20 @@
 </div>
 
 <div class="shell">
-
-  <!-- شريط البحث -->
   <div class="search-bar">
-    <span class="icon">🔍</span>
+    <span style="color:#0B6B3A;font-size:20px;">🔍</span>
     <input id="q" type="search" placeholder="ابحث بالعنوان أو نوع المحتوى..." autocomplete="off">
     <span class="pill" id="stats-pill">0 عنصر</span>
   </div>
 
-  <!-- الإحصائيات -->
   <div class="stats-section">
     <h3>📊 إحصائيات المحتوى</h3>
     <div class="stats-grid">
-      <div class="stat-card">
-        <h4>حسب نوع المحتوى</h4>
-        <div id="type-stats"></div>
-      </div>
-      <div class="stat-card">
-        <h4>حسب الفئة المستهدفة</h4>
-        <div id="target-stats"></div>
-      </div>
+      <div class="stat-card"><h4>حسب نوع المحتوى</h4><div id="type-stats"></div></div>
+      <div class="stat-card"><h4>حسب الفئة المستهدفة</h4><div id="target-stats"></div></div>
     </div>
   </div>
 
-  <!-- قائمة المحتوى -->
   <div class="content-section">
     <h3>📋 قائمة المحتوى</h3>
     <div class="content-table-wrap">
@@ -269,25 +169,28 @@
       </div>
     </div>
   </div>
-
 </div>
 
 <!-- نافذة بيانات الكاتب -->
 <div class="modal-bg" id="author-modal">
-  <div class="modal">
-    <div class="avatar-lg" id="author-avatar">؟</div>
-    <h3 id="author-name">-</h3>
-    <p id="author-email">-</p>
-    <p id="author-role">-</p>
-    <button class="close-btn" onclick="document.getElementById('author-modal').className='modal-bg'">إغلاق</button>
+  <div class="modal-author">
+    <div class="modal-author-header">
+      <div class="avatar-lg" id="author-avatar">؟</div>
+      <h3 id="author-name">-</h3>
+      <span class="role-badge" id="author-role">-</span>
+    </div>
+    <div class="modal-author-body" id="author-body"></div>
+    <div class="modal-author-footer">
+      <button class="close-btn" onclick="document.getElementById('author-modal').className='modal-bg'">إغلاق</button>
+    </div>
   </div>
 </div>
 
-<!-- نافذة إضافة/تعديل المحتوى -->
-<div class="modal-old" id="modal">
-  <div class="modal-old__dialog">
-    <div class="modal-old__head">
-      <h3>إضافة / تعديل محتوى</h3>
+<!-- نافذة التعديل -->
+<div class="modal-edit" id="modal">
+  <div class="modal-edit__dialog">
+    <div class="modal-edit__head">
+      <h3>تعديل المحتوى</h3>
       <button class="iconBtn" id="btnClose">✕</button>
     </div>
     <form id="form">
@@ -299,7 +202,7 @@
         </div>
         <div class="field">
           <label class="label">نوع المحتوى</label>
-          <select class="input input--select" id="ftype">
+          <select class="input" id="ftype">
             <option value="مقال">مقال</option>
             <option value="فيديو">فيديو</option>
             <option value="صور">صور</option>
@@ -310,7 +213,7 @@
         </div>
         <div class="field">
           <label class="label">الفئة المستهدفة</label>
-          <select class="input input--select" id="ftarget">
+          <select class="input" id="ftarget">
             <option value="">— بدون تحديد —</option>
             <option value="الباحثين عن عمل">الباحثين عن عمل</option>
             <option value="المعلمين">المعلمين</option>
@@ -322,12 +225,8 @@
             <option value="المرشدين المهنيين">المرشدين المهنيين</option>
           </select>
         </div>
-        <div class="field field--full">
-          <label class="label">رفع ملف</label>
-          <input class="input" id="fattachment" type="file">
-        </div>
       </div>
-      <div class="modal-old__foot">
+      <div class="modal-edit__foot">
         <button class="btn btn--ghost" type="button" id="btnCancel">إلغاء</button>
         <button class="btn btn--primary" type="submit">حفظ</button>
       </div>
@@ -346,21 +245,17 @@ let allItems = [];
 let authorsMap = {};
 
 const typeLabels = {
-  'مقال': { label: 'مقال', cls: 'badge-article', icon: '📄' },
-  'فيديو': { label: 'فيديو', cls: 'badge-video', icon: '🎥' },
-  'صور': { label: 'صور', cls: 'badge-images', icon: '🖼️' },
-  'انفوجرافيك': { label: 'انفوجرافيك', cls: 'badge-infographic', icon: '📊' },
-  'صوت': { label: 'صوت', cls: 'badge-audio', icon: '🎵' },
-  'بودكاست': { label: 'بودكاست', cls: 'badge-podcast', icon: '🎙️' }
+  'مقال': { cls: 'badge-article', icon: '📄' },
+  'فيديو': { cls: 'badge-video', icon: '🎥' },
+  'صور': { cls: 'badge-images', icon: '🖼️' },
+  'انفوجرافيك': { cls: 'badge-infographic', icon: '📊' },
+  'صوت': { cls: 'badge-audio', icon: '🎵' },
+  'بودكاست': { cls: 'badge-podcast', icon: '🎙️' }
 };
 
-// ===== Auth =====
 async function checkAuth() {
   var { data } = await sb.auth.getSession();
-  if (!data.session) {
-    renderTopbar(null);
-    return;
-  }
+  if (!data.session) { renderTopbar(null); return; }
   currentUser = data.session.user;
   var { data: profile } = await sb.from('profiles').select('role, full_name').eq('id', currentUser.id).single();
   if (profile) currentRole = profile.role;
@@ -370,54 +265,40 @@ async function checkAuth() {
 function renderTopbar(profile) {
   var actions = document.getElementById('topbar-actions');
   actions.innerHTML = '';
-
   if (!profile) {
-    var loginBtn = document.createElement('button');
-    loginBtn.className = 'btn btn--ghost';
-    loginBtn.textContent = 'تسجيل الدخول';
-    loginBtn.onclick = function() { window.location.href = './auth.html'; };
-    actions.appendChild(loginBtn);
-    return;
+    var b = document.createElement('button');
+    b.className = 'btn btn--ghost'; b.textContent = 'تسجيل الدخول';
+    b.onclick = function(){ window.location.href = './auth.html'; };
+    actions.appendChild(b); return;
   }
-
   if (currentRole === 'admin') {
-    var adminBtn = document.createElement('button');
-    adminBtn.className = 'btn btn--primary';
-    adminBtn.innerHTML = '⚙️ لوحة التحكم';
-    adminBtn.onclick = function() { window.location.href = './admin.html'; };
-    actions.appendChild(adminBtn);
+    var b1 = document.createElement('button');
+    b1.className = 'btn btn--primary'; b1.innerHTML = '⚙️ لوحة التحكم';
+    b1.onclick = function(){ window.location.href = './admin.html'; };
+    actions.appendChild(b1);
   }
-
   if (currentRole === 'editor' || currentRole === 'admin') {
-    var uploadBtn = document.createElement('button');
-    uploadBtn.className = 'btn btn--primary';
-    uploadBtn.innerHTML = '📤 رفع محتوى';
-    uploadBtn.onclick = function() { window.location.href = './upload.html'; };
-    actions.appendChild(uploadBtn);
+    var b2 = document.createElement('button');
+    b2.className = 'btn btn--primary'; b2.innerHTML = '📤 رفع محتوى';
+    b2.onclick = function(){ window.location.href = './upload.html'; };
+    actions.appendChild(b2);
   }
-
-  var logoutBtn = document.createElement('button');
-  logoutBtn.className = 'btn btn--ghost';
-  logoutBtn.textContent = 'خروج';
-  logoutBtn.onclick = async function() { await sb.auth.signOut(); window.location.reload(); };
-  actions.appendChild(logoutBtn);
+  var b3 = document.createElement('button');
+  b3.className = 'btn btn--ghost'; b3.textContent = 'خروج';
+  b3.onclick = async function(){ await sb.auth.signOut(); window.location.reload(); };
+  actions.appendChild(b3);
 }
 
-// ===== تحميل المحتوى =====
 async function loadContent() {
-  var { data } = await sb.from('content')
-    .select('*')
-    .eq('is_hidden', false)
-    .order('created_at', { ascending: false });
+  var { data } = await sb.from('content').select('*').eq('is_hidden', false).order('created_at', { ascending: false });
   allItems = data || [];
 
-  // تحميل بيانات الكتّاب
-  var authorIds = [...new Set(allItems.filter(i => i.created_by).map(i => i.created_by))];
+  var authorIds = [...new Set(allItems.filter(function(i){ return i.created_by; }).map(function(i){ return i.created_by; }))];
   if (authorIds.length > 0) {
-    var { data: profiles } = await sb.from('profiles').select('id, full_name, email, role').in('id', authorIds);
-    if (profiles) {
-      profiles.forEach(function(p) { authorsMap[p.id] = p; });
-    }
+    var { data: profiles } = await sb.from('profiles')
+      .select('id, full_name, email, role, organization, city, phone, linkedin')
+      .in('id', authorIds);
+    if (profiles) profiles.forEach(function(p){ authorsMap[p.id] = p; });
   }
 
   updateHeroStats();
@@ -425,131 +306,80 @@ async function loadContent() {
   render();
 }
 
-// ===== Hero Stats =====
 function updateHeroStats() {
   document.getElementById('hero-total').textContent = allItems.length;
-  var uniqueAuthors = new Set(allItems.filter(i => i.created_by).map(i => i.created_by));
-  document.getElementById('hero-authors').textContent = uniqueAuthors.size;
-  var uniqueTypes = new Set(allItems.map(i => i.content_type));
-  document.getElementById('hero-types').textContent = uniqueTypes.size;
+  document.getElementById('hero-authors').textContent = new Set(allItems.filter(function(i){ return i.created_by; }).map(function(i){ return i.created_by; })).size;
+  document.getElementById('hero-types').textContent = new Set(allItems.map(function(i){ return i.content_type; })).size;
 }
 
-// ===== شرائط التقدم =====
 function updateProgressStats() {
   var total = allItems.length || 1;
-
-  // حسب النوع
   var typeCounts = {};
-  allItems.forEach(function(i) {
-    var t = i.content_type || 'غير محدد';
-    typeCounts[t] = (typeCounts[t] || 0) + 1;
-  });
+  allItems.forEach(function(i){ var t = i.content_type || 'غير محدد'; typeCounts[t] = (typeCounts[t]||0)+1; });
   var typeHtml = '';
   Object.keys(typeCounts).sort(function(a,b){ return typeCounts[b]-typeCounts[a]; }).forEach(function(key) {
-    var pct = Math.round((typeCounts[key] / total) * 100);
+    var pct = Math.round((typeCounts[key]/total)*100);
     var info = typeLabels[key] || { icon: '📄' };
-    typeHtml += `
-      <div class="progress-item">
-        <div class="progress-label">
-          <span>${info.icon || ''} ${key}</span>
-          <strong>${typeCounts[key]} (${pct}%)</strong>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-      </div>`;
+    typeHtml += '<div class="progress-item"><div class="progress-label"><span>' + (info.icon||'') + ' ' + key + '</span><strong>' + typeCounts[key] + ' (' + pct + '%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
   });
   document.getElementById('type-stats').innerHTML = typeHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد محتوى</p>';
 
-  // حسب الفئة
   var targetCounts = {};
-  allItems.forEach(function(i) {
-    var t = i.target_audience || 'غير محدد';
-    targetCounts[t] = (targetCounts[t] || 0) + 1;
-  });
+  allItems.forEach(function(i){ var t = i.target_audience || 'غير محدد'; targetCounts[t] = (targetCounts[t]||0)+1; });
   var targetHtml = '';
   Object.keys(targetCounts).sort(function(a,b){ return targetCounts[b]-targetCounts[a]; }).forEach(function(key) {
-    var pct = Math.round((targetCounts[key] / total) * 100);
-    targetHtml += `
-      <div class="progress-item">
-        <div class="progress-label">
-          <span>${key}</span>
-          <strong>${targetCounts[key]} (${pct}%)</strong>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-      </div>`;
+    var pct = Math.round((targetCounts[key]/total)*100);
+    targetHtml += '<div class="progress-item"><div class="progress-label"><span>' + key + '</span><strong>' + targetCounts[key] + ' (' + pct + '%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
   });
   document.getElementById('target-stats').innerHTML = targetHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد محتوى</p>';
 }
 
-// ===== Render =====
 function render() {
   var tbody = document.getElementById('rows');
   var search = document.getElementById('q').value.toLowerCase();
-  var filtered = allItems.filter(function(i) {
-    return !search || i.title.toLowerCase().includes(search) || (i.content_type || '').toLowerCase().includes(search);
-  });
-
+  var filtered = allItems.filter(function(i){ return !search || i.title.toLowerCase().includes(search) || (i.content_type||'').includes(search); });
   document.getElementById('stats-pill').textContent = filtered.length + ' عنصر';
-
-  if (filtered.length === 0) {
-    tbody.innerHTML = '';
-    document.getElementById('empty-state').style.display = 'block';
-    return;
-  }
+  if (filtered.length === 0) { tbody.innerHTML = ''; document.getElementById('empty-state').style.display = 'block'; return; }
   document.getElementById('empty-state').style.display = 'none';
-
   tbody.innerHTML = '';
   filtered.forEach(function(item, idx) {
-    var info = typeLabels[item.content_type] || { label: item.content_type, cls: 'badge-default', icon: '📄' };
+    var info = typeLabels[item.content_type] || { cls: 'badge-default', icon: '📄' };
     var author = item.created_by ? authorsMap[item.created_by] : null;
     var authorName = author ? (author.full_name || author.email || 'مجهول') : 'غير محدد';
-    var authorInitial = authorName.charAt(0);
     var date = item.created_at ? new Date(item.created_at).toLocaleDateString('ar-SA') : '-';
-
     var tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="color:#888;font-weight:700;">${String(idx+1).padStart(3,'0')}</td>
-      <td style="font-weight:700;max-width:200px;">${item.title}</td>
-      <td><span class="badge ${info.cls}">${info.icon} ${info.label}</span></td>
-      <td style="color:#555;">${item.target_audience || '-'}</td>
-      <td>
-        <div class="author-cell">
-          <div class="avatar">${authorInitial}</div>
-          <div class="author-info">
-            <h5>${authorName}</h5>
-            <span>${date}</span>
-          </div>
-          ${author ? `<button class="btn-author" onclick="showAuthor('${item.created_by}')">بيانات</button>` : ''}
-        </div>
-      </td>
-      <td style="color:#888;font-size:13px;">${date}</td>
-      <td>
-        <div class="action-btns">
-          <button class="btn-view" onclick="window.location.href='./view.html?id=${item.id}'">👁 عرض</button>
-          ${currentRole === 'admin' ? `
-            <button class="btn-edit" onclick="editItem(${item.id})">تعديل</button>
-            <button class="btn-delete" onclick="deleteItem(${item.id})">حذف</button>
-          ` : ''}
-        </div>
-      </td>
-    `;
+    tr.innerHTML =
+      '<td style="color:#888;font-weight:700;">' + String(idx+1).padStart(3,'0') + '</td>' +
+      '<td style="font-weight:700;">' + item.title + '</td>' +
+      '<td><span class="badge ' + info.cls + '">' + (info.icon||'') + ' ' + (item.content_type||'-') + '</span></td>' +
+      '<td style="color:#555;">' + (item.target_audience||'-') + '</td>' +
+      '<td><div class="author-cell"><div class="avatar">' + authorName.charAt(0) + '</div><div class="author-info"><h5>' + authorName + '</h5><span>' + date + '</span></div>' + (author ? '<button class="btn-author" onclick="showAuthor(\'' + item.created_by + '\')">بيانات</button>' : '') + '</div></td>' +
+      '<td style="color:#888;font-size:13px;">' + date + '</td>' +
+      '<td><div class="action-btns"><button class="btn-view" onclick="window.location.href=\'./view.html?id=' + item.id + '\'">👁 عرض</button>' +
+      (currentRole === 'admin' ? '<button class="btn-edit" onclick="editItem(' + item.id + ')">تعديل</button><button class="btn-delete" onclick="deleteItem(' + item.id + ')">حذف</button>' : '') +
+      '</div></td>';
     tbody.appendChild(tr);
   });
 }
 
-// ===== بيانات الكاتب =====
 function showAuthor(id) {
-  var author = authorsMap[id];
-  if (!author) return;
-  var name = author.full_name || author.email || 'مجهول';
+  var a = authorsMap[id];
+  if (!a) return;
+  var name = a.full_name || a.email || 'مجهول';
   document.getElementById('author-avatar').textContent = name.charAt(0);
   document.getElementById('author-name').textContent = name;
-  document.getElementById('author-email').textContent = author.email || '-';
   var roleMap = { admin: '🛡️ مشرف', editor: '✏️ محرر', viewer: '👁 قارئ', pending: '⏳ في الانتظار' };
-  document.getElementById('author-role').textContent = roleMap[author.role] || author.role;
+  document.getElementById('author-role').textContent = roleMap[a.role] || a.role;
+  var html = '';
+  if (a.email) html += '<div class="info-row"><span class="icon">📧</span><div><div class="label">البريد الإلكتروني</div><div class="value">' + a.email + '</div></div></div>';
+  if (a.organization) html += '<div class="info-row"><span class="icon">🏢</span><div><div class="label">جهة العمل</div><div class="value">' + a.organization + '</div></div></div>';
+  if (a.city) html += '<div class="info-row"><span class="icon">📍</span><div><div class="label">المدينة</div><div class="value">' + a.city + '</div></div></div>';
+  if (currentRole === 'admin' && a.phone) html += '<div class="info-row"><span class="icon">📞</span><div><div class="label">رقم الهاتف</div><div class="value">' + a.phone + '</div></div></div>';
+  if (a.linkedin) html += '<div class="info-row"><span class="icon">🔗</span><div><div class="label">LinkedIn</div><div class="value"><a href="' + a.linkedin + '" target="_blank">عرض الملف الشخصي</a></div></div></div>';
+  document.getElementById('author-body').innerHTML = html;
   document.getElementById('author-modal').className = 'modal-bg on';
 }
 
-// ===== تعديل وحذف (Admin) =====
 function editItem(id) {
   var item = allItems.find(function(x){ return x.id === id; });
   if (!item) return;
@@ -557,7 +387,7 @@ function editItem(id) {
   document.getElementById('ftitle').value = item.title;
   document.getElementById('ftype').value = item.content_type || 'مقال';
   document.getElementById('ftarget').value = item.target_audience || '';
-  document.getElementById('modal').className = 'modal-old active';
+  document.getElementById('modal').className = 'modal-edit active';
 }
 
 async function deleteItem(id) {
@@ -569,27 +399,17 @@ async function deleteItem(id) {
 document.getElementById('form').addEventListener('submit', async function(e) {
   e.preventDefault();
   var id = document.getElementById('fid').value;
-  var obj = {
-    title: document.getElementById('ftitle').value,
-    content_type: document.getElementById('ftype').value,
-    target_audience: document.getElementById('ftarget').value
-  };
-  if (id) {
-    await sb.from('content').update(obj).eq('id', id);
-  }
-  document.getElementById('modal').className = 'modal-old';
+  var obj = { title: document.getElementById('ftitle').value, content_type: document.getElementById('ftype').value, target_audience: document.getElementById('ftarget').value };
+  if (id) await sb.from('content').update(obj).eq('id', id);
+  document.getElementById('modal').className = 'modal-edit';
   await loadContent();
 });
 
-document.getElementById('btnClose').addEventListener('click', function() { document.getElementById('modal').className = 'modal-old'; });
-document.getElementById('btnCancel').addEventListener('click', function() { document.getElementById('modal').className = 'modal-old'; });
+document.getElementById('btnClose').addEventListener('click', function(){ document.getElementById('modal').className = 'modal-edit'; });
+document.getElementById('btnCancel').addEventListener('click', function(){ document.getElementById('modal').className = 'modal-edit'; });
 document.getElementById('q').addEventListener('input', render);
 
-// ===== Init =====
-async function init() {
-  await checkAuth();
-  await loadContent();
-}
+async function init() { await checkAuth(); await loadContent(); }
 init();
 </script>
 </body>
