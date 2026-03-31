@@ -219,7 +219,7 @@ function renderContent(item) {
   }
 
   // زر التحميل للملفات
-  const downloadBtn = item.file_url && fileType !== 'pdf' ? `
+  const downloadBtn = item.file_url && fileType !== 'pdf' && item.allow_download ? `
     <div style="margin-top:24px;border-top:1px solid #eee;padding-top:24px;">
       <a href="${item.file_url}" target="_blank" class="download-btn">
         ⬇️ تحميل الملف
