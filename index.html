@@ -217,8 +217,7 @@
     const userId = data.session.user.id;
     const { data: profile } = await sb.from('profiles').select('role, full_name, email').eq('id', userId).single();
     
-    if (profile && profile.role === 'admin') {
-      // أضف زر لوحة التحكم
+if (profile && profile.role === 'admin') {
       var adminBtn = document.createElement('button');
       adminBtn.className = 'btn btn--primary';
       adminBtn.innerHTML = '⚙️ لوحة التحكم';
@@ -227,16 +226,14 @@
       document.querySelector('.topbar__actions').prepend(adminBtn);
     }
 
-    // أضف زر تسجيل الخروج
-    var logoutBtn = document.createElement('button');
-    logoutBtn.className = 'btn btn--ghost';
-    logoutBtn.textContent = 'خروج';
-    logoutBtn.onclick = async function() {
-      await sb.auth.signOut();
-      window.location.reload();
-    };
-    document.querySelector('.topbar__actions').prepend(logoutBtn);
-  }
+    if (profile && (profile.role === 'editor' || profile.role === 'admin')) {
+      var uploadBtn = document.createElement('button');
+      uploadBtn.className = 'btn btn--primary';
+      uploadBtn.innerHTML = '📤 رفع محتوى';
+      uploadBtn.style.marginLeft = '10px';
+      uploadBtn.onclick = function() { window.location.href = './upload.html'; };
+      document.querySelector('.topbar__actions').prepend(uploadBtn);
+    }
 })();
 </script>
 <script src="./app.js"></script>
