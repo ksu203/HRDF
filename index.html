@@ -836,8 +836,13 @@ document.getElementById('btnClose').addEventListener('click',function(){ documen
 document.getElementById('btnCancel').addEventListener('click',function(){ document.getElementById('modal').className='modal-edit'; });
 document.getElementById('q').addEventListener('input', applyFilters);
 
-async function init() { await checkAuth(); await loadContent(); }
-init();
+async function init() {
+  // عرض قائمة الجوال فوراً حتى قبل تحميل البيانات
+  renderMobileMenu(null);
+  await checkAuth();
+  await loadContent();
+}
+  init();
 </script>
 </body>
 </html>
