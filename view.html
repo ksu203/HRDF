@@ -10,118 +10,146 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; min-height: 100vh; }
 
-    /* الهيدر */
     .header {
       background: #0B6B3A; color: white;
-      padding: 14px 28px;
-      display: flex; align-items: center; gap: 16px;
+      padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
     }
-    .header img { width: 40px; }
-    .header h1 { font-size: 16px; font-weight: 700; }
+    .header-brand { display: flex; align-items: center; gap: 10px; }
+    .header-brand img { width: 36px; }
+    .header-brand span { font-size: 15px; font-weight: 700; }
     .back-btn {
-      margin-right: auto;
       background: rgba(255,255,255,0.2); color: white;
       border: none; padding: 8px 16px; border-radius: 8px;
       font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px;
+      white-space: nowrap;
     }
 
-    /* المحتوى */
-    .container { max-width: 800px; margin: 40px auto; padding: 0 20px 60px; }
+    .container { max-width: 800px; margin: 24px auto; padding: 0 16px 60px; }
 
-    /* بطاقة المحتوى */
     .content-card {
       background: white; border-radius: 16px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.08);
       overflow: hidden;
     }
 
-    /* الرأس */
     .content-header {
       background: linear-gradient(135deg, #0B6B3A, #1a9a5c);
-      padding: 32px 36px; color: white;
+      padding: 28px 24px; color: white;
     }
     .content-meta {
-      display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+      display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
     }
     .badge {
-      padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 700;
+      padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;
       background: rgba(255,255,255,0.2); color: white;
     }
     .content-title {
-      font-size: 28px; font-weight: 800; line-height: 1.4;
+      font-size: 22px; font-weight: 800; line-height: 1.5;
     }
 
-    /* الجسم */
-    .content-body { padding: 36px; }
+    .content-body { padding: 24px; }
 
-    /* نص المقال */
     .article-text {
-      font-size: 17px; line-height: 2; color: #333;
+      font-size: 16px; line-height: 2; color: #333;
       white-space: pre-wrap;
     }
 
-    /* عرض الصور */
     .image-viewer img {
       width: 100%; border-radius: 12px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
 
-    /* عرض الفيديو */
     .video-viewer video {
-      width: 100%; border-radius: 12px;
-      background: #000;
+      width: 100%; border-radius: 12px; background: #000;
     }
 
-    /* عرض الصوت */
     .audio-viewer {
-      background: #f8f9fa; border-radius: 12px; padding: 32px;
+      background: #f8f9fa; border-radius: 12px; padding: 28px 20px;
       text-align: center;
     }
-    .audio-viewer .audio-icon { font-size: 64px; margin-bottom: 16px; }
-    .audio-viewer audio { width: 100%; margin-top: 16px; }
+    .audio-viewer .audio-icon { font-size: 56px; margin-bottom: 14px; }
+    .audio-viewer h3 { font-size: 16px; color: #333; margin-bottom: 14px; }
+    .audio-viewer audio { width: 100%; }
 
-    /* عرض PDF */
     .pdf-viewer iframe {
-      width: 100%; height: 600px; border: none; border-radius: 12px;
+      width: 100%; height: 500px; border: none; border-radius: 12px;
     }
 
-    /* زر التحميل */
+    .download-section {
+      margin-top: 20px; padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
     .download-btn {
       display: inline-flex; align-items: center; gap: 8px;
       background: #0B6B3A; color: white;
       padding: 12px 24px; border-radius: 10px;
       text-decoration: none; font-size: 15px; font-weight: 700;
-      margin-top: 20px; transition: background 0.2s;
+      transition: background 0.2s; border: none; cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
     }
     .download-btn:hover { background: #094d2a; }
 
-    /* حالة التحميل */
-    .loading {
-      text-align: center; padding: 80px 20px; color: #888;
+    /* معلومات الكاتب */
+    .author-section {
+      margin-top: 20px; padding: 16px;
+      background: #f8f9fa; border-radius: 12px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
     }
+    .author-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #0B6B3A, #1a9a5c);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 18px; font-weight: 700;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .author-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .author-info h4 { font-size: 14px; font-weight: 700; color: #333; }
+    .author-info span { font-size: 12px; color: #888; }
+    .author-profile-btn {
+      margin-right: auto; padding: 7px 16px;
+      border: 1.5px solid #0B6B3A; color: #0B6B3A;
+      background: transparent; border-radius: 8px;
+      font-family: 'Tajawal', sans-serif; font-size: 13px;
+      cursor: pointer; font-weight: 600;
+      transition: all 0.2s;
+    }
+    .author-profile-btn:hover { background: #0B6B3A; color: white; }
+
+    .loading { text-align: center; padding: 80px 20px; color: #888; }
     .loading .spinner {
-      width: 48px; height: 48px; border: 4px solid #eee;
+      width: 44px; height: 44px; border: 4px solid #eee;
       border-top-color: #0B6B3A; border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 16px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* خطأ */
-    .error-state {
-      text-align: center; padding: 80px 20px;
+    .error-state { text-align: center; padding: 80px 20px; }
+    .error-state .icon { font-size: 56px; margin-bottom: 14px; }
+    .error-state h2 { color: #333; margin-bottom: 8px; font-size: 18px; }
+    .error-state p { color: #888; font-size: 14px; }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .content-title { font-size: 18px; }
+      .content-header { padding: 20px 16px; }
+      .content-body { padding: 16px; }
+      .pdf-viewer iframe { height: 350px; }
+      .article-text { font-size: 15px; }
+      .header-brand span { display: none; }
     }
-    .error-state .icon { font-size: 64px; margin-bottom: 16px; }
-    .error-state h2 { color: #333; margin-bottom: 8px; }
-    .error-state p { color: #888; }
   </style>
 </head>
 <body>
 
 <div class="header">
-  <img src="./hrdf-logo.png" alt="HRDF">
-  <h1>مبادرة الإرشاد المهني الشامل</h1>
-  <button class="back-btn" onclick="window.location.href='./index.html'">← رجوع</button>
+  <div class="header-brand">
+    <img src="./hrdf-logo.png" alt="HRDF">
+    <span>مبادرة الإرشاد المهني الشامل</span>
+  </div>
+  <button class="back-btn" onclick="window.history.back()">← رجوع</button>
 </div>
 
 <div class="container">
@@ -138,13 +166,12 @@ const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// احصل على ID من الرابط
 const params = new URLSearchParams(window.location.search);
 const contentId = params.get('id');
 
 function getFileType(url) {
   if (!url) return null;
-  const ext = url.split('?')[0].split('.').pop().toLowerCase();
+  var ext = url.split('?')[0].split('.').pop().toLowerCase();
   if (['jpg','jpeg','png','gif','webp','svg'].includes(ext)) return 'image';
   if (['mp4','webm','ogg','mov'].includes(ext)) return 'video';
   if (['mp3','wav','aac','m4a'].includes(ext)) return 'audio';
@@ -152,130 +179,80 @@ function getFileType(url) {
   return 'file';
 }
 
-function renderContent(item) {
-  const fileType = getFileType(item.file_url);
-  const typeIcons = {
+function renderContent(item, author) {
+  var fileType = getFileType(item.file_url);
+  var typeIcons = {
     'مقال': '📄', 'فيديو': '🎥', 'صور': '🖼️',
-    'انفوجرافيك': '📊', 'صوت': '🎵', 'بودكاست': '🎙️', 'لقاء صحفي': '📰'
+    'انفوجرافيك': '📊', 'صوت': '🎵', 'بودكاست': '🎙️'
   };
-  const icon = typeIcons[item.content_type] || '📄';
+  var icon = typeIcons[item.content_type] || '📄';
+  var date = item.created_at ? new Date(item.created_at).toLocaleDateString('ar-SA') : '-';
 
-  // بناء محتوى العرض
-  let mediaHtml = '';
-
+  var mediaHtml = '';
   if (item.content_type === 'مقال' && item.article_text) {
-    mediaHtml = `
-      <div class="article-text">${item.article_text}</div>
-    `;
+    mediaHtml = '<div class="article-text">' + item.article_text + '</div>';
   } else if (fileType === 'image') {
-    mediaHtml = `
-      <div class="image-viewer">
-        <img src="${item.file_url}" alt="${item.title}">
-      </div>
-    `;
+    mediaHtml = '<div class="image-viewer"><img src="' + item.file_url + '" alt="' + item.title + '"></div>';
   } else if (fileType === 'video') {
-    mediaHtml = `
-      <div class="video-viewer">
-        <video controls>
-          <source src="${item.file_url}">
-          متصفحك لا يدعم تشغيل الفيديو
-        </video>
-      </div>
-    `;
+    mediaHtml = '<div class="video-viewer"><video controls playsinline><source src="' + item.file_url + '">متصفحك لا يدعم تشغيل الفيديو</video></div>';
   } else if (fileType === 'audio') {
-    mediaHtml = `
-      <div class="audio-viewer">
-        <div class="audio-icon">${icon}</div>
-        <h3>${item.title}</h3>
-        <audio controls>
-          <source src="${item.file_url}">
-          متصفحك لا يدعم تشغيل الصوت
-        </audio>
-      </div>
-    `;
+    mediaHtml = '<div class="audio-viewer"><div class="audio-icon">' + icon + '</div><h3>' + item.title + '</h3><audio controls><source src="' + item.file_url + '">متصفحك لا يدعم تشغيل الصوت</audio></div>';
   } else if (fileType === 'pdf') {
-    mediaHtml = `
-      <div class="pdf-viewer">
-        <iframe src="${item.file_url}"></iframe>
-      </div>
-    `;
+    mediaHtml = '<div class="pdf-viewer"><iframe src="' + item.file_url + '"></iframe></div>';
   } else if (item.file_url) {
-    mediaHtml = `
-      <div style="text-align:center;padding:40px;">
-        <div style="font-size:64px;margin-bottom:16px;">${icon}</div>
-        <p style="color:#666;margin-bottom:20px;">اضغط لتحميل أو عرض الملف</p>
-        <a href="${item.file_url}" target="_blank" class="download-btn">
-          ⬇️ تحميل الملف
-        </a>
-      </div>
-    `;
+    mediaHtml = '<div style="text-align:center;padding:32px;"><div style="font-size:56px;margin-bottom:12px;">' + icon + '</div><p style="color:#666;margin-bottom:16px;font-size:14px;">اضغط لتحميل أو عرض الملف</p></div>';
   } else {
-    mediaHtml = `
-      <div style="text-align:center;padding:40px;color:#888;">
-        <div style="font-size:64px;margin-bottom:16px;">📭</div>
-        <p>لا يوجد محتوى للعرض</p>
-      </div>
-    `;
+    mediaHtml = '<div style="text-align:center;padding:32px;color:#888;"><div style="font-size:56px;margin-bottom:12px;">📭</div><p>لا يوجد محتوى للعرض</p></div>';
   }
 
-  // زر التحميل للملفات
-  const downloadBtn = item.file_url && fileType !== 'pdf' && item.allow_download ? `
-    <div style="margin-top:24px;border-top:1px solid #eee;padding-top:24px;">
-      <a href="${item.file_url}" target="_blank" class="download-btn">
-        ⬇️ تحميل الملف
-      </a>
-    </div>
-  ` : '';
+  var downloadHtml = '';
+  if (item.file_url && item.allow_download !== false && fileType !== 'pdf') {
+    downloadHtml = '<div class="download-section"><a href="' + item.file_url + '" target="_blank" class="download-btn">⬇️ تحميل الملف</a></div>';
+  }
 
-  document.getElementById('app').innerHTML = `
-    <div class="content-card">
-      <div class="content-header">
-        <div class="content-meta">
-          <span class="badge">${icon} ${item.content_type || 'محتوى'}</span>
-          ${item.target_audience ? `<span class="badge">👥 ${item.target_audience}</span>` : ''}
-        </div>
-        <h1 class="content-title">${item.title}</h1>
-      </div>
-      <div class="content-body">
-        ${mediaHtml}
-        ${item.file_url && item.content_type !== 'مقال' ? downloadBtn : ''}
-      </div>
-    </div>
-  `;
+  var authorHtml = '';
+  if (author) {
+    var authorName = author.full_name || author.email || 'مجهول';
+    var avatarContent = author.avatar_url ? '<img src="' + author.avatar_url + '">' : authorName.charAt(0);
+    authorHtml = '<div class="author-section"><div class="author-avatar">' + avatarContent + '</div><div class="author-info"><h4>' + authorName + '</h4><span>📅 ' + date + (author.organization ? ' · 🏢 ' + author.organization : '') + '</span></div><button class="author-profile-btn" onclick="window.location.href=\'./profile.html?id=' + author.id + '\'">الملف الشخصي</button></div>';
+  }
+
+  document.getElementById('app').innerHTML =
+    '<div class="content-card">' +
+      '<div class="content-header">' +
+        '<div class="content-meta">' +
+          '<span class="badge">' + icon + ' ' + (item.content_type || 'محتوى') + '</span>' +
+          (item.target_audience ? '<span class="badge">👥 ' + item.target_audience + '</span>' : '') +
+          '<span class="badge">📅 ' + date + '</span>' +
+        '</div>' +
+        '<h1 class="content-title">' + item.title + '</h1>' +
+      '</div>' +
+      '<div class="content-body">' +
+        mediaHtml +
+        downloadHtml +
+        authorHtml +
+      '</div>' +
+    '</div>';
 
   document.title = item.title + ' | HRDF';
 }
 
 async function loadContent() {
   if (!contentId) {
-    document.getElementById('app').innerHTML = `
-      <div class="content-card">
-        <div class="error-state">
-          <div class="icon">🔍</div>
-          <h2>لم يتم تحديد المحتوى</h2>
-          <p>يرجى العودة للصفحة الرئيسية واختيار محتوى</p>
-        </div>
-      </div>
-    `;
+    document.getElementById('app').innerHTML = '<div class="content-card"><div class="error-state"><div class="icon">🔍</div><h2>لم يتم تحديد المحتوى</h2><p>يرجى العودة للصفحة الرئيسية</p></div></div>';
     return;
   }
 
-  const { data, error } = await sb.from('content').select('*').eq('id', contentId).single();
+  var { data, error } = await sb.from('content')
+    .select('*, profiles!content_created_by_fkey(id, full_name, email, organization, avatar_url, role)')
+    .eq('id', contentId).single();
 
   if (error || !data) {
-    document.getElementById('app').innerHTML = `
-      <div class="content-card">
-        <div class="error-state">
-          <div class="icon">❌</div>
-          <h2>لم يتم العثور على المحتوى</h2>
-          <p>قد يكون المحتوى محذوفاً أو غير متاح</p>
-        </div>
-      </div>
-    `;
+    document.getElementById('app').innerHTML = '<div class="content-card"><div class="error-state"><div class="icon">❌</div><h2>لم يتم العثور على المحتوى</h2><p>قد يكون المحتوى محذوفاً أو غير متاح</p></div></div>';
     return;
   }
 
-  renderContent(data);
+  renderContent(data, data.profiles);
 }
 
 loadContent();
