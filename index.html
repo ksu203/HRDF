@@ -11,80 +11,114 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; color: #333; }
-    .topbar { background: white; border-bottom: 3px solid #0B6B3A; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; min-height: 70px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
-    .topbar__brand { display: flex; align-items: center; gap: 16px; }
-    .topbar__logo { height: 48px; }
-    .topbar__title .kicker { font-size: 11px; color: #888; letter-spacing: 1px; }
-    .topbar__title h1 { font-size: 20px; font-weight: 800; color: #0B6B3A; }
-    .topbar__actions { display: flex; align-items: center; gap: 10px; }
-    .btn { padding: 9px 20px; border-radius: 10px; border: none; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+
+    /* ===== الهيدر ===== */
+    .topbar { background: white; border-bottom: 3px solid #0B6B3A; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; min-height: 64px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); position: sticky; top: 0; z-index: 50; }
+    .topbar__brand { display: flex; align-items: center; gap: 12px; }
+    .topbar__logo { height: 40px; }
+    .topbar__title .kicker { font-size: 10px; color: #888; }
+    .topbar__title h1 { font-size: 16px; font-weight: 800; color: #0B6B3A; }
+    .topbar__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    /* قائمة الجوال */
+    .menu-btn { display: none; background: none; border: none; cursor: pointer; font-size: 24px; color: #0B6B3A; padding: 4px; }
+    .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; }
+    .mobile-menu.open { display: block; }
+    .mobile-menu__panel { position: absolute; top: 0; left: 0; width: 280px; height: 100%; background: white; padding: 24px 20px; box-shadow: 4px 0 20px rgba(0,0,0,0.1); overflow-y: auto; }
+    .mobile-menu__close { float: left; background: none; border: none; font-size: 24px; cursor: pointer; color: #888; margin-bottom: 20px; }
+    .mobile-menu__user { display: flex; align-items: center; gap: 12px; padding: 16px 0; border-bottom: 1px solid #eee; margin-bottom: 16px; }
+    .mobile-menu__user .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #0B6B3A, #1a9a5c); display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: 700; overflow: hidden; flex-shrink: 0; }
+    .mobile-menu__user .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .mobile-menu__user .name { font-size: 15px; font-weight: 700; color: #333; }
+    .mobile-menu__user .role { font-size: 12px; color: #888; }
+    .mobile-menu__btn { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; font-size: 15px; font-weight: 600; color: #333; border: none; background: none; font-family: 'Tajawal', sans-serif; width: 100%; text-align: right; transition: background 0.2s; }
+    .mobile-menu__btn:hover { background: #f0f4f8; }
+    .mobile-menu__btn.green { background: #0B6B3A; color: white; }
+    .mobile-menu__btn.green:hover { background: #094d2a; }
+    .mobile-menu__btn.red { color: #dc3545; }
+
+    /* الأزرار */
+    .btn { padding: 9px 18px; border-radius: 10px; border: none; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
     .btn--primary { background: #0B6B3A; color: white; }
     .btn--primary:hover { background: #094d2a; }
     .btn--ghost { background: transparent; color: #0B6B3A; border: 2px solid #0B6B3A; }
     .btn--ghost:hover { background: #0B6B3A; color: white; }
-    .hero { background: linear-gradient(135deg, #0B6B3A 0%, #1a9a5c 100%); padding: 48px 32px 56px; color: white; text-align: center; }
-    .hero h2 { font-size: 32px; font-weight: 800; margin-bottom: 10px; }
-    .hero p { font-size: 16px; opacity: 0.88; max-width: 500px; margin: 0 auto 28px; }
-    .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
-    .hero-stat .num { font-size: 40px; font-weight: 800; }
-    .hero-stat .lbl { font-size: 13px; opacity: 0.8; margin-top: 2px; }
-    .shell { max-width: 1200px; margin: 0 auto; padding: 32px 24px 60px; }
 
-    /* ===== البحث المتقدم ===== */
-    .search-section { background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 28px; overflow: hidden; }
-    .search-main { padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f0f0f0; }
-    .search-main input { flex: 1; border: none; outline: none; font-family: 'Tajawal', sans-serif; font-size: 15px; color: #333; }
-    .search-main .icon { color: #0B6B3A; font-size: 20px; }
-    .pill { background: #e8f5ef; color: #0B6B3A; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; white-space: nowrap; }
-    .advanced-toggle { padding: 10px 20px; display: flex; align-items: center; gap: 8px; cursor: pointer; color: #0B6B3A; font-size: 14px; font-weight: 600; border: none; background: none; font-family: 'Tajawal', sans-serif; width: 100%; text-align: right; }
-    .advanced-toggle:hover { background: #f8fffe; }
-    .advanced-filters { display: none; padding: 20px; border-top: 1px solid #f0f0f0; }
+    /* ===== Hero ===== */
+    .hero { background: linear-gradient(135deg, #0B6B3A 0%, #1a9a5c 100%); padding: 36px 20px 44px; color: white; text-align: center; }
+    .hero h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 14px; opacity: 0.88; max-width: 500px; margin: 0 auto 24px; }
+    .hero-stats { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
+    .hero-stat .num { font-size: 36px; font-weight: 800; }
+    .hero-stat .lbl { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+
+    /* ===== Shell ===== */
+    .shell { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
+
+    /* ===== البحث ===== */
+    .search-section { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 20px; overflow: hidden; }
+    .search-main { padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
+    .search-main input { flex: 1; border: none; outline: none; font-family: 'Tajawal', sans-serif; font-size: 15px; color: #333; min-width: 0; }
+    .pill { background: #e8f5ef; color: #0B6B3A; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .advanced-toggle { padding: 10px 16px; display: flex; align-items: center; gap: 8px; cursor: pointer; color: #0B6B3A; font-size: 14px; font-weight: 600; border: none; background: #f8fffe; font-family: 'Tajawal', sans-serif; width: 100%; text-align: right; border-top: 1px solid #f0f0f0; }
+    .advanced-filters { display: none; padding: 16px; border-top: 1px solid #f0f0f0; }
     .advanced-filters.open { display: block; }
-    .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 16px; }
-    .filter-item label { display: block; font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600; }
-    .filter-item select, .filter-item input[type="date"] { width: 100%; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; color: #333; background: white; }
-    .filter-item select:focus, .filter-item input[type="date"]:focus { outline: none; border-color: #0B6B3A; }
-    .filters-actions { display: flex; gap: 10px; justify-content: flex-end; }
-    .btn-filter { padding: 9px 20px; border-radius: 8px; border: none; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 14px; }
+    .filter-item label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; font-weight: 600; }
+    .filter-item select, .filter-item input[type="date"] { width: 100%; padding: 8px 10px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; background: white; }
+    .filters-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+    .btn-filter { padding: 8px 18px; border-radius: 8px; border: none; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
     .btn-apply { background: #0B6B3A; color: white; }
     .btn-reset { background: #f0f0f0; color: #555; }
-    .active-filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 20px; border-top: 1px solid #f0f0f0; }
-    .filter-tag { background: #e8f5ef; color: #0B6B3A; padding: 4px 12px; border-radius: 20px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
-    .filter-tag button { background: none; border: none; color: #0B6B3A; cursor: pointer; font-size: 14px; padding: 0; line-height: 1; }
+    .active-filters { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px; border-top: 1px solid #f0f0f0; }
+    .filter-tag { background: #e8f5ef; color: #0B6B3A; padding: 3px 10px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 5px; }
+    .filter-tag button { background: none; border: none; color: #0B6B3A; cursor: pointer; font-size: 14px; }
 
     /* ===== الإحصائيات ===== */
-    .stats-section { margin-bottom: 32px; }
-    .stats-section h3 { font-size: 17px; color: #333; margin-bottom: 16px; font-weight: 700; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-    .stat-card { background: white; border-radius: 14px; padding: 20px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-    .stat-card h4 { font-size: 14px; color: #888; margin-bottom: 14px; font-weight: 600; }
-    .progress-item { margin-bottom: 12px; }
+    .stats-section { margin-bottom: 24px; }
+    .stats-section h3 { font-size: 16px; color: #333; margin-bottom: 14px; font-weight: 700; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+    .stat-card { background: white; border-radius: 14px; padding: 18px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .stat-card h4 { font-size: 13px; color: #888; margin-bottom: 12px; font-weight: 600; }
+    .progress-item { margin-bottom: 10px; }
     .progress-item:last-child { margin-bottom: 0; }
-    .progress-label { display: flex; justify-content: space-between; margin-bottom: 5px; }
-    .progress-label span { font-size: 13px; color: #555; cursor: pointer; }
+    .progress-label { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .progress-label span { font-size: 12px; color: #555; cursor: pointer; }
     .progress-label span:hover { color: #0B6B3A; }
-    .progress-label strong { font-size: 13px; color: #0B6B3A; font-weight: 700; }
-    .progress-bar { height: 8px; background: #e8f5ef; border-radius: 10px; overflow: hidden; }
+    .progress-label strong { font-size: 12px; color: #0B6B3A; font-weight: 700; }
+    .progress-bar { height: 7px; background: #e8f5ef; border-radius: 10px; overflow: hidden; }
     .progress-fill { height: 100%; background: linear-gradient(90deg, #0B6B3A, #1a9a5c); border-radius: 10px; transition: width 0.8s ease; }
 
-    /* ===== الجدول ===== */
-    .content-section h3 { font-size: 17px; color: #333; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+    /* ===== قائمة المحتوى — Desktop ===== */
+    .content-section h3 { font-size: 16px; color: #333; margin-bottom: 14px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
     .content-table-wrap { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; }
-    table { width: 100%; border-collapse: collapse; }
+    .desktop-table { width: 100%; border-collapse: collapse; }
     thead tr { background: #f8fffe; }
-    th { padding: 14px 16px; text-align: right; font-size: 13px; color: #666; font-weight: 700; border-bottom: 2px solid #e8f5ef; cursor: pointer; user-select: none; }
+    th { padding: 12px 14px; text-align: right; font-size: 12px; color: #666; font-weight: 700; border-bottom: 2px solid #e8f5ef; cursor: pointer; }
     th:hover { color: #0B6B3A; }
-    td { padding: 14px 16px; border-bottom: 1px solid #f5f5f5; font-size: 14px; vertical-align: middle; }
+    td { padding: 12px 14px; border-bottom: 1px solid #f5f5f5; font-size: 13px; vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #fafffe; }
-    .author-cell { display: flex; align-items: center; gap: 10px; }
-    .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0B6B3A, #1a9a5c); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 700; flex-shrink: 0; overflow: hidden; }
+
+    /* ===== بطاقات الجوال ===== */
+    .mobile-cards { display: none; }
+    .content-card { background: white; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 16px; margin-bottom: 12px; }
+    .content-card__header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
+    .content-card__title { font-size: 15px; font-weight: 700; color: #333; flex: 1; }
+    .content-card__meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .content-card__author { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .content-card__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* الكاتب */
+    .author-cell { display: flex; align-items: center; gap: 8px; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #0B6B3A, #1a9a5c); display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 700; flex-shrink: 0; overflow: hidden; }
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
-    .author-info h5 { font-size: 13px; font-weight: 700; color: #333; }
+    .author-info h5 { font-size: 12px; font-weight: 700; color: #333; }
     .author-info span { font-size: 11px; color: #888; }
-    .btn-author { padding: 4px 10px; border-radius: 6px; border: 1px solid #0B6B3A; color: #0B6B3A; background: transparent; font-size: 12px; cursor: pointer; font-family: 'Tajawal', sans-serif; transition: all 0.2s; }
-    .btn-author:hover { background: #0B6B3A; color: white; }
-    .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: inline-block; }
+    .btn-author { padding: 3px 8px; border-radius: 6px; border: 1px solid #0B6B3A; color: #0B6B3A; background: transparent; font-size: 11px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+
+    /* الشارات */
+    .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; }
     .badge-article { background: #e8f5ef; color: #0B6B3A; }
     .badge-video { background: #fff3cd; color: #856404; }
     .badge-images { background: #cce5ff; color: #004085; }
@@ -92,52 +126,81 @@
     .badge-audio { background: #e2d9f3; color: #4a235a; }
     .badge-podcast { background: #fde8d8; color: #7d3c00; }
     .badge-default { background: #f0f0f0; color: #555; }
-    .action-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-    .btn-view { padding: 6px 14px; border-radius: 8px; border: none; background: #0B6B3A; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
-    .btn-view:hover { background: #094d2a; }
-    .btn-edit { padding: 6px 14px; border-radius: 8px; border: none; background: #0066cc; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
-    .btn-delete { padding: 6px 14px; border-radius: 8px; border: none; background: #dc3545; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
-    .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
-    .empty-state .icon { font-size: 56px; margin-bottom: 14px; }
-    .no-results { text-align: center; padding: 40px; color: #888; }
-    .no-results .icon { font-size: 48px; margin-bottom: 12px; }
 
-    /* نافذة بيانات الكاتب */
-    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+    /* الأزرار الصغيرة */
+    .btn-view { padding: 7px 14px; border-radius: 8px; border: none; background: #0B6B3A; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
+    .btn-edit { padding: 7px 14px; border-radius: 8px; border: none; background: #0066cc; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
+    .btn-delete { padding: 7px 14px; border-radius: 8px; border: none; background: #dc3545; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
+
+    /* Pagination */
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 20px; flex-wrap: wrap; }
+    .page-btn { padding: 8px 14px; border-radius: 8px; border: 1.5px solid #ddd; background: white; color: #333; font-family: 'Tajawal', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.2s; min-width: 40px; }
+    .page-btn.active { background: #0B6B3A; color: white; border-color: #0B6B3A; }
+    .page-btn:hover:not(.active) { border-color: #0B6B3A; color: #0B6B3A; }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .page-info { font-size: 13px; color: #888; }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    .no-results { text-align: center; padding: 40px 20px; color: #888; }
+    .no-results .icon { font-size: 40px; margin-bottom: 10px; }
+
+    /* نافذة الكاتب */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
     .modal-bg.on { display: flex; }
-    .modal-author { background: white; border-radius: 20px; width: 420px; max-width: 95vw; overflow: hidden; }
-    .modal-author-header { background: linear-gradient(135deg, #0B6B3A, #1a9a5c); padding: 32px; text-align: center; color: white; }
-    .avatar-lg { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: 700; margin: 0 auto 14px; border: 3px solid rgba(255,255,255,0.5); overflow: hidden; }
+    .modal-author { background: white; border-radius: 20px; width: 100%; max-width: 400px; overflow: hidden; }
+    .modal-author-header { background: linear-gradient(135deg, #0B6B3A, #1a9a5c); padding: 28px; text-align: center; color: white; }
+    .avatar-lg { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 700; margin: 0 auto 12px; border: 3px solid rgba(255,255,255,0.5); overflow: hidden; }
     .avatar-lg img { width: 100%; height: 100%; object-fit: cover; }
-    .modal-author-header h3 { font-size: 20px; margin-bottom: 4px; }
-    .modal-author-header .role-badge { background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 13px; display: inline-block; }
-    .modal-author-body { padding: 24px; }
-    .info-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+    .modal-author-header h3 { font-size: 18px; margin-bottom: 4px; }
+    .role-badge { background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 20px; font-size: 13px; display: inline-block; }
+    .modal-author-body { padding: 20px; }
+    .info-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f0f0f0; }
     .info-row:last-child { border-bottom: none; }
-    .info-row .lbl { font-size: 12px; color: #888; }
-    .info-row .val { font-size: 14px; color: #333; font-weight: 600; }
+    .info-row .lbl { font-size: 11px; color: #888; }
+    .info-row .val { font-size: 13px; color: #333; font-weight: 600; }
     .info-row a { color: #0B6B3A; text-decoration: none; }
-    .modal-author-footer { padding: 16px 24px; background: #f8f9fa; text-align: center; }
-    .close-btn { padding: 10px 32px; background: #0B6B3A; color: white; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 15px; cursor: pointer; font-weight: 700; }
+    .modal-author-footer { padding: 14px 20px; background: #f8f9fa; text-align: center; }
+    .close-btn { padding: 10px 28px; background: #0B6B3A; color: white; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 15px; cursor: pointer; font-weight: 700; }
 
     /* نافذة التعديل */
-    .modal-edit { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+    .modal-edit { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
     .modal-edit.active { display: flex; }
-    .modal-edit__dialog { background: white; border-radius: 16px; padding: 28px; width: 520px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
-    .modal-edit__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-    .modal-edit__head h3 { font-size: 18px; color: #333; }
+    .modal-edit__dialog { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal-edit__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .modal-edit__head h3 { font-size: 17px; color: #333; }
     .iconBtn { background: none; border: none; font-size: 18px; cursor: pointer; color: #888; }
-    .formGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .field { margin-bottom: 0; }
-    .field--full { grid-column: 1 / -1; }
+    .field { margin-bottom: 14px; }
     .label { display: block; margin-bottom: 5px; font-size: 13px; color: #555; font-weight: 600; }
     .input { width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
     .input:focus { outline: none; border-color: #0B6B3A; }
-    .modal-edit__foot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+    .modal-edit__foot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .topbar__actions { display: none; }
+      .menu-btn { display: block; }
+      .topbar__title h1 { font-size: 14px; }
+      .hero h2 { font-size: 22px; }
+      .hero-stats { gap: 16px; }
+      .hero-stat .num { font-size: 28px; }
+      .desktop-table { display: none; }
+      .mobile-cards { display: block; }
+      .filters-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .content-section h3 { flex-direction: column; align-items: flex-start; gap: 4px; }
+    }
+    @media (max-width: 480px) {
+      .filters-grid { grid-template-columns: 1fr; }
+      .topbar { padding: 0 14px; }
+      .shell { padding: 16px 12px 60px; }
+      .hero { padding: 28px 16px 36px; }
+    }
   </style>
 </head>
 <body>
 
+<!-- الهيدر -->
 <header class="topbar">
   <div class="topbar__brand">
     <img class="topbar__logo" src="./hrdf-logo.png" alt="HRDF">
@@ -147,8 +210,19 @@
     </div>
   </div>
   <div class="topbar__actions" id="topbar-actions"></div>
+  <button class="menu-btn" onclick="openMobileMenu()">☰</button>
 </header>
 
+<!-- قائمة الجوال -->
+<div class="mobile-menu" id="mobile-menu" onclick="closeMobileMenu(event)">
+  <div class="mobile-menu__panel">
+    <button class="mobile-menu__close" onclick="closeMobileMenu()">✕</button>
+    <div id="mobile-user-section"></div>
+    <div id="mobile-menu-btns"></div>
+  </div>
+</div>
+
+<!-- Hero -->
 <div class="hero">
   <h2>بنك المحتوى المهني</h2>
   <p>منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل</p>
@@ -164,13 +238,11 @@
   <!-- البحث المتقدم -->
   <div class="search-section">
     <div class="search-main">
-      <span class="icon">🔍</span>
+      <span style="color:#0B6B3A;font-size:18px;">🔍</span>
       <input id="q" type="search" placeholder="ابحث بالعنوان..." autocomplete="off">
       <span class="pill" id="stats-pill">0 عنصر</span>
     </div>
-    <button class="advanced-toggle" id="advanced-toggle" onclick="toggleAdvanced()">
-      ⚙️ بحث متقدم ▼
-    </button>
+    <button class="advanced-toggle" id="advanced-toggle" onclick="toggleAdvanced()">⚙️ بحث متقدم ▼</button>
     <div class="advanced-filters" id="advanced-filters">
       <div class="filters-grid">
         <div class="filter-item">
@@ -201,15 +273,13 @@
         </div>
         <div class="filter-item">
           <label>الكاتب</label>
-          <select id="f-author">
-            <option value="">— الكل —</option>
-          </select>
+          <select id="f-author"><option value="">— الكل —</option></select>
         </div>
         <div class="filter-item">
           <label>حالة الملف</label>
           <select id="f-file">
             <option value="">— الكل —</option>
-            <option value="has">يوجد ملف مرفق</option>
+            <option value="has">يوجد ملف</option>
             <option value="none">بدون ملف</option>
           </select>
         </div>
@@ -224,7 +294,7 @@
       </div>
       <div class="filters-actions">
         <button class="btn-filter btn-reset" onclick="resetFilters()">🔄 إعادة تعيين</button>
-        <button class="btn-filter btn-apply" onclick="applyFilters()">🔍 تطبيق البحث</button>
+        <button class="btn-filter btn-apply" onclick="applyFilters()">🔍 تطبيق</button>
       </div>
     </div>
     <div class="active-filters" id="active-filters" style="display:none;"></div>
@@ -243,38 +313,47 @@
   <div class="content-section">
     <h3>
       <span>📋 قائمة المحتوى</span>
-      <span id="sort-label" style="font-size:13px;color:#888;font-weight:400;">ترتيب: الأحدث أولاً</span>
+      <span id="sort-label" style="font-size:12px;color:#888;font-weight:400;">الأحدث أولاً</span>
     </h3>
+
+    <!-- Desktop Table -->
     <div class="content-table-wrap">
-      <table>
+      <table class="desktop-table">
         <thead>
           <tr>
-            <th onclick="sortBy('num')"># ↕</th>
+            <th>#</th>
             <th onclick="sortBy('title')">العنوان ↕</th>
             <th>النوع</th>
-            <th>الفئة المستهدفة</th>
+            <th>الفئة</th>
             <th>الكاتب</th>
-            <th onclick="sortBy('date')">تاريخ النشر ↕</th>
+            <th onclick="sortBy('date')">التاريخ ↕</th>
             <th>إجراءات</th>
           </tr>
         </thead>
         <tbody id="rows"></tbody>
       </table>
+
+      <!-- Mobile Cards -->
+      <div class="mobile-cards" id="mobile-cards"></div>
+
       <div class="empty-state" id="empty-state" style="display:none;">
         <div class="icon">📭</div>
         <p>لا يوجد محتوى متاح حالياً</p>
       </div>
       <div class="no-results" id="no-results" style="display:none;">
         <div class="icon">🔍</div>
-        <p>لا توجد نتائج مطابقة للبحث</p>
-        <button class="btn-filter btn-reset" onclick="resetFilters()" style="margin-top:12px;">إعادة تعيين البحث</button>
+        <p>لا توجد نتائج مطابقة</p>
+        <button class="btn-filter btn-reset" onclick="resetFilters()" style="margin-top:10px;">إعادة تعيين</button>
       </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination" style="display:none;"></div>
     </div>
   </div>
 
 </div>
 
-<!-- نافذة بيانات الكاتب -->
+<!-- نافذة الكاتب -->
 <div class="modal-bg" id="author-modal">
   <div class="modal-author">
     <div class="modal-author-header">
@@ -298,36 +377,28 @@
     </div>
     <form id="form">
       <input type="hidden" id="fid">
-      <div class="formGrid">
-        <div class="field field--full">
-          <label class="label">العنوان</label>
-          <input class="input" id="ftitle" required>
-        </div>
-        <div class="field">
-          <label class="label">نوع المحتوى</label>
-          <select class="input" id="ftype">
-            <option value="مقال">مقال</option>
-            <option value="فيديو">فيديو</option>
-            <option value="صور">صور</option>
-            <option value="انفوجرافيك">انفوجرافيك</option>
-            <option value="صوت">صوت</option>
-            <option value="بودكاست">بودكاست</option>
-          </select>
-        </div>
-        <div class="field">
-          <label class="label">الفئة المستهدفة</label>
-          <select class="input" id="ftarget">
-            <option value="">— بدون تحديد —</option>
-            <option value="الباحثين عن عمل">الباحثين عن عمل</option>
-            <option value="المعلمين">المعلمين</option>
-            <option value="طلاب المدارس">طلاب المدارس</option>
-            <option value="طلاب الجامعات">طلاب الجامعات</option>
-            <option value="طلاب المعاهد">طلاب المعاهد</option>
-            <option value="الموظفين">الموظفين</option>
-            <option value="أولياء الأمور">أولياء الأمور</option>
-            <option value="المرشدين المهنيين">المرشدين المهنيين</option>
-          </select>
-        </div>
+      <div class="field"><label class="label">العنوان</label><input class="input" id="ftitle" required></div>
+      <div class="field">
+        <label class="label">نوع المحتوى</label>
+        <select class="input" id="ftype">
+          <option value="مقال">مقال</option><option value="فيديو">فيديو</option>
+          <option value="صور">صور</option><option value="انفوجرافيك">انفوجرافيك</option>
+          <option value="صوت">صوت</option><option value="بودكاست">بودكاست</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="label">الفئة المستهدفة</label>
+        <select class="input" id="ftarget">
+          <option value="">— بدون تحديد —</option>
+          <option value="الباحثين عن عمل">الباحثين عن عمل</option>
+          <option value="المعلمين">المعلمين</option>
+          <option value="طلاب المدارس">طلاب المدارس</option>
+          <option value="طلاب الجامعات">طلاب الجامعات</option>
+          <option value="طلاب المعاهد">طلاب المعاهد</option>
+          <option value="الموظفين">الموظفين</option>
+          <option value="أولياء الأمور">أولياء الأمور</option>
+          <option value="المرشدين المهنيين">المرشدين المهنيين</option>
+        </select>
       </div>
       <div class="modal-edit__foot">
         <button class="btn btn--ghost" type="button" id="btnCancel">إلغاء</button>
@@ -349,6 +420,8 @@ let filteredItems = [];
 let authorsMap = {};
 let sortField = 'date';
 let sortDir = 'desc';
+let currentPage = 1;
+const PAGE_SIZE = 20;
 
 const typeLabels = {
   'مقال': { cls: 'badge-article', icon: '📄' },
@@ -358,8 +431,15 @@ const typeLabels = {
   'صوت': { cls: 'badge-audio', icon: '🎵' },
   'بودكاست': { cls: 'badge-podcast', icon: '🎙️' }
 };
-
 const roleMap = { admin: '🛡️ مشرف', editor: '✏️ محرر', viewer: '👁 قارئ', pending: '⏳ في الانتظار' };
+
+// ===== قائمة الجوال =====
+function openMobileMenu() { document.getElementById('mobile-menu').classList.add('open'); }
+function closeMobileMenu(e) {
+  if (!e || e.target === document.getElementById('mobile-menu')) {
+    document.getElementById('mobile-menu').classList.remove('open');
+  }
+}
 
 // ===== Auth =====
 async function checkAuth() {
@@ -369,6 +449,7 @@ async function checkAuth() {
   var { data: profile } = await sb.from('profiles').select('role, full_name, avatar_url').eq('id', currentUser.id).single();
   if (profile) currentRole = profile.role;
   renderTopbar(profile);
+  renderMobileMenu(profile);
 }
 
 function renderTopbar(profile) {
@@ -388,20 +469,17 @@ function renderTopbar(profile) {
   }
   if (currentRole === 'editor' || currentRole === 'admin') {
     var b2 = document.createElement('button');
-    b2.className = 'btn btn--primary'; b2.innerHTML = '📤 رفع محتوى';
+    b2.className = 'btn btn--primary'; b2.innerHTML = '📤 رفع';
     b2.onclick = function(){ window.location.href = './upload.html'; };
     actions.appendChild(b2);
   }
   var name = profile.full_name || currentUser.email || 'حسابي';
-  var initial = name.charAt(0);
   var b4 = document.createElement('div');
-  b4.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 14px;border-radius:10px;border:2px solid #0B6B3A;transition:all 0.2s;';
+  b4.style.cssText = 'display:flex;align-items:center;gap:6px;cursor:pointer;padding:5px 12px;border-radius:10px;border:2px solid #0B6B3A;';
   var avatarHtml = profile.avatar_url
-    ? '<img src="' + profile.avatar_url + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">'
-    : '<div style="width:32px;height:32px;border-radius:50%;background:#0B6B3A;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">' + initial + '</div>';
-  b4.innerHTML = avatarHtml + '<span style="font-size:14px;font-weight:600;color:#0B6B3A;">' + name.split(' ')[0] + '</span>';
-  b4.onmouseover = function(){ this.style.background='#e8f5ef'; };
-  b4.onmouseout = function(){ this.style.background='transparent'; };
+    ? '<img src="' + profile.avatar_url + '" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">'
+    : '<div style="width:28px;height:28px;border-radius:50%;background:#0B6B3A;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;">' + name.charAt(0) + '</div>';
+  b4.innerHTML = avatarHtml + '<span style="font-size:13px;font-weight:600;color:#0B6B3A;">' + name.split(' ')[0] + '</span>';
   b4.onclick = function(){ window.location.href = './profile.html'; };
   actions.appendChild(b4);
   var b3 = document.createElement('button');
@@ -410,19 +488,54 @@ function renderTopbar(profile) {
   actions.appendChild(b3);
 }
 
+function renderMobileMenu(profile) {
+  var userSection = document.getElementById('mobile-user-section');
+  var btns = document.getElementById('mobile-menu-btns');
+  if (!profile) {
+    userSection.innerHTML = '';
+    btns.innerHTML = '<button class="mobile-menu__btn green" onclick="window.location.href=\'./auth.html\'">🔑 تسجيل الدخول</button>';
+    return;
+  }
+  var name = profile.full_name || currentUser.email || 'مستخدم';
+  var avatarHtml = profile.avatar_url
+    ? '<img src="' + profile.avatar_url + '">'
+    : name.charAt(0);
+  userSection.innerHTML = '<div class="mobile-menu__user"><div class="avatar">' + avatarHtml + '</div><div><div class="name">' + name + '</div><div class="role">' + (roleMap[currentRole] || currentRole) + '</div></div></div>';
+
+  var html = '<button class="mobile-menu__btn" onclick="window.location.href=\'./profile.html\';closeMobileMenu()">👤 ملفي الشخصي</button>';
+  if (currentRole === 'admin') html += '<button class="mobile-menu__btn" onclick="window.location.href=\'./admin.html\';closeMobileMenu()">⚙️ لوحة التحكم</button>';
+  if (currentRole === 'editor' || currentRole === 'admin') html += '<button class="mobile-menu__btn" onclick="window.location.href=\'./upload.html\';closeMobileMenu()">📤 رفع محتوى</button>';
+  html += '<button class="mobile-menu__btn red" onclick="signout()">🚪 تسجيل الخروج</button>';
+  btns.innerHTML = html;
+}
+
+async function signout() { await sb.auth.signOut(); window.location.reload(); }
+
 // ===== تحميل المحتوى =====
 async function loadContent() {
-  var { data } = await sb.from('content').select('*').eq('is_hidden', false).order('created_at', { ascending: false });
-  allItems = data || [];
+  var { data } = await sb.from('content')
+    .select('*, profiles!content_created_by_fkey(id, full_name, email, role, organization, city, phone, linkedin, avatar_url)')
+    .eq('is_hidden', false)
+    .order('created_at', { ascending: false });
 
-  var authorIds = [...new Set(allItems.filter(function(i){ return i.created_by; }).map(function(i){ return i.created_by; }))];
-  if (authorIds.length > 0) {
-    var { data: profiles } = await sb.from('profiles').select('id, full_name, email, role, organization, city, phone, linkedin, avatar_url').in('id', authorIds);
-    if (profiles) {
-      profiles.forEach(function(p){ authorsMap[p.id] = p; });
-      populateAuthorFilter(profiles);
+  allItems = (data || []).map(function(item) {
+    if (item.profiles) { authorsMap[item.created_by] = item.profiles; }
+    return item;
+  });
+
+  // تعبئة قائمة الكتّاب
+  var authorSelect = document.getElementById('f-author');
+  var seen = {};
+  allItems.forEach(function(i) {
+    if (i.created_by && !seen[i.created_by] && authorsMap[i.created_by]) {
+      seen[i.created_by] = true;
+      var opt = document.createElement('option');
+      opt.value = i.created_by;
+      var a = authorsMap[i.created_by];
+      opt.textContent = a.full_name || a.email || 'مجهول';
+      authorSelect.appendChild(opt);
     }
-  }
+  });
 
   filteredItems = [...allItems];
   updateHeroStats();
@@ -430,57 +543,40 @@ async function loadContent() {
   render();
 }
 
-function populateAuthorFilter(profiles) {
-  var select = document.getElementById('f-author');
-  profiles.forEach(function(p) {
-    var opt = document.createElement('option');
-    opt.value = p.id;
-    opt.textContent = p.full_name || p.email || 'مجهول';
-    select.appendChild(opt);
-  });
-}
-
-// ===== Hero Stats =====
 function updateHeroStats() {
   document.getElementById('hero-total').textContent = allItems.length;
   document.getElementById('hero-authors').textContent = new Set(allItems.filter(function(i){ return i.created_by; }).map(function(i){ return i.created_by; })).size;
   document.getElementById('hero-types').textContent = new Set(allItems.map(function(i){ return i.content_type; })).size;
 }
 
-// ===== شرائط التقدم =====
 function updateProgressStats() {
   var total = allItems.length || 1;
   var typeCounts = {};
-  allItems.forEach(function(i){ var t = i.content_type || 'غير محدد'; typeCounts[t] = (typeCounts[t]||0)+1; });
+  allItems.forEach(function(i){ var t = i.content_type||'غير محدد'; typeCounts[t]=(typeCounts[t]||0)+1; });
   var typeHtml = '';
   Object.keys(typeCounts).sort(function(a,b){ return typeCounts[b]-typeCounts[a]; }).forEach(function(key) {
     var pct = Math.round((typeCounts[key]/total)*100);
-    var info = typeLabels[key] || { icon: '📄' };
-    typeHtml += '<div class="progress-item"><div class="progress-label"><span onclick="quickFilter(\'type\',\''+key+'\')">' + (info.icon||'') + ' ' + key + '</span><strong>' + typeCounts[key] + ' (' + pct + '%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
+    var info = typeLabels[key]||{icon:'📄'};
+    typeHtml += '<div class="progress-item"><div class="progress-label"><span onclick="quickFilter(\'type\',\''+key+'\')">'+(info.icon||'')+' '+key+'</span><strong>'+typeCounts[key]+' ('+pct+'%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div></div>';
   });
-  document.getElementById('type-stats').innerHTML = typeHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد محتوى</p>';
+  document.getElementById('type-stats').innerHTML = typeHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد</p>';
 
   var targetCounts = {};
-  allItems.forEach(function(i){ var t = i.target_audience || 'غير محدد'; targetCounts[t] = (targetCounts[t]||0)+1; });
+  allItems.forEach(function(i){ var t = i.target_audience||'غير محدد'; targetCounts[t]=(targetCounts[t]||0)+1; });
   var targetHtml = '';
   Object.keys(targetCounts).sort(function(a,b){ return targetCounts[b]-targetCounts[a]; }).forEach(function(key) {
     var pct = Math.round((targetCounts[key]/total)*100);
-    targetHtml += '<div class="progress-item"><div class="progress-label"><span onclick="quickFilter(\'audience\',\''+key+'\')">' + key + '</span><strong>' + targetCounts[key] + ' (' + pct + '%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
+    targetHtml += '<div class="progress-item"><div class="progress-label"><span onclick="quickFilter(\'audience\',\''+key+'\')">' +key+'</span><strong>'+targetCounts[key]+' ('+pct+'%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div></div>';
   });
-  document.getElementById('target-stats').innerHTML = targetHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد محتوى</p>';
+  document.getElementById('target-stats').innerHTML = targetHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد</p>';
 }
 
-// ===== البحث المتقدم =====
+// ===== البحث والفلترة =====
 function toggleAdvanced() {
-  var filters = document.getElementById('advanced-filters');
-  var toggle = document.getElementById('advanced-toggle');
-  if (filters.classList.contains('open')) {
-    filters.classList.remove('open');
-    toggle.textContent = '⚙️ بحث متقدم ▼';
-  } else {
-    filters.classList.add('open');
-    toggle.textContent = '⚙️ بحث متقدم ▲';
-  }
+  var f = document.getElementById('advanced-filters');
+  var t = document.getElementById('advanced-toggle');
+  f.classList.toggle('open');
+  t.textContent = f.classList.contains('open') ? '⚙️ بحث متقدم ▲' : '⚙️ بحث متقدم ▼';
 }
 
 function applyFilters() {
@@ -500,17 +596,18 @@ function applyFilters() {
     if (file === 'has' && !i.file_url) return false;
     if (file === 'none' && i.file_url) return false;
     if (dateFrom && new Date(i.created_at) < new Date(dateFrom)) return false;
-    if (dateTo && new Date(i.created_at) > new Date(dateTo + 'T23:59:59')) return false;
+    if (dateTo && new Date(i.created_at) > new Date(dateTo+'T23:59:59')) return false;
     return true;
   });
 
+  currentPage = 1;
   updateActiveTags(q, type, audience, author, file, dateFrom, dateTo);
   render();
 }
 
 function quickFilter(field, value) {
-  if (field === 'type') { document.getElementById('f-type').value = value; }
-  if (field === 'audience') { document.getElementById('f-audience').value = value; }
+  if (field === 'type') document.getElementById('f-type').value = value;
+  if (field === 'audience') document.getElementById('f-audience').value = value;
   document.getElementById('advanced-filters').classList.add('open');
   document.getElementById('advanced-toggle').textContent = '⚙️ بحث متقدم ▲';
   applyFilters();
@@ -518,168 +615,228 @@ function quickFilter(field, value) {
 
 function updateActiveTags(q, type, audience, author, file, dateFrom, dateTo) {
   var tags = [];
-  if (q) tags.push({ label: 'بحث: ' + q, clear: function(){ document.getElementById('q').value=''; } });
-  if (type) tags.push({ label: 'النوع: ' + type, clear: function(){ document.getElementById('f-type').value=''; } });
-  if (audience) tags.push({ label: 'الفئة: ' + audience, clear: function(){ document.getElementById('f-audience').value=''; } });
-  if (author) {
-    var a = authorsMap[author];
-    tags.push({ label: 'الكاتب: ' + (a ? (a.full_name || a.email) : author), clear: function(){ document.getElementById('f-author').value=''; } });
-  }
-  if (file === 'has') tags.push({ label: 'يوجد ملف', clear: function(){ document.getElementById('f-file').value=''; } });
-  if (file === 'none') tags.push({ label: 'بدون ملف', clear: function(){ document.getElementById('f-file').value=''; } });
-  if (dateFrom) tags.push({ label: 'من: ' + dateFrom, clear: function(){ document.getElementById('f-date-from').value=''; } });
-  if (dateTo) tags.push({ label: 'إلى: ' + dateTo, clear: function(){ document.getElementById('f-date-to').value=''; } });
-
+  if (q) tags.push({ label: 'بحث: '+q, clear: function(){ document.getElementById('q').value=''; } });
+  if (type) tags.push({ label: 'النوع: '+type, clear: function(){ document.getElementById('f-type').value=''; } });
+  if (audience) tags.push({ label: 'الفئة: '+audience, clear: function(){ document.getElementById('f-audience').value=''; } });
+  if (author) { var a=authorsMap[author]; tags.push({ label: 'الكاتب: '+(a?(a.full_name||a.email):author), clear: function(){ document.getElementById('f-author').value=''; } }); }
+  if (file==='has') tags.push({ label: 'يوجد ملف', clear: function(){ document.getElementById('f-file').value=''; } });
+  if (file==='none') tags.push({ label: 'بدون ملف', clear: function(){ document.getElementById('f-file').value=''; } });
+  if (dateFrom) tags.push({ label: 'من: '+dateFrom, clear: function(){ document.getElementById('f-date-from').value=''; } });
+  if (dateTo) tags.push({ label: 'إلى: '+dateTo, clear: function(){ document.getElementById('f-date-to').value=''; } });
+  window._activeTags = tags;
   var container = document.getElementById('active-filters');
-  if (tags.length === 0) { container.style.display = 'none'; return; }
-  container.style.display = 'flex';
-  container.innerHTML = '<span style="font-size:13px;color:#888;margin-left:8px;">الفلاتر النشطة:</span>';
+  if (!tags.length) { container.style.display='none'; return; }
+  container.style.display='flex';
+  container.innerHTML = '<span style="font-size:12px;color:#888;margin-left:6px;">الفلاتر:</span>';
   tags.forEach(function(tag, idx) {
     var div = document.createElement('div');
     div.className = 'filter-tag';
-    div.innerHTML = tag.label + '<button onclick="clearTag(' + idx + ')">✕</button>';
+    div.innerHTML = tag.label+'<button onclick="clearTag('+idx+')">✕</button>';
     container.appendChild(div);
   });
-  window._activeTags = tags;
 }
 
 function clearTag(idx) {
-  if (window._activeTags && window._activeTags[idx]) {
-    window._activeTags[idx].clear();
-    applyFilters();
-  }
+  if (window._activeTags && window._activeTags[idx]) { window._activeTags[idx].clear(); applyFilters(); }
 }
 
 function resetFilters() {
-  document.getElementById('q').value = '';
-  document.getElementById('f-type').value = '';
-  document.getElementById('f-audience').value = '';
-  document.getElementById('f-author').value = '';
-  document.getElementById('f-file').value = '';
-  document.getElementById('f-date-from').value = '';
-  document.getElementById('f-date-to').value = '';
-  filteredItems = [...allItems];
-  document.getElementById('active-filters').style.display = 'none';
+  document.getElementById('q').value='';
+  document.getElementById('f-type').value='';
+  document.getElementById('f-audience').value='';
+  document.getElementById('f-author').value='';
+  document.getElementById('f-file').value='';
+  document.getElementById('f-date-from').value='';
+  document.getElementById('f-date-to').value='';
+  filteredItems=[...allItems];
+  currentPage=1;
+  document.getElementById('active-filters').style.display='none';
   render();
 }
 
 // ===== الترتيب =====
 function sortBy(field) {
-  if (sortField === field) { sortDir = sortDir === 'asc' ? 'desc' : 'asc'; }
-  else { sortField = field; sortDir = 'asc'; }
-  var labels = { num: 'الرقم', title: 'العنوان', date: 'التاريخ' };
-  document.getElementById('sort-label').textContent = 'ترتيب: ' + (labels[field] || field) + ' (' + (sortDir === 'asc' ? 'تصاعدي' : 'تنازلي') + ')';
+  if (sortField===field) sortDir=sortDir==='asc'?'desc':'asc';
+  else { sortField=field; sortDir='asc'; }
+  var labels={title:'العنوان',date:'التاريخ'};
+  document.getElementById('sort-label').textContent='ترتيب: '+(labels[field]||field)+' ('+(sortDir==='asc'?'تصاعدي':'تنازلي')+')';
   render();
 }
 
 // ===== Render =====
 function render() {
-  var tbody = document.getElementById('rows');
-  var sorted = [...filteredItems].sort(function(a, b) {
-    var dir = sortDir === 'asc' ? 1 : -1;
-    if (sortField === 'title') return dir * a.title.localeCompare(b.title, 'ar');
-    if (sortField === 'date') return dir * (new Date(a.created_at) - new Date(b.created_at));
+  var sorted = [...filteredItems].sort(function(a,b) {
+    var dir=sortDir==='asc'?1:-1;
+    if (sortField==='title') return dir*a.title.localeCompare(b.title,'ar');
+    if (sortField==='date') return dir*(new Date(a.created_at)-new Date(b.created_at));
     return 0;
   });
 
-  document.getElementById('stats-pill').textContent = sorted.length + ' عنصر';
+  document.getElementById('stats-pill').textContent = sorted.length+' عنصر';
 
-  if (allItems.length === 0) {
-    tbody.innerHTML = '';
-    document.getElementById('empty-state').style.display = 'block';
-    document.getElementById('no-results').style.display = 'none';
+  if (allItems.length===0) {
+    document.getElementById('empty-state').style.display='block';
+    document.getElementById('no-results').style.display='none';
+    document.getElementById('rows').innerHTML='';
+    document.getElementById('mobile-cards').innerHTML='';
+    document.getElementById('pagination').style.display='none';
     return;
   }
-  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('empty-state').style.display='none';
 
-  if (sorted.length === 0) {
-    tbody.innerHTML = '';
-    document.getElementById('no-results').style.display = 'block';
+  if (sorted.length===0) {
+    document.getElementById('no-results').style.display='block';
+    document.getElementById('rows').innerHTML='';
+    document.getElementById('mobile-cards').innerHTML='';
+    document.getElementById('pagination').style.display='none';
     return;
   }
-  document.getElementById('no-results').style.display = 'none';
+  document.getElementById('no-results').style.display='none';
 
+  // Pagination
+  var totalPages = Math.ceil(sorted.length/PAGE_SIZE);
+  if (currentPage>totalPages) currentPage=1;
+  var start=(currentPage-1)*PAGE_SIZE;
+  var pageItems=sorted.slice(start, start+PAGE_SIZE);
+
+  renderTable(pageItems, start);
+  renderMobileCards(pageItems, start);
+  renderPagination(sorted.length, totalPages);
+}
+
+function renderTable(items, startIdx) {
+  var tbody = document.getElementById('rows');
   tbody.innerHTML = '';
-  sorted.forEach(function(item, idx) {
-    var info = typeLabels[item.content_type] || { cls: 'badge-default', icon: '📄' };
-    var author = item.created_by ? authorsMap[item.created_by] : null;
-    var authorName = author ? (author.full_name || author.email || 'مجهول') : 'غير محدد';
-    var date = item.created_at ? new Date(item.created_at).toLocaleDateString('ar-SA') : '-';
-    var avatarContent = author && author.avatar_url
-      ? '<img src="' + author.avatar_url + '">'
-      : authorName.charAt(0);
-    var tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td style="color:#888;font-weight:700;">' + String(idx+1).padStart(3,'0') + '</td>' +
-      '<td style="font-weight:700;">' + item.title + '</td>' +
-      '<td><span class="badge ' + info.cls + '">' + (info.icon||'') + ' ' + (item.content_type||'-') + '</span></td>' +
-      '<td style="color:#555;">' + (item.target_audience||'-') + '</td>' +
-      '<td><div class="author-cell"><div class="avatar">' + avatarContent + '</div><div class="author-info"><h5>' + authorName + '</h5><span>' + date + '</span></div>' + (author ? '<button class="btn-author" onclick="showAuthor(\'' + item.created_by + '\')">بيانات</button>' : '') + '</div></td>' +
-      '<td style="color:#888;font-size:13px;">' + date + '</td>' +
-      '<td><div class="action-btns"><button class="btn-view" onclick="window.location.href=\'./view.html?id=' + item.id + '\'">👁 عرض</button>' +
-      (currentRole === 'admin' ? '<button class="btn-edit" onclick="editItem(' + item.id + ')">تعديل</button><button class="btn-delete" onclick="deleteItem(' + item.id + ')">حذف</button>' : '') +
-      '</div></td>';
+  items.forEach(function(item, idx) {
+    var info=typeLabels[item.content_type]||{cls:'badge-default',icon:'📄'};
+    var author=item.created_by?authorsMap[item.created_by]:null;
+    var authorName=author?(author.full_name||author.email||'مجهول'):'غير محدد';
+    var date=item.created_at?new Date(item.created_at).toLocaleDateString('ar-SA'):'-';
+    var avatarContent=author&&author.avatar_url?'<img src="'+author.avatar_url+'">':authorName.charAt(0);
+    var tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td style="color:#888;font-weight:700;">'+String(startIdx+idx+1).padStart(3,'0')+'</td>'+
+      '<td style="font-weight:700;max-width:180px;">'+item.title+'</td>'+
+      '<td><span class="badge '+info.cls+'">'+(info.icon||'')+' '+(item.content_type||'-')+'</span></td>'+
+      '<td style="color:#555;font-size:12px;">'+(item.target_audience||'-')+'</td>'+
+      '<td><div class="author-cell"><div class="avatar">'+avatarContent+'</div><div class="author-info"><h5>'+authorName+'</h5><span>'+date+'</span></div>'+(author?'<button class="btn-author" onclick="showAuthor(\''+item.created_by+'\')">بيانات</button>':'')+'</div></td>'+
+      '<td style="color:#888;font-size:12px;">'+date+'</td>'+
+      '<td><div style="display:flex;gap:4px;flex-wrap:wrap;"><button class="btn-view" onclick="window.location.href=\'./view.html?id='+item.id+'\'">👁 عرض</button>'+(currentRole==='admin'?'<button class="btn-edit" onclick="editItem('+item.id+')">تعديل</button><button class="btn-delete" onclick="deleteItem('+item.id+')">حذف</button>':'')+'</div></td>';
     tbody.appendChild(tr);
   });
 }
 
+function renderMobileCards(items, startIdx) {
+  var container = document.getElementById('mobile-cards');
+  container.innerHTML = '';
+  items.forEach(function(item, idx) {
+    var info=typeLabels[item.content_type]||{cls:'badge-default',icon:'📄'};
+    var author=item.created_by?authorsMap[item.created_by]:null;
+    var authorName=author?(author.full_name||author.email||'مجهول'):'غير محدد';
+    var date=item.created_at?new Date(item.created_at).toLocaleDateString('ar-SA'):'-';
+    var avatarContent=author&&author.avatar_url?'<img src="'+author.avatar_url+'">':authorName.charAt(0);
+    var div=document.createElement('div');
+    div.className='content-card';
+    div.innerHTML=
+      '<div class="content-card__header">'+
+        '<div class="content-card__title">'+item.title+'</div>'+
+        '<span style="color:#888;font-size:12px;font-weight:700;">#'+String(startIdx+idx+1).padStart(3,'0')+'</span>'+
+      '</div>'+
+      '<div class="content-card__meta">'+
+        '<span class="badge '+info.cls+'">'+(info.icon||'')+' '+(item.content_type||'-')+'</span>'+
+        (item.target_audience?'<span class="badge badge-default">👥 '+item.target_audience+'</span>':'')+
+        '<span class="badge badge-default">📅 '+date+'</span>'+
+      '</div>'+
+      '<div class="content-card__author">'+
+        '<div class="avatar" style="width:28px;height:28px;font-size:12px;">'+avatarContent+'</div>'+
+        '<span style="font-size:13px;color:#555;">'+authorName+'</span>'+
+        (author?'<button class="btn-author" onclick="showAuthor(\''+item.created_by+'\')" style="margin-right:auto;">بيانات</button>':'')+
+      '</div>'+
+      '<div class="content-card__actions">'+
+        '<button class="btn-view" onclick="window.location.href=\'./view.html?id='+item.id+'\'">👁 عرض</button>'+
+        (currentRole==='admin'?'<button class="btn-edit" onclick="editItem('+item.id+')">تعديل</button><button class="btn-delete" onclick="deleteItem('+item.id+')">حذف</button>':'')+
+      '</div>';
+    container.appendChild(div);
+  });
+}
+
+function renderPagination(total, totalPages) {
+  var pag = document.getElementById('pagination');
+  if (totalPages<=1) { pag.style.display='none'; return; }
+  pag.style.display='flex';
+  pag.innerHTML='';
+
+  var prev=document.createElement('button');
+  prev.className='page-btn'; prev.textContent='‹ السابق'; prev.disabled=currentPage===1;
+  prev.onclick=function(){ currentPage--; render(); window.scrollTo(0,400); };
+  pag.appendChild(prev);
+
+  for (var i=1; i<=totalPages; i++) {
+    if (totalPages>7 && i>2 && i<totalPages-1 && Math.abs(i-currentPage)>1) {
+      if (i===3 || i===totalPages-2) { var dots=document.createElement('span'); dots.textContent='...'; dots.style.padding='8px 4px'; pag.appendChild(dots); }
+      continue;
+    }
+    var btn=document.createElement('button');
+    btn.className='page-btn'+(i===currentPage?' active':'');
+    btn.textContent=i;
+    btn.onclick=(function(p){ return function(){ currentPage=p; render(); window.scrollTo(0,400); }; })(i);
+    pag.appendChild(btn);
+  }
+
+  var next=document.createElement('button');
+  next.className='page-btn'; next.textContent='التالي ›'; next.disabled=currentPage===totalPages;
+  next.onclick=function(){ currentPage++; render(); window.scrollTo(0,400); };
+  pag.appendChild(next);
+
+  var info=document.createElement('span');
+  info.className='page-info'; info.textContent='صفحة '+currentPage+' من '+totalPages+' ('+total+' عنصر)';
+  pag.appendChild(info);
+}
+
 // ===== بيانات الكاتب =====
 function showAuthor(id) {
-  var a = authorsMap[id];
-  if (!a) return;
-  var name = a.full_name || a.email || 'مجهول';
-  var avatarContent = a.avatar_url ? '<img src="' + a.avatar_url + '">' : name.charAt(0);
-  document.getElementById('author-avatar').innerHTML = avatarContent;
-  document.getElementById('author-name').textContent = name;
-  document.getElementById('author-role').textContent = roleMap[a.role] || a.role;
-  var html = '';
-  if (a.email) html += '<div class="info-row"><span style="font-size:18px;width:28px;text-align:center;">📧</span><div><div class="lbl">البريد الإلكتروني</div><div class="val">' + a.email + '</div></div></div>';
-  if (a.organization) html += '<div class="info-row"><span style="font-size:18px;width:28px;text-align:center;">🏢</span><div><div class="lbl">جهة العمل</div><div class="val">' + a.organization + '</div></div></div>';
-  if (a.city) html += '<div class="info-row"><span style="font-size:18px;width:28px;text-align:center;">📍</span><div><div class="lbl">المدينة</div><div class="val">' + a.city + '</div></div></div>';
-  if (currentRole === 'admin' && a.phone) html += '<div class="info-row"><span style="font-size:18px;width:28px;text-align:center;">📞</span><div><div class="lbl">رقم الهاتف</div><div class="val">' + a.phone + '</div></div></div>';
-  if (a.linkedin) html += '<div class="info-row"><span style="font-size:18px;width:28px;text-align:center;">🔗</span><div><div class="lbl">LinkedIn</div><div class="val"><a href="' + a.linkedin + '" target="_blank">عرض الملف الشخصي ↗</a></div></div></div>';
-  document.getElementById('author-body').innerHTML = html;
-  document.getElementById('author-modal').className = 'modal-bg on';
+  var a=authorsMap[id]; if(!a) return;
+  var name=a.full_name||a.email||'مجهول';
+  document.getElementById('author-avatar').innerHTML=a.avatar_url?'<img src="'+a.avatar_url+'">':name.charAt(0);
+  document.getElementById('author-name').textContent=name;
+  document.getElementById('author-role').textContent=roleMap[a.role]||a.role;
+  var html='';
+  if(a.email) html+='<div class="info-row"><span style="font-size:16px;width:24px;text-align:center;">📧</span><div><div class="lbl">البريد</div><div class="val">'+a.email+'</div></div></div>';
+  if(a.organization) html+='<div class="info-row"><span style="font-size:16px;width:24px;text-align:center;">🏢</span><div><div class="lbl">جهة العمل</div><div class="val">'+a.organization+'</div></div></div>';
+  if(a.city) html+='<div class="info-row"><span style="font-size:16px;width:24px;text-align:center;">📍</span><div><div class="lbl">المدينة</div><div class="val">'+a.city+'</div></div></div>';
+  if(currentRole==='admin'&&a.phone) html+='<div class="info-row"><span style="font-size:16px;width:24px;text-align:center;">📞</span><div><div class="lbl">الهاتف</div><div class="val">'+a.phone+'</div></div></div>';
+  if(a.linkedin) html+='<div class="info-row"><span style="font-size:16px;width:24px;text-align:center;">🔗</span><div><div class="lbl">LinkedIn</div><div class="val"><a href="'+a.linkedin+'" target="_blank">عرض ↗</a></div></div></div>';
+  document.getElementById('author-body').innerHTML=html;
+  document.getElementById('author-modal').className='modal-bg on';
 }
 
 // ===== تعديل وحذف =====
 function editItem(id) {
-  var item = allItems.find(function(x){ return x.id === id; });
-  if (!item) return;
-  document.getElementById('fid').value = item.id;
-  document.getElementById('ftitle').value = item.title;
-  document.getElementById('ftype').value = item.content_type || 'مقال';
-  document.getElementById('ftarget').value = item.target_audience || '';
-  document.getElementById('modal').className = 'modal-edit active';
+  var item=allItems.find(function(x){ return x.id===id; }); if(!item) return;
+  document.getElementById('fid').value=item.id;
+  document.getElementById('ftitle').value=item.title;
+  document.getElementById('ftype').value=item.content_type||'مقال';
+  document.getElementById('ftarget').value=item.target_audience||'';
+  document.getElementById('modal').className='modal-edit active';
 }
-
 async function deleteItem(id) {
-  if (!confirm('هل أنت متأكد من حذف هذا المحتوى؟')) return;
-  await sb.from('content').delete().eq('id', id);
+  if(!confirm('هل أنت متأكد؟')) return;
+  await sb.from('content').delete().eq('id',id);
   await loadContent();
 }
-
 document.getElementById('form').addEventListener('submit', async function(e) {
   e.preventDefault();
-  var id = document.getElementById('fid').value;
-  var obj = { title: document.getElementById('ftitle').value, content_type: document.getElementById('ftype').value, target_audience: document.getElementById('ftarget').value };
-  if (id) await sb.from('content').update(obj).eq('id', id);
-  document.getElementById('modal').className = 'modal-edit';
+  var id=document.getElementById('fid').value;
+  var obj={title:document.getElementById('ftitle').value,content_type:document.getElementById('ftype').value,target_audience:document.getElementById('ftarget').value};
+  if(id) await sb.from('content').update(obj).eq('id',id);
+  document.getElementById('modal').className='modal-edit';
   await loadContent();
 });
+document.getElementById('btnClose').addEventListener('click',function(){ document.getElementById('modal').className='modal-edit'; });
+document.getElementById('btnCancel').addEventListener('click',function(){ document.getElementById('modal').className='modal-edit'; });
+document.getElementById('q').addEventListener('input', applyFilters);
 
-document.getElementById('btnClose').addEventListener('click', function(){ document.getElementById('modal').className = 'modal-edit'; });
-document.getElementById('btnCancel').addEventListener('click', function(){ document.getElementById('modal').className = 'modal-edit'; });
-
-// البحث الفوري
-document.getElementById('q').addEventListener('input', function() {
-  applyFilters();
-});
-
-async function init() {
-  await checkAuth();
-  await loadContent();
-}
+async function init() { await checkAuth(); await loadContent(); }
 init();
 </script>
 </body>
