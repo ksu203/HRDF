@@ -12,8 +12,8 @@
     .header { background: #0B6B3A; color: white; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
     .header h1 { font-size: 18px; }
     .header button { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px; }
-    .nav { background: white; border-bottom: 2px solid #eee; display: flex; padding: 0 28px; }
-    .nav-tab { padding: 14px 20px; cursor: pointer; color: #888; font-size: 15px; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+    .nav { background: white; border-bottom: 2px solid #eee; display: flex; padding: 0 28px; overflow-x: auto; }
+    .nav-tab { padding: 14px 20px; cursor: pointer; color: #888; font-size: 15px; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; }
     .nav-tab.on { color: #0B6B3A; border-bottom-color: #0B6B3A; font-weight: 700; }
     .content { padding: 28px; max-width: 1200px; margin: 0 auto; }
     .section { display: none; }
@@ -67,6 +67,13 @@
     .progress-bar { width: 100%; height: 6px; background: #eee; border-radius: 4px; margin-top: 8px; display: none; }
     .progress-bar-fill { height: 100%; background: #0B6B3A; border-radius: 4px; width: 0%; transition: width 0.3s; }
     .notif-badge { background: #dc3545; color: white; border-radius: 50%; padding: 2px 7px; font-size: 12px; margin-right: 6px; }
+    .form-section { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 28px; max-width: 500px; margin: 0 auto; }
+    .form-section h3 { font-size: 18px; color: #333; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #e8f5ef; }
+    .form-field { margin-bottom: 16px; }
+    .form-field label { display: block; margin-bottom: 6px; font-size: 14px; color: #444; font-weight: 600; }
+    .form-field input, .form-field select { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
+    .form-field input:focus, .form-field select:focus { outline: none; border-color: #0B6B3A; }
+    .create-msg { margin-top: 14px; padding: 12px; border-radius: 10px; text-align: center; font-size: 14px; display: none; }
   </style>
 </head>
 <body>
@@ -81,6 +88,7 @@
   <div class="nav-tab" id="nt2">المحتوى</div>
   <div class="nav-tab" id="nt3">التصنيفات</div>
   <div class="nav-tab" id="nt4">🔔 الإشعارات <span class="notif-badge" id="notif-count" style="display:none">0</span></div>
+  <div class="nav-tab" id="nt5">➕ إضافة مشرف</div>
 </div>
 
 <div class="content">
@@ -140,6 +148,35 @@
     </div>
   </div>
 
+  <!-- إضافة مشرف -->
+  <div class="section" id="s5">
+    <div class="form-section">
+      <h3>➕ إضافة حساب جديد</h3>
+      <div class="form-field">
+        <label>الاسم الكامل *</label>
+        <input type="text" id="new-admin-name" placeholder="اسم المستخدم">
+      </div>
+      <div class="form-field">
+        <label>البريد الإلكتروني *</label>
+        <input type="email" id="new-admin-email" placeholder="example@email.com">
+      </div>
+      <div class="form-field">
+        <label>كلمة المرور *</label>
+        <input type="password" id="new-admin-pass" placeholder="6 أحرف على الأقل">
+      </div>
+      <div class="form-field">
+        <label>الصلاحية *</label>
+        <select id="new-admin-role">
+          <option value="admin">admin — مشرف كامل</option>
+          <option value="editor">editor — محرر</option>
+          <option value="viewer">viewer — قارئ</option>
+        </select>
+      </div>
+      <button class="btn btn-green" id="btn-create-admin" style="width:100%;padding:13px;font-size:16px;margin-top:8px;">➕ إنشاء الحساب</button>
+      <div class="create-msg" id="create-admin-msg"></div>
+    </div>
+  </div>
+
 </div>
 
 <!-- نافذة تغيير الصلاحية -->
@@ -151,8 +188,8 @@
       <label>الدور الجديد</label>
       <select id="role-select">
         <option value="pending">pending — في الانتظار</option>
-        <option value="viewer">viewer — قراءة فقط</option>
-        <option value="editor">editor — رفع محتوى</option>
+        <option value="viewer">viewer — قارئ</option>
+        <option value="editor">editor — محرر</option>
         <option value="admin">admin — مشرف كامل</option>
       </select>
     </div>
@@ -262,7 +299,8 @@ function setupTabs() {
     { tab: 'nt1', sec: 's1', load: loadUsers },
     { tab: 'nt2', sec: 's2', load: loadContent },
     { tab: 'nt3', sec: 's3', load: loadCategories },
-    { tab: 'nt4', sec: 's4', load: loadNotifications }
+    { tab: 'nt4', sec: 's4', load: loadNotifications },
+    { tab: 'nt5', sec: 's5', load: function(){} }
   ];
   tabs.forEach(function(t) {
     document.getElementById(t.tab).addEventListener('click', function() {
@@ -293,7 +331,10 @@ async function loadUsers() {
   data.forEach(function(u) {
     var badge = '<span class="badge badge-' + u.role + '">' + u.role + '</span>';
     html += '<tr><td>' + (u.email || '-') + '</td><td>' + (u.full_name || '-') + '</td><td>' + badge + '</td>';
-    html += '<td><button class="btn btn-blue" onclick="openRoleModal(\'' + u.id + '\',\'' + u.email + '\',\'' + u.role + '\')">تغيير الصلاحية</button></td></tr>';
+    html += '<td>';
+    html += '<button class="btn btn-blue" onclick="openRoleModal(\'' + u.id + '\',\'' + (u.email||'') + '\',\'' + u.role + '\')">تغيير الصلاحية</button>';
+    html += '<button class="btn btn-gray" onclick="window.location.href=\'./profile.html?id=' + u.id + '\'">الملف الشخصي</button>';
+    html += '</td></tr>';
   });
   document.getElementById('users-table').innerHTML = html || '<tr><td colspan="4" class="empty">لا يوجد مستخدمون</td></tr>';
 }
@@ -320,50 +361,33 @@ async function loadContent() {
   if (!data) return;
   var html = '';
   data.forEach(function(c) {
-    var status = c.status === 'active'
-      ? '<span class="badge badge-editor">نشط</span>'
-      : '<span class="badge badge-pending">غير نشط</span>';
-    var visibility = c.is_hidden
-      ? '<span class="badge badge-hidden">مخفي</span>'
-      : '<span class="badge badge-visible">ظاهر</span>';
-    var download = c.allow_download
-      ? '<span class="badge badge-editor">✓</span>'
-      : '<span class="badge badge-hidden">✗</span>';
-    var fileLink = c.file_url
-      ? '<a href="' + c.file_url + '" target="_blank" class="btn btn-gray">تحميل</a>'
-      : '-';
+    var status = c.status === 'active' ? '<span class="badge badge-editor">نشط</span>' : '<span class="badge badge-pending">غير نشط</span>';
+    var visibility = c.is_hidden ? '<span class="badge badge-hidden">مخفي</span>' : '<span class="badge badge-visible">ظاهر</span>';
+    var download = c.allow_download ? '<span class="badge badge-editor">✓</span>' : '<span class="badge badge-hidden">✗</span>';
+    var fileLink = c.file_url ? '<a href="' + c.file_url + '" target="_blank" class="btn btn-gray">تحميل</a>' : '-';
     var rowClass = c.is_hidden ? 'hidden-row' : '';
     html += '<tr class="' + rowClass + '">';
-    html += '<td>' + c.title + '</td>';
-    html += '<td>' + (c.content_type || '-') + '</td>';
-    html += '<td>' + (c.target_audience || '-') + '</td>';
-    html += '<td>' + status + '</td>';
-    html += '<td>' + visibility + '</td>';
-    html += '<td>' + download + '</td>';
-    html += '<td>' + fileLink + '</td>';
+    html += '<td>' + c.title + '</td><td>' + (c.content_type||'-') + '</td><td>' + (c.target_audience||'-') + '</td>';
+    html += '<td>' + status + '</td><td>' + visibility + '</td><td>' + download + '</td><td>' + fileLink + '</td>';
     html += '<td>';
     html += '<button class="btn btn-blue" onclick="openEditContent(' + c.id + ')">تعديل</button>';
     html += '<button class="btn ' + (c.is_hidden ? 'btn-green' : 'btn-orange') + '" onclick="toggleHidden(' + c.id + ',' + c.is_hidden + ')">' + (c.is_hidden ? '👁 إظهار' : '🙈 إخفاء') + '</button>';
-    html += '<button class="btn ' + (c.allow_download ? 'btn-yellow' : 'btn-green') + '" onclick="toggleDownload(' + c.id + ',' + c.allow_download + ')">' + (c.allow_download ? '🔒 منع التنزيل' : '✓ سماح التنزيل') + '</button>';
+    html += '<button class="btn ' + (c.allow_download ? 'btn-yellow' : 'btn-green') + '" onclick="toggleDownload(' + c.id + ',' + c.allow_download + ')">' + (c.allow_download ? '🔒 منع' : '✓ سماح') + '</button>';
     html += '<button class="btn btn-red" onclick="deleteContent(' + c.id + ')">حذف</button>';
     html += '</td></tr>';
   });
   document.getElementById('content-table').innerHTML = html || '<tr><td colspan="8" class="empty">لا يوجد محتوى</td></tr>';
 }
 
-// إخفاء/إظهار
 async function toggleHidden(id, isHidden) {
   await sb.from('content').update({ is_hidden: !isHidden }).eq('id', id);
   loadContent();
 }
-
-// السماح/منع التنزيل
 async function toggleDownload(id, allowDownload) {
   await sb.from('content').update({ allow_download: !allowDownload }).eq('id', id);
   loadContent();
 }
 
-// إضافة محتوى
 document.getElementById('c-type').addEventListener('change', function() {
   document.getElementById('article-text-field').style.display = this.value === 'مقال' ? 'block' : 'none';
 });
@@ -409,9 +433,7 @@ document.getElementById('save-content').addEventListener('click', async function
   var title = document.getElementById('c-title').value;
   if (!title) { alert('يرجى إدخال العنوان'); return; }
   var btn = document.getElementById('save-content');
-  btn.textContent = 'جاري الحفظ...';
-  btn.disabled = true;
-
+  btn.textContent = 'جاري الحفظ...'; btn.disabled = true;
   var fileUrl = null;
   var fileInput = document.getElementById('c-file');
   if (fileInput.files && fileInput.files[0]) {
@@ -421,16 +443,12 @@ document.getElementById('save-content').addEventListener('click', async function
     document.getElementById('upload-progress-fill').style.width = '30%';
     document.getElementById('upload-status').textContent = 'جاري رفع الملف...';
     var { error: uploadError } = await sb.storage.from('content-files').upload(fileName, file);
-    if (uploadError) {
-      alert('خطأ في رفع الملف: ' + uploadError.message);
-      btn.textContent = 'حفظ'; btn.disabled = false; return;
-    }
+    if (uploadError) { alert('خطأ في رفع الملف: ' + uploadError.message); btn.textContent = 'حفظ'; btn.disabled = false; return; }
     document.getElementById('upload-progress-fill').style.width = '100%';
     document.getElementById('upload-status').textContent = 'تم رفع الملف ✅';
     var { data: urlData } = sb.storage.from('content-files').getPublicUrl(fileName);
     fileUrl = urlData.publicUrl;
   }
-
   var contentType = document.getElementById('c-type').value;
   var obj = {
     title: title,
@@ -443,13 +461,8 @@ document.getElementById('save-content').addEventListener('click', async function
     created_by: currentUserId
   };
   if (fileUrl) obj.file_url = fileUrl;
-
-  if (editContentId) {
-    await sb.from('content').update(obj).eq('id', editContentId);
-  } else {
-    await sb.from('content').insert(obj);
-  }
-
+  if (editContentId) { await sb.from('content').update(obj).eq('id', editContentId); }
+  else { await sb.from('content').insert(obj); }
   btn.textContent = 'حفظ'; btn.disabled = false;
   document.getElementById('modal-content').className = 'modal-bg';
   document.getElementById('c-file').value = '';
@@ -471,8 +484,7 @@ async function loadCategories() {
   var html = '';
   data.forEach(function(c) {
     var date = new Date(c.created_at).toLocaleDateString('ar-SA');
-    html += '<tr><td>' + c.name + '</td><td>' + date + '</td>';
-    html += '<td><button class="btn btn-red" onclick="deleteCat(' + c.id + ')">حذف</button></td></tr>';
+    html += '<tr><td>' + c.name + '</td><td>' + date + '</td><td><button class="btn btn-red" onclick="deleteCat(' + c.id + ')">حذف</button></td></tr>';
   });
   document.getElementById('cat-table').innerHTML = html || '<tr><td colspan="3" class="empty">لا توجد تصنيفات</td></tr>';
 }
@@ -481,9 +493,7 @@ document.getElementById('btn-add-cat').addEventListener('click', function() {
   document.getElementById('cat-name').value = '';
   document.getElementById('modal-cat').className = 'modal-bg on';
 });
-document.getElementById('close-cat').addEventListener('click', function() {
-  document.getElementById('modal-cat').className = 'modal-bg';
-});
+document.getElementById('close-cat').addEventListener('click', function() { document.getElementById('modal-cat').className = 'modal-bg'; });
 document.getElementById('save-cat').addEventListener('click', async function() {
   var name = document.getElementById('cat-name').value;
   if (!name) return;
@@ -499,45 +509,27 @@ async function deleteCat(id) {
 
 // ===== الإشعارات =====
 async function loadNotifications() {
-  var { data } = await sb.from('content')
-    .select('*, profiles(email, full_name)')
-    .eq('is_reviewed', false)
-    .order('created_at', { ascending: false });
-
+  var { data } = await sb.from('content').select('*, profiles(email, full_name)').eq('is_reviewed', false).order('created_at', { ascending: false });
   var count = data ? data.length : 0;
   var badge = document.getElementById('notif-count');
-  if (count > 0) {
-    badge.style.display = 'inline';
-    badge.textContent = count;
-  } else {
-    badge.style.display = 'none';
-  }
-
+  badge.style.display = count > 0 ? 'inline' : 'none';
+  if (count > 0) badge.textContent = count;
   if (!data || data.length === 0) {
     document.getElementById('notif-table').innerHTML = '<tr><td colspan="5" class="empty">لا توجد إشعارات جديدة ✅</td></tr>';
     return;
   }
-
   var html = '';
   data.forEach(function(c) {
     var date = new Date(c.created_at).toLocaleDateString('ar-SA');
     var uploader = c.profiles ? (c.profiles.full_name || c.profiles.email) : '-';
-    html += '<tr>';
-    html += '<td>' + c.title + '</td>';
-    html += '<td>' + (c.content_type || '-') + '</td>';
-    html += '<td>' + uploader + '</td>';
-    html += '<td>' + date + '</td>';
-    html += '<td>';
-    html += '<button class="btn btn-green" onclick="reviewContent(' + c.id + ')">✓ تمت المراجعة</button>';
-    html += '<button class="btn btn-blue" onclick="openEditContent(' + c.id + ')">تعديل</button>';
-    html += '<button class="btn btn-red" onclick="deleteContent(' + c.id + ')">حذف</button>';
-    html += '</td></tr>';
+    html += '<tr><td>' + c.title + '</td><td>' + (c.content_type||'-') + '</td><td>' + uploader + '</td><td>' + date + '</td>';
+    html += '<td><button class="btn btn-green" onclick="reviewContent(' + c.id + ')">✓ تمت المراجعة</button><button class="btn btn-blue" onclick="openEditContent(' + c.id + ')">تعديل</button><button class="btn btn-red" onclick="deleteContent(' + c.id + ')">حذف</button></td></tr>';
   });
   document.getElementById('notif-table').innerHTML = html;
 }
 
 async function reviewContent(id) {
-  await sb.from('content').update({ is_reviewed: true }).eq('id', id);
+  await sb.from('content').update({ is_reviewed: true, is_hidden: false }).eq('id', id);
   loadNotifications();
 }
 
@@ -545,13 +537,57 @@ async function checkNotifications() {
   var { data } = await sb.from('content').select('id').eq('is_reviewed', false);
   var count = data ? data.length : 0;
   var badge = document.getElementById('notif-count');
-  if (count > 0) {
-    badge.style.display = 'inline';
-    badge.textContent = count;
-  } else {
-    badge.style.display = 'none';
-  }
+  badge.style.display = count > 0 ? 'inline' : 'none';
+  if (count > 0) badge.textContent = count;
 }
+
+// ===== إضافة مشرف =====
+document.getElementById('btn-create-admin').addEventListener('click', async function() {
+  var email = document.getElementById('new-admin-email').value.trim();
+  var pass = document.getElementById('new-admin-pass').value;
+  var name = document.getElementById('new-admin-name').value.trim();
+  var role = document.getElementById('new-admin-role').value;
+  var msg = document.getElementById('create-admin-msg');
+  msg.style.display = 'none';
+
+  if (!email || !pass || !name) {
+    msg.style.display = 'block';
+    msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
+    msg.textContent = 'يرجى ملء جميع الحقول';
+    return;
+  }
+  if (pass.length < 6) {
+    msg.style.display = 'block';
+    msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
+    msg.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+    return;
+  }
+
+  var btn = document.getElementById('btn-create-admin');
+  btn.textContent = 'جاري الإنشاء...'; btn.disabled = true;
+
+  var { data, error } = await sb.auth.signUp({ email: email, password: pass });
+
+  if (error) {
+    msg.style.display = 'block';
+    msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
+    msg.textContent = 'خطأ: ' + error.message;
+    btn.textContent = '➕ إنشاء الحساب'; btn.disabled = false;
+    return;
+  }
+
+  if (data && data.user) {
+    await sb.from('profiles').update({ full_name: name, role: role }).eq('id', data.user.id);
+  }
+
+  msg.style.display = 'block';
+  msg.style.background = '#d4edda'; msg.style.color = '#155724';
+  msg.textContent = '✅ تم إنشاء الحساب بنجاح! البريد: ' + email;
+  document.getElementById('new-admin-email').value = '';
+  document.getElementById('new-admin-pass').value = '';
+  document.getElementById('new-admin-name').value = '';
+  btn.textContent = '➕ إنشاء الحساب'; btn.disabled = false;
+});
 
 async function init() {
   await checkAuth();
