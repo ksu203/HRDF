@@ -29,9 +29,30 @@
     .hero-stat .num { font-size: 40px; font-weight: 800; }
     .hero-stat .lbl { font-size: 13px; opacity: 0.8; margin-top: 2px; }
     .shell { max-width: 1200px; margin: 0 auto; padding: 32px 24px 60px; }
-    .search-bar { background: white; border-radius: 14px; padding: 16px 20px; margin-bottom: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 12px; }
-    .search-bar input { flex: 1; border: none; outline: none; font-family: 'Tajawal', sans-serif; font-size: 15px; color: #333; }
-    .pill { background: #e8f5ef; color: #0B6B3A; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+
+    /* ===== البحث المتقدم ===== */
+    .search-section { background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 28px; overflow: hidden; }
+    .search-main { padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f0f0f0; }
+    .search-main input { flex: 1; border: none; outline: none; font-family: 'Tajawal', sans-serif; font-size: 15px; color: #333; }
+    .search-main .icon { color: #0B6B3A; font-size: 20px; }
+    .pill { background: #e8f5ef; color: #0B6B3A; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .advanced-toggle { padding: 10px 20px; display: flex; align-items: center; gap: 8px; cursor: pointer; color: #0B6B3A; font-size: 14px; font-weight: 600; border: none; background: none; font-family: 'Tajawal', sans-serif; width: 100%; text-align: right; }
+    .advanced-toggle:hover { background: #f8fffe; }
+    .advanced-filters { display: none; padding: 20px; border-top: 1px solid #f0f0f0; }
+    .advanced-filters.open { display: block; }
+    .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 16px; }
+    .filter-item label { display: block; font-size: 13px; color: #666; margin-bottom: 5px; font-weight: 600; }
+    .filter-item select, .filter-item input[type="date"] { width: 100%; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; color: #333; background: white; }
+    .filter-item select:focus, .filter-item input[type="date"]:focus { outline: none; border-color: #0B6B3A; }
+    .filters-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-filter { padding: 9px 20px; border-radius: 8px; border: none; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .btn-apply { background: #0B6B3A; color: white; }
+    .btn-reset { background: #f0f0f0; color: #555; }
+    .active-filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 20px; border-top: 1px solid #f0f0f0; }
+    .filter-tag { background: #e8f5ef; color: #0B6B3A; padding: 4px 12px; border-radius: 20px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+    .filter-tag button { background: none; border: none; color: #0B6B3A; cursor: pointer; font-size: 14px; padding: 0; line-height: 1; }
+
+    /* ===== الإحصائيات ===== */
     .stats-section { margin-bottom: 32px; }
     .stats-section h3 { font-size: 17px; color: #333; margin-bottom: 16px; font-weight: 700; }
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
@@ -40,20 +61,25 @@
     .progress-item { margin-bottom: 12px; }
     .progress-item:last-child { margin-bottom: 0; }
     .progress-label { display: flex; justify-content: space-between; margin-bottom: 5px; }
-    .progress-label span { font-size: 13px; color: #555; }
+    .progress-label span { font-size: 13px; color: #555; cursor: pointer; }
+    .progress-label span:hover { color: #0B6B3A; }
     .progress-label strong { font-size: 13px; color: #0B6B3A; font-weight: 700; }
     .progress-bar { height: 8px; background: #e8f5ef; border-radius: 10px; overflow: hidden; }
     .progress-fill { height: 100%; background: linear-gradient(90deg, #0B6B3A, #1a9a5c); border-radius: 10px; transition: width 0.8s ease; }
-    .content-section h3 { font-size: 17px; color: #333; margin-bottom: 16px; font-weight: 700; }
+
+    /* ===== الجدول ===== */
+    .content-section h3 { font-size: 17px; color: #333; margin-bottom: 16px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
     .content-table-wrap { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
     thead tr { background: #f8fffe; }
-    th { padding: 14px 16px; text-align: right; font-size: 13px; color: #666; font-weight: 700; border-bottom: 2px solid #e8f5ef; }
+    th { padding: 14px 16px; text-align: right; font-size: 13px; color: #666; font-weight: 700; border-bottom: 2px solid #e8f5ef; cursor: pointer; user-select: none; }
+    th:hover { color: #0B6B3A; }
     td { padding: 14px 16px; border-bottom: 1px solid #f5f5f5; font-size: 14px; vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #fafffe; }
     .author-cell { display: flex; align-items: center; gap: 10px; }
-    .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0B6B3A, #1a9a5c); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0B6B3A, #1a9a5c); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: 700; flex-shrink: 0; overflow: hidden; }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
     .author-info h5 { font-size: 13px; font-weight: 700; color: #333; }
     .author-info span { font-size: 11px; color: #888; }
     .btn-author { padding: 4px 10px; border-radius: 6px; border: 1px solid #0B6B3A; color: #0B6B3A; background: transparent; font-size: 12px; cursor: pointer; font-family: 'Tajawal', sans-serif; transition: all 0.2s; }
@@ -73,21 +99,23 @@
     .btn-delete { padding: 6px 14px; border-radius: 8px; border: none; background: #dc3545; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
     .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
     .empty-state .icon { font-size: 56px; margin-bottom: 14px; }
+    .no-results { text-align: center; padding: 40px; color: #888; }
+    .no-results .icon { font-size: 48px; margin-bottom: 12px; }
 
     /* نافذة بيانات الكاتب */
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
     .modal-bg.on { display: flex; }
     .modal-author { background: white; border-radius: 20px; width: 420px; max-width: 95vw; overflow: hidden; }
     .modal-author-header { background: linear-gradient(135deg, #0B6B3A, #1a9a5c); padding: 32px; text-align: center; color: white; }
-    .avatar-lg { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: 700; margin: 0 auto 14px; border: 3px solid rgba(255,255,255,0.5); }
+    .avatar-lg { width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: 700; margin: 0 auto 14px; border: 3px solid rgba(255,255,255,0.5); overflow: hidden; }
+    .avatar-lg img { width: 100%; height: 100%; object-fit: cover; }
     .modal-author-header h3 { font-size: 20px; margin-bottom: 4px; }
     .modal-author-header .role-badge { background: rgba(255,255,255,0.2); padding: 4px 14px; border-radius: 20px; font-size: 13px; display: inline-block; }
     .modal-author-body { padding: 24px; }
     .info-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
     .info-row:last-child { border-bottom: none; }
-    .info-row .icon { font-size: 18px; width: 28px; text-align: center; }
-    .info-row .label { font-size: 12px; color: #888; }
-    .info-row .value { font-size: 14px; color: #333; font-weight: 600; }
+    .info-row .lbl { font-size: 12px; color: #888; }
+    .info-row .val { font-size: 14px; color: #333; font-weight: 600; }
     .info-row a { color: #0B6B3A; text-decoration: none; }
     .modal-author-footer { padding: 16px 24px; background: #f8f9fa; text-align: center; }
     .close-btn { padding: 10px 32px; background: #0B6B3A; color: white; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 15px; cursor: pointer; font-weight: 700; }
@@ -132,12 +160,77 @@
 </div>
 
 <div class="shell">
-  <div class="search-bar">
-    <span style="color:#0B6B3A;font-size:20px;">🔍</span>
-    <input id="q" type="search" placeholder="ابحث بالعنوان أو نوع المحتوى..." autocomplete="off">
-    <span class="pill" id="stats-pill">0 عنصر</span>
+
+  <!-- البحث المتقدم -->
+  <div class="search-section">
+    <div class="search-main">
+      <span class="icon">🔍</span>
+      <input id="q" type="search" placeholder="ابحث بالعنوان..." autocomplete="off">
+      <span class="pill" id="stats-pill">0 عنصر</span>
+    </div>
+    <button class="advanced-toggle" id="advanced-toggle" onclick="toggleAdvanced()">
+      ⚙️ بحث متقدم ▼
+    </button>
+    <div class="advanced-filters" id="advanced-filters">
+      <div class="filters-grid">
+        <div class="filter-item">
+          <label>نوع المحتوى</label>
+          <select id="f-type">
+            <option value="">— الكل —</option>
+            <option value="مقال">مقال</option>
+            <option value="فيديو">فيديو</option>
+            <option value="صور">صور</option>
+            <option value="انفوجرافيك">انفوجرافيك</option>
+            <option value="صوت">صوت</option>
+            <option value="بودكاست">بودكاست</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>الفئة المستهدفة</label>
+          <select id="f-audience">
+            <option value="">— الكل —</option>
+            <option value="الباحثين عن عمل">الباحثين عن عمل</option>
+            <option value="المعلمين">المعلمين</option>
+            <option value="طلاب المدارس">طلاب المدارس</option>
+            <option value="طلاب الجامعات">طلاب الجامعات</option>
+            <option value="طلاب المعاهد">طلاب المعاهد</option>
+            <option value="الموظفين">الموظفين</option>
+            <option value="أولياء الأمور">أولياء الأمور</option>
+            <option value="المرشدين المهنيين">المرشدين المهنيين</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>الكاتب</label>
+          <select id="f-author">
+            <option value="">— الكل —</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>حالة الملف</label>
+          <select id="f-file">
+            <option value="">— الكل —</option>
+            <option value="has">يوجد ملف مرفق</option>
+            <option value="none">بدون ملف</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>من تاريخ</label>
+          <input type="date" id="f-date-from">
+        </div>
+        <div class="filter-item">
+          <label>إلى تاريخ</label>
+          <input type="date" id="f-date-to">
+        </div>
+      </div>
+      <div class="filters-actions">
+        <button class="btn-filter btn-reset" onclick="resetFilters()">🔄 إعادة تعيين</button>
+        <button class="btn-filter btn-apply" onclick="applyFilters()">🔍 تطبيق البحث</button>
+      </div>
+    </div>
+    <div class="active-filters" id="active-filters" style="display:none;"></div>
   </div>
 
+  <!-- الإحصائيات -->
   <div class="stats-section">
     <h3>📊 إحصائيات المحتوى</h3>
     <div class="stats-grid">
@@ -146,18 +239,22 @@
     </div>
   </div>
 
+  <!-- قائمة المحتوى -->
   <div class="content-section">
-    <h3>📋 قائمة المحتوى</h3>
+    <h3>
+      <span>📋 قائمة المحتوى</span>
+      <span id="sort-label" style="font-size:13px;color:#888;font-weight:400;">ترتيب: الأحدث أولاً</span>
+    </h3>
     <div class="content-table-wrap">
       <table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>العنوان</th>
+            <th onclick="sortBy('num')"># ↕</th>
+            <th onclick="sortBy('title')">العنوان ↕</th>
             <th>النوع</th>
             <th>الفئة المستهدفة</th>
             <th>الكاتب</th>
-            <th>تاريخ النشر</th>
+            <th onclick="sortBy('date')">تاريخ النشر ↕</th>
             <th>إجراءات</th>
           </tr>
         </thead>
@@ -167,8 +264,14 @@
         <div class="icon">📭</div>
         <p>لا يوجد محتوى متاح حالياً</p>
       </div>
+      <div class="no-results" id="no-results" style="display:none;">
+        <div class="icon">🔍</div>
+        <p>لا توجد نتائج مطابقة للبحث</p>
+        <button class="btn-filter btn-reset" onclick="resetFilters()" style="margin-top:12px;">إعادة تعيين البحث</button>
+      </div>
     </div>
   </div>
+
 </div>
 
 <!-- نافذة بيانات الكاتب -->
@@ -242,7 +345,10 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let currentUser = null;
 let currentRole = null;
 let allItems = [];
+let filteredItems = [];
 let authorsMap = {};
+let sortField = 'date';
+let sortDir = 'desc';
 
 const typeLabels = {
   'مقال': { cls: 'badge-article', icon: '📄' },
@@ -253,6 +359,9 @@ const typeLabels = {
   'بودكاست': { cls: 'badge-podcast', icon: '🎙️' }
 };
 
+const roleMap = { admin: '🛡️ مشرف', editor: '✏️ محرر', viewer: '👁 قارئ', pending: '⏳ في الانتظار' };
+
+// ===== Auth =====
 async function checkAuth() {
   var { data } = await sb.auth.getSession();
   if (!data.session) { renderTopbar(null); return; }
@@ -283,47 +392,62 @@ function renderTopbar(profile) {
     b2.onclick = function(){ window.location.href = './upload.html'; };
     actions.appendChild(b2);
   }
-
-  // أيقونة حسابي
   var name = profile.full_name || currentUser.email || 'حسابي';
   var initial = name.charAt(0);
   var b4 = document.createElement('div');
   b4.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;padding:6px 14px;border-radius:10px;border:2px solid #0B6B3A;transition:all 0.2s;';
-  var avatarHtml = profile.avatar_url   ? '<img src="' + profile.avatar_url + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">'   : '<div style="width:32px;height:32px;border-radius:50%;background:#0B6B3A;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">' + initial + '</div>'; b4.innerHTML = avatarHtml + '<span style="font-size:14px;font-weight:600;color:#0B6B3A;">' + name.split(' ')[0] + '</span>';
+  var avatarHtml = profile.avatar_url
+    ? '<img src="' + profile.avatar_url + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">'
+    : '<div style="width:32px;height:32px;border-radius:50%;background:#0B6B3A;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">' + initial + '</div>';
+  b4.innerHTML = avatarHtml + '<span style="font-size:14px;font-weight:600;color:#0B6B3A;">' + name.split(' ')[0] + '</span>';
   b4.onmouseover = function(){ this.style.background='#e8f5ef'; };
   b4.onmouseout = function(){ this.style.background='transparent'; };
   b4.onclick = function(){ window.location.href = './profile.html'; };
   actions.appendChild(b4);
-
   var b3 = document.createElement('button');
   b3.className = 'btn btn--ghost'; b3.textContent = 'خروج';
   b3.onclick = async function(){ await sb.auth.signOut(); window.location.reload(); };
   actions.appendChild(b3);
 }
 
+// ===== تحميل المحتوى =====
 async function loadContent() {
   var { data } = await sb.from('content').select('*').eq('is_hidden', false).order('created_at', { ascending: false });
   allItems = data || [];
 
   var authorIds = [...new Set(allItems.filter(function(i){ return i.created_by; }).map(function(i){ return i.created_by; }))];
   if (authorIds.length > 0) {
-    var { data: profiles } = await sb.from('profiles')
-      .select('id, full_name, email, role, organization, city, phone, linkedin')
-      .in('id', authorIds);
-    if (profiles) profiles.forEach(function(p){ authorsMap[p.id] = p; });
+    var { data: profiles } = await sb.from('profiles').select('id, full_name, email, role, organization, city, phone, linkedin, avatar_url').in('id', authorIds);
+    if (profiles) {
+      profiles.forEach(function(p){ authorsMap[p.id] = p; });
+      populateAuthorFilter(profiles);
+    }
   }
 
+  filteredItems = [...allItems];
   updateHeroStats();
   updateProgressStats();
   render();
 }
 
+function populateAuthorFilter(profiles) {
+  var select = document.getElementById('f-author');
+  profiles.forEach(function(p) {
+    var opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.full_name || p.email || 'مجهول';
+    select.appendChild(opt);
+  });
+}
+
+// ===== Hero Stats =====
 function updateHeroStats() {
   document.getElementById('hero-total').textContent = allItems.length;
   document.getElementById('hero-authors').textContent = new Set(allItems.filter(function(i){ return i.created_by; }).map(function(i){ return i.created_by; })).size;
   document.getElementById('hero-types').textContent = new Set(allItems.map(function(i){ return i.content_type; })).size;
 }
 
+// ===== شرائط التقدم =====
 function updateProgressStats() {
   var total = allItems.length || 1;
   var typeCounts = {};
@@ -332,7 +456,7 @@ function updateProgressStats() {
   Object.keys(typeCounts).sort(function(a,b){ return typeCounts[b]-typeCounts[a]; }).forEach(function(key) {
     var pct = Math.round((typeCounts[key]/total)*100);
     var info = typeLabels[key] || { icon: '📄' };
-    typeHtml += '<div class="progress-item"><div class="progress-label"><span>' + (info.icon||'') + ' ' + key + '</span><strong>' + typeCounts[key] + ' (' + pct + '%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
+    typeHtml += '<div class="progress-item"><div class="progress-label"><span onclick="quickFilter(\'type\',\''+key+'\')">' + (info.icon||'') + ' ' + key + '</span><strong>' + typeCounts[key] + ' (' + pct + '%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
   });
   document.getElementById('type-stats').innerHTML = typeHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد محتوى</p>';
 
@@ -341,31 +465,156 @@ function updateProgressStats() {
   var targetHtml = '';
   Object.keys(targetCounts).sort(function(a,b){ return targetCounts[b]-targetCounts[a]; }).forEach(function(key) {
     var pct = Math.round((targetCounts[key]/total)*100);
-    targetHtml += '<div class="progress-item"><div class="progress-label"><span>' + key + '</span><strong>' + targetCounts[key] + ' (' + pct + '%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
+    targetHtml += '<div class="progress-item"><div class="progress-label"><span onclick="quickFilter(\'audience\',\''+key+'\')">' + key + '</span><strong>' + targetCounts[key] + ' (' + pct + '%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
   });
   document.getElementById('target-stats').innerHTML = targetHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد محتوى</p>';
 }
 
+// ===== البحث المتقدم =====
+function toggleAdvanced() {
+  var filters = document.getElementById('advanced-filters');
+  var toggle = document.getElementById('advanced-toggle');
+  if (filters.classList.contains('open')) {
+    filters.classList.remove('open');
+    toggle.textContent = '⚙️ بحث متقدم ▼';
+  } else {
+    filters.classList.add('open');
+    toggle.textContent = '⚙️ بحث متقدم ▲';
+  }
+}
+
+function applyFilters() {
+  var q = document.getElementById('q').value.toLowerCase().trim();
+  var type = document.getElementById('f-type').value;
+  var audience = document.getElementById('f-audience').value;
+  var author = document.getElementById('f-author').value;
+  var file = document.getElementById('f-file').value;
+  var dateFrom = document.getElementById('f-date-from').value;
+  var dateTo = document.getElementById('f-date-to').value;
+
+  filteredItems = allItems.filter(function(i) {
+    if (q && !i.title.toLowerCase().includes(q)) return false;
+    if (type && i.content_type !== type) return false;
+    if (audience && i.target_audience !== audience) return false;
+    if (author && i.created_by !== author) return false;
+    if (file === 'has' && !i.file_url) return false;
+    if (file === 'none' && i.file_url) return false;
+    if (dateFrom && new Date(i.created_at) < new Date(dateFrom)) return false;
+    if (dateTo && new Date(i.created_at) > new Date(dateTo + 'T23:59:59')) return false;
+    return true;
+  });
+
+  updateActiveTags(q, type, audience, author, file, dateFrom, dateTo);
+  render();
+}
+
+function quickFilter(field, value) {
+  if (field === 'type') { document.getElementById('f-type').value = value; }
+  if (field === 'audience') { document.getElementById('f-audience').value = value; }
+  document.getElementById('advanced-filters').classList.add('open');
+  document.getElementById('advanced-toggle').textContent = '⚙️ بحث متقدم ▲';
+  applyFilters();
+}
+
+function updateActiveTags(q, type, audience, author, file, dateFrom, dateTo) {
+  var tags = [];
+  if (q) tags.push({ label: 'بحث: ' + q, clear: function(){ document.getElementById('q').value=''; } });
+  if (type) tags.push({ label: 'النوع: ' + type, clear: function(){ document.getElementById('f-type').value=''; } });
+  if (audience) tags.push({ label: 'الفئة: ' + audience, clear: function(){ document.getElementById('f-audience').value=''; } });
+  if (author) {
+    var a = authorsMap[author];
+    tags.push({ label: 'الكاتب: ' + (a ? (a.full_name || a.email) : author), clear: function(){ document.getElementById('f-author').value=''; } });
+  }
+  if (file === 'has') tags.push({ label: 'يوجد ملف', clear: function(){ document.getElementById('f-file').value=''; } });
+  if (file === 'none') tags.push({ label: 'بدون ملف', clear: function(){ document.getElementById('f-file').value=''; } });
+  if (dateFrom) tags.push({ label: 'من: ' + dateFrom, clear: function(){ document.getElementById('f-date-from').value=''; } });
+  if (dateTo) tags.push({ label: 'إلى: ' + dateTo, clear: function(){ document.getElementById('f-date-to').value=''; } });
+
+  var container = document.getElementById('active-filters');
+  if (tags.length === 0) { container.style.display = 'none'; return; }
+  container.style.display = 'flex';
+  container.innerHTML = '<span style="font-size:13px;color:#888;margin-left:8px;">الفلاتر النشطة:</span>';
+  tags.forEach(function(tag, idx) {
+    var div = document.createElement('div');
+    div.className = 'filter-tag';
+    div.innerHTML = tag.label + '<button onclick="clearTag(' + idx + ')">✕</button>';
+    container.appendChild(div);
+  });
+  window._activeTags = tags;
+}
+
+function clearTag(idx) {
+  if (window._activeTags && window._activeTags[idx]) {
+    window._activeTags[idx].clear();
+    applyFilters();
+  }
+}
+
+function resetFilters() {
+  document.getElementById('q').value = '';
+  document.getElementById('f-type').value = '';
+  document.getElementById('f-audience').value = '';
+  document.getElementById('f-author').value = '';
+  document.getElementById('f-file').value = '';
+  document.getElementById('f-date-from').value = '';
+  document.getElementById('f-date-to').value = '';
+  filteredItems = [...allItems];
+  document.getElementById('active-filters').style.display = 'none';
+  render();
+}
+
+// ===== الترتيب =====
+function sortBy(field) {
+  if (sortField === field) { sortDir = sortDir === 'asc' ? 'desc' : 'asc'; }
+  else { sortField = field; sortDir = 'asc'; }
+  var labels = { num: 'الرقم', title: 'العنوان', date: 'التاريخ' };
+  document.getElementById('sort-label').textContent = 'ترتيب: ' + (labels[field] || field) + ' (' + (sortDir === 'asc' ? 'تصاعدي' : 'تنازلي') + ')';
+  render();
+}
+
+// ===== Render =====
 function render() {
   var tbody = document.getElementById('rows');
-  var search = document.getElementById('q').value.toLowerCase();
-  var filtered = allItems.filter(function(i){ return !search || i.title.toLowerCase().includes(search) || (i.content_type||'').includes(search); });
-  document.getElementById('stats-pill').textContent = filtered.length + ' عنصر';
-  if (filtered.length === 0) { tbody.innerHTML = ''; document.getElementById('empty-state').style.display = 'block'; return; }
+  var sorted = [...filteredItems].sort(function(a, b) {
+    var dir = sortDir === 'asc' ? 1 : -1;
+    if (sortField === 'title') return dir * a.title.localeCompare(b.title, 'ar');
+    if (sortField === 'date') return dir * (new Date(a.created_at) - new Date(b.created_at));
+    return 0;
+  });
+
+  document.getElementById('stats-pill').textContent = sorted.length + ' عنصر';
+
+  if (allItems.length === 0) {
+    tbody.innerHTML = '';
+    document.getElementById('empty-state').style.display = 'block';
+    document.getElementById('no-results').style.display = 'none';
+    return;
+  }
   document.getElementById('empty-state').style.display = 'none';
+
+  if (sorted.length === 0) {
+    tbody.innerHTML = '';
+    document.getElementById('no-results').style.display = 'block';
+    return;
+  }
+  document.getElementById('no-results').style.display = 'none';
+
   tbody.innerHTML = '';
-  filtered.forEach(function(item, idx) {
+  sorted.forEach(function(item, idx) {
     var info = typeLabels[item.content_type] || { cls: 'badge-default', icon: '📄' };
     var author = item.created_by ? authorsMap[item.created_by] : null;
     var authorName = author ? (author.full_name || author.email || 'مجهول') : 'غير محدد';
     var date = item.created_at ? new Date(item.created_at).toLocaleDateString('ar-SA') : '-';
+    var avatarContent = author && author.avatar_url
+      ? '<img src="' + author.avatar_url + '">'
+      : authorName.charAt(0);
     var tr = document.createElement('tr');
     tr.innerHTML =
       '<td style="color:#888;font-weight:700;">' + String(idx+1).padStart(3,'0') + '</td>' +
       '<td style="font-weight:700;">' + item.title + '</td>' +
       '<td><span class="badge ' + info.cls + '">' + (info.icon||'') + ' ' + (item.content_type||'-') + '</span></td>' +
       '<td style="color:#555;">' + (item.target_audience||'-') + '</td>' +
-      '<td><div class="author-cell"><div class="avatar">' + authorName.charAt(0) + '</div><div class="author-info"><h5>' + authorName + '</h5><span>' + date + '</span></div>' + (author ? '<button class="btn-author" onclick="showAuthor(\'' + item.created_by + '\')">بيانات</button>' : '') + '</div></td>' +
+      '<td><div class="author-cell"><div class="avatar">' + avatarContent + '</div><div class="author-info"><h5>' + authorName + '</h5><span>' + date + '</span></div>' + (author ? '<button class="btn-author" onclick="showAuthor(\'' + item.created_by + '\')">بيانات</button>' : '') + '</div></td>' +
       '<td style="color:#888;font-size:13px;">' + date + '</td>' +
       '<td><div class="action-btns"><button class="btn-view" onclick="window.location.href=\'./view.html?id=' + item.id + '\'">👁 عرض</button>' +
       (currentRole === 'admin' ? '<button class="btn-edit" onclick="editItem(' + item.id + ')">تعديل</button><button class="btn-delete" onclick="deleteItem(' + item.id + ')">حذف</button>' : '') +
@@ -374,24 +623,26 @@ function render() {
   });
 }
 
+// ===== بيانات الكاتب =====
 function showAuthor(id) {
   var a = authorsMap[id];
   if (!a) return;
   var name = a.full_name || a.email || 'مجهول';
-  document.getElementById('author-avatar').textContent = name.charAt(0);
+  var avatarContent = a.avatar_url ? '<img src="' + a.avatar_url + '">' : name.charAt(0);
+  document.getElementById('author-avatar').innerHTML = avatarContent;
   document.getElementById('author-name').textContent = name;
-  var roleMap = { admin: '🛡️ مشرف', editor: '✏️ محرر', viewer: '👁 قارئ', pending: '⏳ في الانتظار' };
   document.getElementById('author-role').textContent = roleMap[a.role] || a.role;
   var html = '';
-  if (a.email) html += '<div class="info-row"><span class="icon">📧</span><div><div class="label">البريد الإلكتروني</div><div class="value">' + a.email + '</div></div></div>';
-  if (a.organization) html += '<div class="info-row"><span class="icon">🏢</span><div><div class="label">جهة العمل</div><div class="value">' + a.organization + '</div></div></div>';
-  if (a.city) html += '<div class="info-row"><span class="icon">📍</span><div><div class="label">المدينة</div><div class="value">' + a.city + '</div></div></div>';
-  if (currentRole === 'admin' && a.phone) html += '<div class="info-row"><span class="icon">📞</span><div><div class="label">رقم الهاتف</div><div class="value">' + a.phone + '</div></div></div>';
-  if (a.linkedin) html += '<div class="info-row"><span class="icon">🔗</span><div><div class="label">LinkedIn</div><div class="value"><a href="' + a.linkedin + '" target="_blank">عرض الملف الشخصي</a></div></div></div>';
+  if (a.email) html += '<div class="info-row"><span style="font-size:18px;width:28px;text-align:center;">📧</span><div><div class="lbl">البريد الإلكتروني</div><div class="val">' + a.email + '</div></div></div>';
+  if (a.organization) html += '<div class="info-row"><span style="font-size:18px;width:28px;text-align:center;">🏢</span><div><div class="lbl">جهة العمل</div><div class="val">' + a.organization + '</div></div></div>';
+  if (a.city) html += '<div class="info-row"><span style="font-size:18px;width:28px;text-align:center;">📍</span><div><div class="lbl">المدينة</div><div class="val">' + a.city + '</div></div></div>';
+  if (currentRole === 'admin' && a.phone) html += '<div class="info-row"><span style="font-size:18px;width:28px;text-align:center;">📞</span><div><div class="lbl">رقم الهاتف</div><div class="val">' + a.phone + '</div></div></div>';
+  if (a.linkedin) html += '<div class="info-row"><span style="font-size:18px;width:28px;text-align:center;">🔗</span><div><div class="lbl">LinkedIn</div><div class="val"><a href="' + a.linkedin + '" target="_blank">عرض الملف الشخصي ↗</a></div></div></div>';
   document.getElementById('author-body').innerHTML = html;
   document.getElementById('author-modal').className = 'modal-bg on';
 }
 
+// ===== تعديل وحذف =====
 function editItem(id) {
   var item = allItems.find(function(x){ return x.id === id; });
   if (!item) return;
@@ -419,9 +670,16 @@ document.getElementById('form').addEventListener('submit', async function(e) {
 
 document.getElementById('btnClose').addEventListener('click', function(){ document.getElementById('modal').className = 'modal-edit'; });
 document.getElementById('btnCancel').addEventListener('click', function(){ document.getElementById('modal').className = 'modal-edit'; });
-document.getElementById('q').addEventListener('input', render);
 
-async function init() { await checkAuth(); await loadContent(); }
+// البحث الفوري
+document.getElementById('q').addEventListener('input', function() {
+  applyFilters();
+});
+
+async function init() {
+  await checkAuth();
+  await loadContent();
+}
 init();
 </script>
 </body>
