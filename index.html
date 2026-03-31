@@ -492,7 +492,7 @@ function renderMobileMenu(profile) {
   var userSection = document.getElementById('mobile-user-section');
   var btns = document.getElementById('mobile-menu-btns');
   if (!profile) {
-    userSection.innerHTML = '';
+    userSection.innerHTML = '<div style="padding:16px 0;border-bottom:1px solid #eee;margin-bottom:16px;text-align:center;color:#888;font-size:14px;">غير مسجل الدخول</div>';
     btns.innerHTML = '<button class="mobile-menu__btn green" onclick="window.location.href=\'./auth.html\'">🔑 تسجيل الدخول</button>';
     return;
   }
