@@ -64,58 +64,8 @@
   padding: 36px 20px 44px;
   color: white;
   text-align: center;
-  position: relative;
-  overflow: hidden;
 }
-.hero::before {
-  content: '';
-  position: absolute;
-  bottom: -80px;
-  right: -80px;
-  width: 280px;
-  height: 280px;
-  background: #df7c2e;
-  border-radius: 50%;
-  opacity: 0.9;
-  z-index: 0;
-}
-.hero::after {
-  content: '';
-  position: absolute;
-  top: -30px;
-  left: 38%;
-  width: 22px;
-  height: 160%;
-  background: linear-gradient(180deg, #00ac65, #005187);
-  transform: rotate(-20deg);
-  opacity: 0.8;
-  z-index: 0;
-}
-.hero-dot {
-  position: absolute;
-  top: 20px;
-  left: 60px;
-  width: 120px;
-  height: 120px;
-  border: 3px solid rgba(223,124,46,0.3);
-  border-radius: 50%;
-  z-index: 0;
-}
-.hero-dot2 {
-  position: absolute;
-  bottom: 30px;
-  left: 10%;
-  width: 60px;
-  height: 60px;
-  background: rgba(0,172,101,0.2);
-  border-radius: 50%;
-  z-index: 0;
-}
-.hero h2, .hero p, .hero-stats { position: relative; z-index: 1; }    .hero h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
-    .hero p { font-size: 14px; opacity: 0.88; max-width: 500px; margin: 0 auto 24px; }
-    .hero-stats { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
-    .hero-stat .num { font-size: 36px; font-weight: 800; }
-    .hero-stat .lbl { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+.hero h2, .hero p, .hero-stats { position: relative; z-index: 1; }
 
     /* ===== Shell ===== */
     .shell { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
