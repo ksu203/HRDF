@@ -9,19 +9,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Tajawal', sans-serif;
-      background: linear-gradient(135deg, #f0f4f8 0%, #e8f5ef 100%);
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-    }
-    .container {
-      background: white; padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-      width: 100%; max-width: 480px;
-    }
+    body { font-family: 'Tajawal', sans-serif; background: linear-gradient(135deg, #f0f4f8 0%, #e8f5ef 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); width: 100%; max-width: 480px; }
     .logo { text-align: center; margin-bottom: 16px; }
     .logo img { width: 80px; }
     h2 { text-align: center; color: #0B6B3A; margin-bottom: 4px; font-size: 22px; }
@@ -33,28 +22,11 @@
     .panel.on { display: block; }
     .field { margin-bottom: 14px; }
     .field label { display: block; margin-bottom: 5px; font-size: 14px; color: #444; font-weight: 600; }
-    .field input, .field select {
-      width: 100%; padding: 11px 14px;
-      border: 1.5px solid #ddd; border-radius: 10px;
-      font-family: 'Tajawal', sans-serif; font-size: 15px;
-      transition: border 0.2s;
-    }
+    .field input, .field select { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 15px; transition: border 0.2s; }
     .field input:focus, .field select:focus { outline: none; border-color: #0B6B3A; }
-    .section-title {
-      font-size: 13px; color: #0B6B3A; font-weight: 700;
-      margin: 18px 0 12px; padding-bottom: 6px;
-      border-bottom: 1px solid #e8f5ef;
-    }
+    .section-title { font-size: 13px; color: #0B6B3A; font-weight: 700; margin: 18px 0 12px; padding-bottom: 6px; border-bottom: 1px solid #e8f5ef; }
     .optional { color: #aaa; font-weight: 400; font-size: 12px; }
-    .btn {
-      width: 100%; padding: 13px;
-      background: #0B6B3A; color: white;
-      border: none; border-radius: 10px;
-      font-family: 'Tajawal', sans-serif;
-      font-size: 16px; font-weight: 700;
-      cursor: pointer; margin-top: 8px;
-      transition: background 0.2s;
-    }
+    .btn { width: 100%; padding: 13px; background: #0B6B3A; color: white; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
     .btn:hover { background: #094d2a; }
     .msg { margin-top: 14px; padding: 12px; border-radius: 10px; text-align: center; font-size: 14px; display: none; }
     .msg.ok { background: #d4edda; color: #155724; display: block; }
@@ -88,28 +60,12 @@
 
   <!-- حساب جديد -->
   <div class="panel" id="p2">
-
     <div class="section-title">📋 المعلومات الأساسية</div>
-
-    <div class="field">
-      <label>الاسم الكامل *</label>
-      <input type="text" id="r-name" placeholder="الاسم الكامل">
-    </div>
-    <div class="field">
-      <label>البريد الإلكتروني *</label>
-      <input type="email" id="r-email" placeholder="example@email.com">
-    </div>
-    <div class="field">
-      <label>كلمة المرور *</label>
-      <input type="password" id="r-pass" placeholder="••••••••">
-    </div>
-
+    <div class="field"><label>الاسم الكامل *</label><input type="text" id="r-name" placeholder="الاسم الكامل"></div>
+    <div class="field"><label>البريد الإلكتروني *</label><input type="email" id="r-email" placeholder="example@email.com"></div>
+    <div class="field"><label>كلمة المرور *</label><input type="password" id="r-pass" placeholder="••••••••"></div>
     <div class="section-title">🏢 معلومات العمل</div>
-
-    <div class="field">
-      <label>جهة العمل *</label>
-      <input type="text" id="r-org" placeholder="اسم الجهة أو المؤسسة">
-    </div>
+    <div class="field"><label>جهة العمل *</label><input type="text" id="r-org" placeholder="اسم الجهة أو المؤسسة"></div>
     <div class="field">
       <label>المدينة *</label>
       <select id="r-city">
@@ -134,18 +90,9 @@
         <option value="أخرى">أخرى</option>
       </select>
     </div>
-    <div class="field">
-      <label>رقم الهاتف <span class="optional">(سري — يظهر للمشرفين فقط)</span></label>
-      <input type="tel" id="r-phone" placeholder="05xxxxxxxx">
-    </div>
-
+    <div class="field"><label>رقم الهاتف <span class="optional">(سري — يظهر للمشرفين فقط)</span></label><input type="tel" id="r-phone" placeholder="05xxxxxxxx"></div>
     <div class="section-title">🔗 معلومات اختيارية <span class="optional">(اختياري)</span></div>
-
-    <div class="field">
-      <label>رابط LinkedIn <span class="optional">(اختياري)</span></label>
-      <input type="url" id="r-linkedin" placeholder="https://linkedin.com/in/...">
-    </div>
-
+    <div class="field"><label>رابط LinkedIn <span class="optional">(اختياري)</span></label><input type="url" id="r-linkedin" placeholder="https://linkedin.com/in/..."></div>
     <button class="btn" id="btn-register">إنشاء حساب</button>
     <div class="msg" id="r-msg"></div>
   </div>
@@ -156,7 +103,6 @@ const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// التبويب
 document.getElementById('t1').addEventListener('click', function() {
   document.getElementById('t1').className = 'tab on';
   document.getElementById('t2').className = 'tab';
@@ -170,37 +116,45 @@ document.getElementById('t2').addEventListener('click', function() {
   document.getElementById('p1').className = 'panel';
 });
 
-// تسجيل الدخول
 document.getElementById('btn-login').addEventListener('click', async function() {
   var email = document.getElementById('l-email').value;
   var pass = document.getElementById('l-pass').value;
   var msg = document.getElementById('l-msg');
   msg.className = 'msg';
+
+  if (!email || !pass) {
+    msg.className = 'msg err';
+    msg.textContent = 'يرجى إدخال البريد الإلكتروني وكلمة المرور';
+    return;
+  }
+
   var res = await sb.auth.signInWithPassword({ email: email, password: pass });
+
   if (res.error) {
     msg.className = 'msg err';
     msg.textContent = 'خطأ في البريد الإلكتروني أو كلمة المرور';
-  } else {
-    msg.className = 'msg ok';
- msg.textContent = 'تم تسجيل الدخول، جاري التحويل...';
-    var userId = res.data.user.id;
-    var profileRes = await sb.from('profiles').select('role').eq('id', userId).single();
-    var role = profileRes.data ? profileRes.data.role : 'pending';
-  var userId = res.data.user.id;
-    var profileRes = await sb.from('profiles').select('role').eq('id', userId).single();
-    var role = profileRes.data ? profileRes.data.role : 'pending';
-    setTimeout(function(){
-      if (role === 'admin') {
-        window.location.href = './admin.html';
-      } else if (role === 'editor' || role === 'viewer') {
-        window.location.href = './index.html';
-      } else {
-        msg.textContent = 'حسابك في انتظار منح الصلاحية من المشرف ⏳';
-        msg.className = 'msg err';
-      }
-    }, 1500);
+    return;
+  }
 
-// إنشاء حساب
+  msg.className = 'msg ok';
+  msg.textContent = 'تم تسجيل الدخول، جاري التحويل...';
+
+  var userId = res.data.user.id;
+  var profileRes = await sb.from('profiles').select('role').eq('id', userId).single();
+  var role = profileRes.data ? profileRes.data.role : 'pending';
+
+  setTimeout(function() {
+    if (role === 'admin') {
+      window.location.href = './admin.html';
+    } else if (role === 'editor' || role === 'viewer') {
+      window.location.href = './index.html';
+    } else {
+      msg.textContent = 'حسابك في انتظار منح الصلاحية من المشرف ⏳';
+      msg.className = 'msg err';
+    }
+  }, 1500);
+});
+
 document.getElementById('btn-register').addEventListener('click', async function() {
   var name = document.getElementById('r-name').value.trim();
   var email = document.getElementById('r-email').value.trim();
@@ -225,7 +179,6 @@ document.getElementById('btn-register').addEventListener('click', async function
     return;
   }
 
-  // تحديث الملف الشخصي
   if (res.data && res.data.user) {
     await sb.from('profiles').update({
       full_name: name,
