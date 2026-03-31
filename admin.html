@@ -93,13 +93,50 @@
 
 <div class="content">
 
-  <!-- المستخدمون -->
+ <!-- المستخدمون -->
   <div class="section on" id="s1">
     <div class="stats">
       <div class="stat-card"><div class="num" id="cnt-total">-</div><div class="lbl">إجمالي المستخدمين</div></div>
       <div class="stat-card"><div class="num" id="cnt-pending">-</div><div class="lbl">في انتظار الموافقة</div></div>
       <div class="stat-card"><div class="num" id="cnt-active">-</div><div class="lbl">مفعّلون</div></div>
     </div>
+
+    <!-- نموذج إضافة حساب جديد -->
+    <div class="card" style="margin-bottom:24px;">
+      <div class="card-header" id="add-user-header" style="cursor:pointer;" onclick="toggleAddUser()">
+        <h3>➕ إضافة حساب جديد</h3>
+        <span id="add-user-arrow">▼</span>
+      </div>
+      <div id="add-user-form" style="display:none;padding:24px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="field">
+            <label style="display:block;margin-bottom:5px;font-size:14px;color:#444;font-weight:600;">الاسم الكامل *</label>
+            <input type="text" id="new-admin-name" placeholder="اسم المستخدم" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;">
+          </div>
+          <div class="field">
+            <label style="display:block;margin-bottom:5px;font-size:14px;color:#444;font-weight:600;">البريد الإلكتروني *</label>
+            <input type="email" id="new-admin-email" placeholder="example@email.com" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;">
+          </div>
+          <div class="field">
+            <label style="display:block;margin-bottom:5px;font-size:14px;color:#444;font-weight:600;">كلمة المرور *</label>
+            <input type="password" id="new-admin-pass" placeholder="6 أحرف على الأقل" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;">
+          </div>
+          <div class="field">
+            <label style="display:block;margin-bottom:5px;font-size:14px;color:#444;font-weight:600;">الصلاحية *</label>
+            <select id="new-admin-role" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;">
+              <option value="admin">admin — مشرف كامل</option>
+              <option value="editor">editor — محرر</option>
+              <option value="viewer">viewer — قارئ</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:16px;display:flex;align-items:center;gap:12px;">
+          <button class="btn btn-green" id="btn-create-admin" style="padding:10px 28px;font-size:15px;">➕ إنشاء الحساب</button>
+          <div id="create-admin-msg" style="font-size:14px;display:none;padding:8px 16px;border-radius:8px;"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-header"><h3>قائمة المستخدمين</h3></div>
       <table>
