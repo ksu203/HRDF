@@ -14,13 +14,20 @@
     .header-btns { display: flex; gap: 10px; }
     .header button { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px; }
     .container { max-width: 800px; margin: 40px auto; padding: 0 20px 60px; }
-
-    /* بطاقة الملف الشخصي */
     .profile-card { background: white; border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 24px; }
-    .profile-header { background: linear-gradient(135deg, #0B6B3A, #1a9a5c); padding: 40px; text-align: center; color: white; }
-    .avatar-xl { width: 100px; height: 100px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; font-size: 40px; font-weight: 800; margin: 0 auto 16px; border: 4px solid rgba(255,255,255,0.4); }
+    .profile-header { background: linear-gradient(135deg, #0B6B3A, #1a9a5c); padding: 40px; text-align: center; color: white; position: relative; }
+
+    /* الصورة الشخصية */
+    .avatar-wrap { position: relative; width: 110px; height: 110px; margin: 0 auto 16px; }
+    .avatar-xl { width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; font-size: 44px; font-weight: 800; border: 4px solid rgba(255,255,255,0.4); overflow: hidden; }
+    .avatar-xl img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-upload-btn { position: absolute; bottom: 4px; left: 4px; width: 32px; height: 32px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 16px; transition: transform 0.2s; }
+    .avatar-upload-btn:hover { transform: scale(1.1); }
+    .avatar-upload-input { display: none; }
+    .upload-hint { font-size: 12px; opacity: 0.7; margin-bottom: 12px; }
+
     .profile-header h2 { font-size: 24px; margin-bottom: 6px; }
-    .profile-header .role-badge { background: rgba(255,255,255,0.2); padding: 5px 16px; border-radius: 20px; font-size: 14px; display: inline-block; }
+    .role-badge { background: rgba(255,255,255,0.2); padding: 5px 16px; border-radius: 20px; font-size: 14px; display: inline-block; }
     .profile-body { padding: 32px; }
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
     .info-item { background: #f8f9fa; border-radius: 12px; padding: 16px; }
@@ -29,8 +36,6 @@
     .info-item .val a { color: #0B6B3A; text-decoration: none; }
     .info-item.private { border: 1.5px dashed #ffc107; background: #fffdf0; }
     .info-item.private .lbl::after { content: ' 🔒'; }
-
-    /* نموذج التعديل */
     .edit-card { background: white; border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 32px; margin-bottom: 24px; }
     .edit-card h3 { font-size: 18px; color: #333; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #e8f5ef; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -44,10 +49,8 @@
     .msg { margin-top: 14px; padding: 12px; border-radius: 10px; text-align: center; font-size: 14px; display: none; }
     .msg.ok { background: #d4edda; color: #155724; display: block; }
     .msg.err { background: #f8d7da; color: #721c24; display: block; }
-
-    /* محتوى المستخدم */
     .content-card { background: white; border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
-    .content-card-header { padding: 20px 28px; border-bottom: 2px solid #e8f5ef; display: flex; align-items: center; justify-content: space-between; }
+    .content-card-header { padding: 20px 28px; border-bottom: 2px solid #e8f5ef; }
     .content-card-header h3 { font-size: 17px; color: #333; }
     .content-item { padding: 16px 28px; border-bottom: 1px solid #f5f5f5; display: flex; align-items: center; justify-content: space-between; }
     .content-item:last-child { border-bottom: none; }
@@ -59,12 +62,11 @@
     .badge-images { background: #cce5ff; color: #004085; }
     .badge-default { background: #f0f0f0; color: #555; }
     .empty { text-align: center; padding: 40px; color: #aaa; }
-
-    /* Admin controls */
-    .admin-bar { background: #fff3cd; border: 1.5px solid #ffc107; border-radius: 12px; padding: 14px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
+    .admin-bar { background: #fff3cd; border: 1.5px solid #ffc107; border-radius: 12px; padding: 14px 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
     .admin-bar span { font-size: 14px; color: #856404; font-weight: 600; }
     .admin-bar select { padding: 8px 14px; border: 1.5px solid #ffc107; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; background: white; cursor: pointer; }
     .admin-bar button { padding: 8px 20px; background: #0B6B3A; color: white; border: none; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; cursor: pointer; font-weight: 700; }
+    .uploading { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 8px; display: none; }
   </style>
 </head>
 <body>
@@ -90,7 +92,7 @@ const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const params = new URLSearchParams(window.location.search);
-const viewId = params.get('id'); // إذا كان Admin يشاهد ملف شخص آخر
+const viewId = params.get('id');
 
 let currentUser = null;
 let currentRole = null;
@@ -99,16 +101,16 @@ let targetProfile = null;
 const roleMap = { admin: '🛡️ مشرف', editor: '✏️ محرر', viewer: '👁 قارئ', pending: '⏳ في الانتظار' };
 const typeMap = { 'مقال': 'badge-article', 'فيديو': 'badge-video', 'صور': 'badge-images' };
 
+const cities = ['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','الخبر','الظهران','الطائف','تبوك','أبها','القصيم','حائل','جازان','نجران','الباحة','سكاكا','عرعر','أخرى'];
+
 async function init() {
   var { data } = await sb.auth.getSession();
   if (!data.session) { window.location.href = './auth.html'; return; }
   currentUser = data.session.user;
 
-  var { data: profile } = await sb.from('profiles')
-    .select('*').eq('id', currentUser.id).single();
+  var { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   if (profile) currentRole = profile.role;
 
-  // تحديد الملف الشخصي المراد عرضه
   var targetId = viewId || currentUser.id;
   var { data: target } = await sb.from('profiles').select('*').eq('id', targetId).single();
   targetProfile = target;
@@ -130,12 +132,22 @@ function renderProfile(isOwnProfile, isAdmin) {
   var name = p.full_name || p.email || 'مجهول';
   var app = document.getElementById('app');
 
+  // الصورة
+  var avatarContent = p.avatar_url
+    ? '<img src="' + p.avatar_url + '" alt="صورة شخصية">'
+    : name.charAt(0).toUpperCase();
+
+  var uploadBtn = isOwnProfile ? `
+    <label class="avatar-upload-btn" for="avatar-input" title="تغيير الصورة">📷</label>
+    <input class="avatar-upload-input" type="file" id="avatar-input" accept="image/*">
+  ` : '';
+
   var adminBar = '';
   if (isAdmin && !isOwnProfile) {
     adminBar = `
       <div class="admin-bar">
         <span>🛡️ أنت تشاهد هذا الملف كمشرف</span>
-        <div style="display:flex;gap:10px;align-items:center;">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
           <select id="role-select">
             <option value="pending" ${p.role==='pending'?'selected':''}>pending — في الانتظار</option>
             <option value="viewer" ${p.role==='viewer'?'selected':''}>viewer — قارئ</option>
@@ -158,7 +170,8 @@ function renderProfile(isOwnProfile, isAdmin) {
           <div class="field">
             <label>المدينة</label>
             <select id="e-city">
-              ${['الرياض','جدة','مكة المكرمة','المدينة المنورة','الدمام','الخبر','الظهران','الطائف','تبوك','أبها','القصيم','حائل','جازان','نجران','الباحة','سكاكا','عرعر','أخرى'].map(function(c){ return '<option value="'+c+'" '+(p.city===c?'selected':'')+'>'+c+'</option>'; }).join('')}
+              <option value="">— اختر المدينة —</option>
+              ${cities.map(function(c){ return '<option value="'+c+'" '+(p.city===c?'selected':'')+'>'+c+'</option>'; }).join('')}
             </select>
           </div>
           <div class="field"><label>رقم الهاتف <span style="color:#aaa;font-size:12px;">(سري)</span></label><input type="tel" id="e-phone" value="${p.phone || ''}"></div>
@@ -173,7 +186,11 @@ function renderProfile(isOwnProfile, isAdmin) {
     ${adminBar}
     <div class="profile-card">
       <div class="profile-header">
-        <div class="avatar-xl">${name.charAt(0)}</div>
+        <div class="avatar-wrap">
+          <div class="avatar-xl" id="avatar-display">${avatarContent}</div>
+          ${uploadBtn}
+        </div>
+        <div class="uploading" id="upload-hint">جاري رفع الصورة...</div>
         <h2>${name}</h2>
         <span class="role-badge">${roleMap[p.role] || p.role}</span>
       </div>
@@ -204,13 +221,36 @@ function renderProfile(isOwnProfile, isAdmin) {
       </div>
     </div>
     ${editForm}
-    <div class="content-card" id="content-section">
-      <div class="content-card-header">
-        <h3>📋 المحتوى المرفوع</h3>
-      </div>
+    <div class="content-card">
+      <div class="content-card-header"><h3>📋 المحتوى المرفوع</h3></div>
       <div id="content-list"><div class="empty">جاري التحميل...</div></div>
     </div>
   `;
+
+  // تفعيل رفع الصورة
+  if (isOwnProfile) {
+    document.getElementById('avatar-input').addEventListener('change', async function() {
+      var file = this.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) { alert('حجم الصورة يجب أن يكون أقل من 2MB'); return; }
+
+      document.getElementById('upload-hint').style.display = 'block';
+
+      var fileName = 'avatar_' + currentUser.id + '_' + Date.now() + '.' + file.name.split('.').pop();
+      var { error } = await sb.storage.from('avatars').upload(fileName, file, { upsert: true });
+
+      if (error) { alert('خطأ في رفع الصورة: ' + error.message); document.getElementById('upload-hint').style.display = 'none'; return; }
+
+      var { data: urlData } = sb.storage.from('avatars').getPublicUrl(fileName);
+      var avatarUrl = urlData.publicUrl;
+
+      await sb.from('profiles').update({ avatar_url: avatarUrl }).eq('id', currentUser.id);
+
+      // تحديث الصورة مباشرة
+      document.getElementById('avatar-display').innerHTML = '<img src="' + avatarUrl + '" alt="صورة شخصية">';
+      document.getElementById('upload-hint').style.display = 'none';
+    });
+  }
 }
 
 async function saveProfile() {
@@ -246,17 +286,7 @@ async function loadUserContent(userId) {
     var date = new Date(c.created_at).toLocaleDateString('ar-SA');
     var cls = typeMap[c.content_type] || 'badge-default';
     var status = c.is_hidden ? '🙈 مخفي' : '👁 ظاهر';
-    html += `
-      <div class="content-item">
-        <div>
-          <div class="title">${c.title}</div>
-          <div class="meta">${date} — ${status}</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <span class="badge ${cls}">${c.content_type || '-'}</span>
-          <button onclick="window.location.href='./view.html?id=${c.id}'" style="padding:5px 12px;background:#0B6B3A;color:white;border:none;border-radius:6px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;">عرض</button>
-        </div>
-      </div>`;
+    html += '<div class="content-item"><div><div class="title">' + c.title + '</div><div class="meta">' + date + ' — ' + status + '</div></div><div style="display:flex;gap:8px;align-items:center;"><span class="badge ' + cls + '">' + (c.content_type||'-') + '</span><button onclick="window.location.href=\'./view.html?id=' + c.id + '\'" style="padding:5px 12px;background:#0B6B3A;color:white;border:none;border-radius:6px;cursor:pointer;font-family:\'Tajawal\',sans-serif;font-size:13px;">عرض</button></div></div>';
   });
   document.getElementById('content-list').innerHTML = html;
 }
