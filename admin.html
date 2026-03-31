@@ -9,45 +9,21 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; }
-    .header {
-      background: #0B6B3A; color: white;
-      padding: 14px 28px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    .header { background: #0B6B3A; color: white; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
     .header h1 { font-size: 18px; }
-    .header button {
-      background: rgba(255,255,255,0.2); color: white;
-      border: none; padding: 8px 16px; border-radius: 8px;
-      font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px;
-    }
-    .nav {
-      background: white; border-bottom: 2px solid #eee;
-      display: flex; padding: 0 28px;
-    }
-    .nav-tab {
-      padding: 14px 20px; cursor: pointer;
-      color: #888; font-size: 15px;
-      border-bottom: 2px solid transparent; margin-bottom: -2px;
-    }
+    .header button { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px; }
+    .nav { background: white; border-bottom: 2px solid #eee; display: flex; padding: 0 28px; }
+    .nav-tab { padding: 14px 20px; cursor: pointer; color: #888; font-size: 15px; border-bottom: 2px solid transparent; margin-bottom: -2px; }
     .nav-tab.on { color: #0B6B3A; border-bottom-color: #0B6B3A; font-weight: 700; }
     .content { padding: 28px; max-width: 1100px; margin: 0 auto; }
     .section { display: none; }
     .section.on { display: block; }
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
-    .stat-card {
-      background: white; border-radius: 12px; padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center;
-    }
+    .stat-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; }
     .stat-card .num { font-size: 36px; font-weight: 700; color: #0B6B3A; }
     .stat-card .lbl { color: #888; font-size: 14px; margin-top: 4px; }
-    .card {
-      background: white; border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden;
-    }
-    .card-header {
-      padding: 16px 20px; border-bottom: 1px solid #eee;
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    .card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden; }
+    .card-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; }
     .card-header h3 { font-size: 16px; color: #333; }
     table { width: 100%; border-collapse: collapse; }
     th { background: #f8f9fa; padding: 12px 16px; text-align: right; font-size: 13px; color: #666; }
@@ -64,36 +40,19 @@
     .badge-viewer { background: #cce5ff; color: #004085; }
     .badge-editor { background: #d4edda; color: #155724; }
     .badge-admin { background: #0B6B3A; color: white; }
-    .modal-bg {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.5); z-index: 100;
-      align-items: center; justify-content: center;
-    }
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
     .modal-bg.on { display: flex; }
-    .modal {
-      background: white; border-radius: 16px;
-      padding: 28px; width: 480px; max-width: 95vw;
-      max-height: 90vh; overflow-y: auto;
-    }
+    .modal { background: white; border-radius: 16px; padding: 28px; width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
     .modal h3 { margin-bottom: 20px; color: #333; }
     .field { margin-bottom: 14px; }
     .field label { display: block; margin-bottom: 5px; font-size: 14px; color: #444; }
-    .field input, .field select {
-      width: 100%; padding: 10px 14px;
-      border: 1px solid #ddd; border-radius: 8px;
-      font-family: 'Tajawal', sans-serif; font-size: 14px;
-    }
+    .field input, .field select, .field textarea { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
+    .field textarea { resize: vertical; min-height: 120px; }
     .field input[type="file"] { padding: 8px; }
     .modal-btns { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
     .empty { text-align: center; padding: 40px; color: #aaa; }
-    .progress-bar {
-      width: 100%; height: 6px; background: #eee;
-      border-radius: 4px; margin-top: 8px; display: none;
-    }
-    .progress-bar-fill {
-      height: 100%; background: #0B6B3A;
-      border-radius: 4px; width: 0%; transition: width 0.3s;
-    }
+    .progress-bar { width: 100%; height: 6px; background: #eee; border-radius: 4px; margin-top: 8px; display: none; }
+    .progress-bar-fill { height: 100%; background: #0B6B3A; border-radius: 4px; width: 0%; transition: width 0.3s; }
   </style>
 </head>
 <body>
@@ -111,7 +70,6 @@
 
 <div class="content">
 
-  <!-- قسم المستخدمين -->
   <div class="section on" id="s1">
     <div class="stats">
       <div class="stat-card"><div class="num" id="cnt-total">-</div><div class="lbl">إجمالي المستخدمين</div></div>
@@ -127,7 +85,6 @@
     </div>
   </div>
 
-  <!-- قسم المحتوى -->
   <div class="section" id="s2">
     <div class="card">
       <div class="card-header">
@@ -141,7 +98,6 @@
     </div>
   </div>
 
-  <!-- قسم التصنيفات -->
   <div class="section" id="s3">
     <div class="card">
       <div class="card-header">
@@ -161,10 +117,7 @@
 <div class="modal-bg" id="modal-role">
   <div class="modal">
     <h3>تغيير صلاحية المستخدم</h3>
-    <div class="field">
-      <label>البريد الإلكتروني</label>
-      <input type="text" id="role-email" readonly>
-    </div>
+    <div class="field"><label>البريد الإلكتروني</label><input type="text" id="role-email" readonly></div>
     <div class="field">
       <label>الدور الجديد</label>
       <select id="role-select">
@@ -217,17 +170,16 @@
         <option value="inactive">غير نشط</option>
       </select>
     </div>
-<div class="field" id="article-text-field" style="display:none;">
+    <!-- مربع نص المقال — يظهر فقط عند اختيار مقال -->
+    <div class="field" id="article-text-field" style="display:none;">
       <label>نص المقال</label>
-      <textarea id="c-article-text" rows="6" style="width:100%;padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;resize:vertical;" placeholder="اكتب أو الصق نص المقال هنا..."></textarea>
+      <textarea id="c-article-text" placeholder="اكتب أو الصق نص المقال هنا..."></textarea>
     </div>
     <div class="field">
       <label>رفع ملف (PDF، صورة، فيديو)</label>
       <input type="file" id="c-file" accept=".pdf,.jpg,.jpeg,.png,.mp4,.mp3">
       <small style="color:#888;font-size:12px;margin-top:4px;display:block">الحد الأقصى 50MB</small>
-      <div class="progress-bar" id="upload-progress">
-        <div class="progress-bar-fill" id="upload-progress-fill"></div>
-      </div>
+      <div class="progress-bar" id="upload-progress"><div class="progress-bar-fill" id="upload-progress-fill"></div></div>
       <div id="upload-status" style="font-size:13px;margin-top:6px;color:#0B6B3A;"></div>
     </div>
     <div class="modal-btns">
@@ -278,10 +230,6 @@ function setupTabs() {
   tabs.forEach(function(t) {
     document.getElementById(t.tab).addEventListener('click', function() {
       tabs.forEach(function(x) {
-   document.getElementById('c-type').addEventListener('change', function() {
-    var field = document.getElementById('article-text-field');
-    field.style.display = this.value === 'مقال' ? 'block' : 'none';
-  });
         document.getElementById(x.tab).className = 'nav-tab';
         document.getElementById(x.sec).className = 'section';
       });
@@ -342,17 +290,24 @@ async function loadContent() {
       ? '<a href="' + c.file_url + '" target="_blank" class="btn btn-gray">تحميل</a>'
       : '-';
     html += '<tr><td>' + c.title + '</td><td>' + (c.content_type || '-') + '</td><td>' + (c.target_audience || '-') + '</td><td>' + status + '</td><td>' + fileLink + '</td>';
-    html += '<td><button class="btn btn-blue" style="margin-left:6px" onclick="openEditContent(' + c.id + ',\'' + c.title + '\',\'' + c.content_type + '\',\'' + c.target_audience + '\',\'' + c.status + '\')">تعديل</button>';
+    html += '<td><button class="btn btn-blue" style="margin-left:6px" onclick="openEditContent(' + c.id + ',\'' + c.title + '\',\'' + c.content_type + '\',\'' + c.target_audience + '\',\'' + c.status + '\',\'' + (c.article_text || '') + '\')">تعديل</button>';
     html += '<button class="btn btn-red" onclick="deleteContent(' + c.id + ')">حذف</button></td></tr>';
   });
   document.getElementById('content-table').innerHTML = html || '<tr><td colspan="6" class="empty">لا يوجد محتوى</td></tr>';
 }
 
+// إظهار/إخفاء مربع نص المقال
+document.getElementById('c-type').addEventListener('change', function() {
+  document.getElementById('article-text-field').style.display = this.value === 'مقال' ? 'block' : 'none';
+});
+
 document.getElementById('btn-add-content').addEventListener('click', function() {
   editContentId = null;
   document.getElementById('content-modal-title').textContent = 'إضافة محتوى جديد';
   document.getElementById('c-title').value = '';
+  document.getElementById('c-article-text').value = '';
   document.getElementById('c-file').value = '';
+  document.getElementById('article-text-field').style.display = 'none';
   document.getElementById('upload-status').textContent = '';
   document.getElementById('upload-progress').style.display = 'none';
   document.getElementById('modal-content').className = 'modal-bg on';
@@ -362,13 +317,15 @@ document.getElementById('close-content').addEventListener('click', function() {
   document.getElementById('modal-content').className = 'modal-bg';
 });
 
-function openEditContent(id, title, type, audience, status) {
+function openEditContent(id, title, type, audience, status, articleText) {
   editContentId = id;
   document.getElementById('content-modal-title').textContent = 'تعديل المحتوى';
   document.getElementById('c-title').value = title;
   document.getElementById('c-type').value = type;
   document.getElementById('c-audience').value = audience;
   document.getElementById('c-status').value = status;
+  document.getElementById('c-article-text').value = articleText || '';
+  document.getElementById('article-text-field').style.display = type === 'مقال' ? 'block' : 'none';
   document.getElementById('c-file').value = '';
   document.getElementById('upload-status').textContent = '';
   document.getElementById('upload-progress').style.display = 'none';
@@ -389,36 +346,30 @@ document.getElementById('save-content').addEventListener('click', async function
   if (fileInput.files && fileInput.files[0]) {
     var file = fileInput.files[0];
     var fileName = Date.now() + '_' + file.name;
-
     document.getElementById('upload-progress').style.display = 'block';
     document.getElementById('upload-progress-fill').style.width = '30%';
     document.getElementById('upload-status').textContent = 'جاري رفع الملف...';
-
-    var { data: uploadData, error: uploadError } = await sb.storage
-      .from('content-files')
-      .upload(fileName, file);
-
+    var { error: uploadError } = await sb.storage.from('content-files').upload(fileName, file);
     if (uploadError) {
       alert('خطأ في رفع الملف: ' + uploadError.message);
       btn.textContent = 'حفظ';
       btn.disabled = false;
       return;
     }
-
     document.getElementById('upload-progress-fill').style.width = '100%';
     document.getElementById('upload-status').textContent = 'تم رفع الملف ✅';
-
     var { data: urlData } = sb.storage.from('content-files').getPublicUrl(fileName);
     fileUrl = urlData.publicUrl;
   }
 
-var obj = {
+  var contentType = document.getElementById('c-type').value;
+  var obj = {
     title: title,
-    content_type: document.getElementById('c-type').value,
+    content_type: contentType,
     target_audience: document.getElementById('c-audience').value,
     status: document.getElementById('c-status').value,
     created_by: currentUserId,
-    article_text: document.getElementById('c-article-text').value || null
+    article_text: contentType === 'مقال' ? document.getElementById('c-article-text').value : null
   };
   if (fileUrl) obj.file_url = fileUrl;
 
