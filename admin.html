@@ -15,7 +15,7 @@
     .nav { background: white; border-bottom: 2px solid #eee; display: flex; padding: 0 28px; }
     .nav-tab { padding: 14px 20px; cursor: pointer; color: #888; font-size: 15px; border-bottom: 2px solid transparent; margin-bottom: -2px; }
     .nav-tab.on { color: #0B6B3A; border-bottom-color: #0B6B3A; font-weight: 700; }
-    .content { padding: 28px; max-width: 1100px; margin: 0 auto; }
+    .content { padding: 28px; max-width: 1200px; margin: 0 auto; }
     .section { display: none; }
     .section.on { display: block; }
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
@@ -26,20 +26,25 @@
     .card-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-between; }
     .card-header h3 { font-size: 16px; color: #333; }
     table { width: 100%; border-collapse: collapse; }
-    th { background: #f8f9fa; padding: 12px 16px; text-align: right; font-size: 13px; color: #666; }
-    td { padding: 12px 16px; border-top: 1px solid #f0f0f0; font-size: 14px; }
+    th { background: #f8f9fa; padding: 10px 12px; text-align: right; font-size: 12px; color: #666; }
+    td { padding: 10px 12px; border-top: 1px solid #f0f0f0; font-size: 13px; }
     tr:hover td { background: #fafafa; }
-    .btn { padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 14px; }
+    tr.hidden-row td { opacity: 0.5; background: #fff8f8; }
+    .btn { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 13px; margin: 2px; }
     .btn-green { background: #0B6B3A; color: white; }
     .btn-blue { background: #0066cc; color: white; }
     .btn-red { background: #dc3545; color: white; }
     .btn-gray { background: #6c757d; color: white; }
+    .btn-orange { background: #fd7e14; color: white; }
+    .btn-yellow { background: #ffc107; color: #333; }
     .btn:hover { opacity: 0.85; }
     .badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
     .badge-pending { background: #fff3cd; color: #856404; }
     .badge-viewer { background: #cce5ff; color: #004085; }
     .badge-editor { background: #d4edda; color: #155724; }
     .badge-admin { background: #0B6B3A; color: white; }
+    .badge-hidden { background: #f8d7da; color: #721c24; }
+    .badge-visible { background: #d4edda; color: #155724; }
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
     .modal-bg.on { display: flex; }
     .modal { background: white; border-radius: 16px; padding: 28px; width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
@@ -49,10 +54,19 @@
     .field input, .field select, .field textarea { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
     .field textarea { resize: vertical; min-height: 120px; }
     .field input[type="file"] { padding: 8px; }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+    .toggle-row label { font-size: 14px; color: #444; }
+    .toggle { position: relative; width: 44px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: #ccc; border-radius: 24px; cursor: pointer; transition: 0.3s; }
+    .toggle-slider:before { content: ''; position: absolute; width: 18px; height: 18px; right: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+    .toggle input:checked + .toggle-slider { background: #0B6B3A; }
+    .toggle input:checked + .toggle-slider:before { transform: translateX(-20px); }
     .modal-btns { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
     .empty { text-align: center; padding: 40px; color: #aaa; }
     .progress-bar { width: 100%; height: 6px; background: #eee; border-radius: 4px; margin-top: 8px; display: none; }
     .progress-bar-fill { height: 100%; background: #0B6B3A; border-radius: 4px; width: 0%; transition: width 0.3s; }
+    .notif-badge { background: #dc3545; color: white; border-radius: 50%; padding: 2px 7px; font-size: 12px; margin-right: 6px; }
   </style>
 </head>
 <body>
@@ -66,10 +80,12 @@
   <div class="nav-tab on" id="nt1">المستخدمون</div>
   <div class="nav-tab" id="nt2">المحتوى</div>
   <div class="nav-tab" id="nt3">التصنيفات</div>
+  <div class="nav-tab" id="nt4">🔔 الإشعارات <span class="notif-badge" id="notif-count" style="display:none">0</span></div>
 </div>
 
 <div class="content">
 
+  <!-- المستخدمون -->
   <div class="section on" id="s1">
     <div class="stats">
       <div class="stat-card"><div class="num" id="cnt-total">-</div><div class="lbl">إجمالي المستخدمين</div></div>
@@ -85,6 +101,7 @@
     </div>
   </div>
 
+  <!-- المحتوى -->
   <div class="section" id="s2">
     <div class="card">
       <div class="card-header">
@@ -92,12 +109,13 @@
         <button class="btn btn-green" id="btn-add-content">+ إضافة محتوى</button>
       </div>
       <table>
-        <thead><tr><th>العنوان</th><th>النوع</th><th>الفئة المستهدفة</th><th>الحالة</th><th>الملف</th><th>إجراءات</th></tr></thead>
-        <tbody id="content-table"><tr><td colspan="6" class="empty">جاري التحميل...</td></tr></tbody>
+        <thead><tr><th>العنوان</th><th>النوع</th><th>الفئة</th><th>الحالة</th><th>الظهور</th><th>التنزيل</th><th>الملف</th><th>إجراءات</th></tr></thead>
+        <tbody id="content-table"><tr><td colspan="8" class="empty">جاري التحميل...</td></tr></tbody>
       </table>
     </div>
   </div>
 
+  <!-- التصنيفات -->
   <div class="section" id="s3">
     <div class="card">
       <div class="card-header">
@@ -107,6 +125,17 @@
       <table>
         <thead><tr><th>اسم التصنيف</th><th>تاريخ الإنشاء</th><th>إجراءات</th></tr></thead>
         <tbody id="cat-table"><tr><td colspan="3" class="empty">جاري التحميل...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- الإشعارات -->
+  <div class="section" id="s4">
+    <div class="card">
+      <div class="card-header"><h3>🔔 إشعارات المحتوى الجديد</h3></div>
+      <table>
+        <thead><tr><th>العنوان</th><th>النوع</th><th>رُفع بواسطة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+        <tbody id="notif-table"><tr><td colspan="5" class="empty">جاري التحميل...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -123,7 +152,7 @@
       <select id="role-select">
         <option value="pending">pending — في الانتظار</option>
         <option value="viewer">viewer — قراءة فقط</option>
-        <option value="editor">editor — قراءة ورفع ملفات</option>
+        <option value="editor">editor — رفع محتوى</option>
         <option value="admin">admin — مشرف كامل</option>
       </select>
     </div>
@@ -170,12 +199,19 @@
         <option value="inactive">غير نشط</option>
       </select>
     </div>
-    <!-- مربع نص المقال — يظهر فقط عند اختيار مقال -->
     <div class="field" id="article-text-field" style="display:none;">
       <label>نص المقال</label>
       <textarea id="c-article-text" placeholder="اكتب أو الصق نص المقال هنا..."></textarea>
     </div>
-    <div class="field">
+    <div class="toggle-row">
+      <label>إظهار للزوار</label>
+      <label class="toggle"><input type="checkbox" id="c-visible" checked><span class="toggle-slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <label>السماح بالتنزيل</label>
+      <label class="toggle"><input type="checkbox" id="c-download" checked><span class="toggle-slider"></span></label>
+    </div>
+    <div class="field" style="margin-top:14px;">
       <label>رفع ملف (PDF، صورة، فيديو)</label>
       <input type="file" id="c-file" accept=".pdf,.jpg,.jpeg,.png,.mp4,.mp3">
       <small style="color:#888;font-size:12px;margin-top:4px;display:block">الحد الأقصى 50MB</small>
@@ -225,7 +261,8 @@ function setupTabs() {
   var tabs = [
     { tab: 'nt1', sec: 's1', load: loadUsers },
     { tab: 'nt2', sec: 's2', load: loadContent },
-    { tab: 'nt3', sec: 's3', load: loadCategories }
+    { tab: 'nt3', sec: 's3', load: loadCategories },
+    { tab: 'nt4', sec: 's4', load: loadNotifications }
   ];
   tabs.forEach(function(t) {
     document.getElementById(t.tab).addEventListener('click', function() {
@@ -279,24 +316,54 @@ document.getElementById('save-role').addEventListener('click', async function() 
 
 // ===== المحتوى =====
 async function loadContent() {
-  var { data } = await sb.from('content').select('*');
+  var { data } = await sb.from('content').select('*').order('id', { ascending: false });
   if (!data) return;
   var html = '';
   data.forEach(function(c) {
     var status = c.status === 'active'
       ? '<span class="badge badge-editor">نشط</span>'
       : '<span class="badge badge-pending">غير نشط</span>';
+    var visibility = c.is_hidden
+      ? '<span class="badge badge-hidden">مخفي</span>'
+      : '<span class="badge badge-visible">ظاهر</span>';
+    var download = c.allow_download
+      ? '<span class="badge badge-editor">✓</span>'
+      : '<span class="badge badge-hidden">✗</span>';
     var fileLink = c.file_url
       ? '<a href="' + c.file_url + '" target="_blank" class="btn btn-gray">تحميل</a>'
       : '-';
-    html += '<tr><td>' + c.title + '</td><td>' + (c.content_type || '-') + '</td><td>' + (c.target_audience || '-') + '</td><td>' + status + '</td><td>' + fileLink + '</td>';
-    html += '<td><button class="btn btn-blue" style="margin-left:6px" onclick="openEditContent(' + c.id + ',\'' + c.title + '\',\'' + c.content_type + '\',\'' + c.target_audience + '\',\'' + c.status + '\',\'' + (c.article_text || '') + '\')">تعديل</button>';
-    html += '<button class="btn btn-red" onclick="deleteContent(' + c.id + ')">حذف</button></td></tr>';
+    var rowClass = c.is_hidden ? 'hidden-row' : '';
+    html += '<tr class="' + rowClass + '">';
+    html += '<td>' + c.title + '</td>';
+    html += '<td>' + (c.content_type || '-') + '</td>';
+    html += '<td>' + (c.target_audience || '-') + '</td>';
+    html += '<td>' + status + '</td>';
+    html += '<td>' + visibility + '</td>';
+    html += '<td>' + download + '</td>';
+    html += '<td>' + fileLink + '</td>';
+    html += '<td>';
+    html += '<button class="btn btn-blue" onclick="openEditContent(' + c.id + ')">تعديل</button>';
+    html += '<button class="btn ' + (c.is_hidden ? 'btn-green' : 'btn-orange') + '" onclick="toggleHidden(' + c.id + ',' + c.is_hidden + ')">' + (c.is_hidden ? '👁 إظهار' : '🙈 إخفاء') + '</button>';
+    html += '<button class="btn ' + (c.allow_download ? 'btn-yellow' : 'btn-green') + '" onclick="toggleDownload(' + c.id + ',' + c.allow_download + ')">' + (c.allow_download ? '🔒 منع التنزيل' : '✓ سماح التنزيل') + '</button>';
+    html += '<button class="btn btn-red" onclick="deleteContent(' + c.id + ')">حذف</button>';
+    html += '</td></tr>';
   });
-  document.getElementById('content-table').innerHTML = html || '<tr><td colspan="6" class="empty">لا يوجد محتوى</td></tr>';
+  document.getElementById('content-table').innerHTML = html || '<tr><td colspan="8" class="empty">لا يوجد محتوى</td></tr>';
 }
 
-// إظهار/إخفاء مربع نص المقال
+// إخفاء/إظهار
+async function toggleHidden(id, isHidden) {
+  await sb.from('content').update({ is_hidden: !isHidden }).eq('id', id);
+  loadContent();
+}
+
+// السماح/منع التنزيل
+async function toggleDownload(id, allowDownload) {
+  await sb.from('content').update({ allow_download: !allowDownload }).eq('id', id);
+  loadContent();
+}
+
+// إضافة محتوى
 document.getElementById('c-type').addEventListener('change', function() {
   document.getElementById('article-text-field').style.display = this.value === 'مقال' ? 'block' : 'none';
 });
@@ -307,6 +374,8 @@ document.getElementById('btn-add-content').addEventListener('click', function() 
   document.getElementById('c-title').value = '';
   document.getElementById('c-article-text').value = '';
   document.getElementById('c-file').value = '';
+  document.getElementById('c-visible').checked = true;
+  document.getElementById('c-download').checked = true;
   document.getElementById('article-text-field').style.display = document.getElementById('c-type').value === 'مقال' ? 'block' : 'none';
   document.getElementById('upload-status').textContent = '';
   document.getElementById('upload-progress').style.display = 'none';
@@ -317,15 +386,19 @@ document.getElementById('close-content').addEventListener('click', function() {
   document.getElementById('modal-content').className = 'modal-bg';
 });
 
-function openEditContent(id, title, type, audience, status, articleText) {
+async function openEditContent(id) {
+  var { data: c } = await sb.from('content').select('*').eq('id', id).single();
+  if (!c) return;
   editContentId = id;
   document.getElementById('content-modal-title').textContent = 'تعديل المحتوى';
-  document.getElementById('c-title').value = title;
-  document.getElementById('c-type').value = type;
-  document.getElementById('c-audience').value = audience;
-  document.getElementById('c-status').value = status;
-  document.getElementById('c-article-text').value = articleText || '';
-  document.getElementById('article-text-field').style.display = type === 'مقال' ? 'block' : 'none';
+  document.getElementById('c-title').value = c.title;
+  document.getElementById('c-type').value = c.content_type;
+  document.getElementById('c-audience').value = c.target_audience;
+  document.getElementById('c-status').value = c.status;
+  document.getElementById('c-article-text').value = c.article_text || '';
+  document.getElementById('c-visible').checked = !c.is_hidden;
+  document.getElementById('c-download').checked = c.allow_download !== false;
+  document.getElementById('article-text-field').style.display = c.content_type === 'مقال' ? 'block' : 'none';
   document.getElementById('c-file').value = '';
   document.getElementById('upload-status').textContent = '';
   document.getElementById('upload-progress').style.display = 'none';
@@ -335,14 +408,12 @@ function openEditContent(id, title, type, audience, status, articleText) {
 document.getElementById('save-content').addEventListener('click', async function() {
   var title = document.getElementById('c-title').value;
   if (!title) { alert('يرجى إدخال العنوان'); return; }
-
   var btn = document.getElementById('save-content');
   btn.textContent = 'جاري الحفظ...';
   btn.disabled = true;
 
   var fileUrl = null;
   var fileInput = document.getElementById('c-file');
-
   if (fileInput.files && fileInput.files[0]) {
     var file = fileInput.files[0];
     var fileName = Date.now() + '_' + file.name;
@@ -352,9 +423,7 @@ document.getElementById('save-content').addEventListener('click', async function
     var { error: uploadError } = await sb.storage.from('content-files').upload(fileName, file);
     if (uploadError) {
       alert('خطأ في رفع الملف: ' + uploadError.message);
-      btn.textContent = 'حفظ';
-      btn.disabled = false;
-      return;
+      btn.textContent = 'حفظ'; btn.disabled = false; return;
     }
     document.getElementById('upload-progress-fill').style.width = '100%';
     document.getElementById('upload-status').textContent = 'تم رفع الملف ✅';
@@ -368,8 +437,10 @@ document.getElementById('save-content').addEventListener('click', async function
     content_type: contentType,
     target_audience: document.getElementById('c-audience').value,
     status: document.getElementById('c-status').value,
-    created_by: currentUserId,
-    article_text: contentType === 'مقال' ? document.getElementById('c-article-text').value : null
+    is_hidden: !document.getElementById('c-visible').checked,
+    allow_download: document.getElementById('c-download').checked,
+    article_text: contentType === 'مقال' ? document.getElementById('c-article-text').value : null,
+    created_by: currentUserId
   };
   if (fileUrl) obj.file_url = fileUrl;
 
@@ -379,8 +450,7 @@ document.getElementById('save-content').addEventListener('click', async function
     await sb.from('content').insert(obj);
   }
 
-  btn.textContent = 'حفظ';
-  btn.disabled = false;
+  btn.textContent = 'حفظ'; btn.disabled = false;
   document.getElementById('modal-content').className = 'modal-bg';
   document.getElementById('c-file').value = '';
   document.getElementById('upload-status').textContent = '';
@@ -427,10 +497,67 @@ async function deleteCat(id) {
   loadCategories();
 }
 
+// ===== الإشعارات =====
+async function loadNotifications() {
+  var { data } = await sb.from('content')
+    .select('*, profiles(email, full_name)')
+    .eq('is_reviewed', false)
+    .order('created_at', { ascending: false });
+
+  var count = data ? data.length : 0;
+  var badge = document.getElementById('notif-count');
+  if (count > 0) {
+    badge.style.display = 'inline';
+    badge.textContent = count;
+  } else {
+    badge.style.display = 'none';
+  }
+
+  if (!data || data.length === 0) {
+    document.getElementById('notif-table').innerHTML = '<tr><td colspan="5" class="empty">لا توجد إشعارات جديدة ✅</td></tr>';
+    return;
+  }
+
+  var html = '';
+  data.forEach(function(c) {
+    var date = new Date(c.created_at).toLocaleDateString('ar-SA');
+    var uploader = c.profiles ? (c.profiles.full_name || c.profiles.email) : '-';
+    html += '<tr>';
+    html += '<td>' + c.title + '</td>';
+    html += '<td>' + (c.content_type || '-') + '</td>';
+    html += '<td>' + uploader + '</td>';
+    html += '<td>' + date + '</td>';
+    html += '<td>';
+    html += '<button class="btn btn-green" onclick="reviewContent(' + c.id + ')">✓ تمت المراجعة</button>';
+    html += '<button class="btn btn-blue" onclick="openEditContent(' + c.id + ')">تعديل</button>';
+    html += '<button class="btn btn-red" onclick="deleteContent(' + c.id + ')">حذف</button>';
+    html += '</td></tr>';
+  });
+  document.getElementById('notif-table').innerHTML = html;
+}
+
+async function reviewContent(id) {
+  await sb.from('content').update({ is_reviewed: true }).eq('id', id);
+  loadNotifications();
+}
+
+async function checkNotifications() {
+  var { data } = await sb.from('content').select('id').eq('is_reviewed', false);
+  var count = data ? data.length : 0;
+  var badge = document.getElementById('notif-count');
+  if (count > 0) {
+    badge.style.display = 'inline';
+    badge.textContent = count;
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
 async function init() {
   await checkAuth();
   setupTabs();
   loadUsers();
+  checkNotifications();
 }
 init();
 </script>
