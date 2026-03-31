@@ -35,8 +35,10 @@ async function checkAuth() {
 // =============================
 
 async function loadFromSupabase() {
-  const { data, error } = await sb.from('content').select('*').order('id', { ascending: false });
-  if (error) { console.error(error); return []; }
+const { data, error } = await sb.from('content')
+    .select('*')
+    .eq('is_hidden', false)
+    .order('id', { ascending: false });  if (error) { console.error(error); return []; }
   return data || [];
 }
 
