@@ -307,7 +307,7 @@ document.getElementById('btn-add-content').addEventListener('click', function() 
   document.getElementById('c-title').value = '';
   document.getElementById('c-article-text').value = '';
   document.getElementById('c-file').value = '';
-  document.getElementById('article-text-field').style.display = 'none';
+  document.getElementById('article-text-field').style.display = document.getElementById('c-type').value === 'مقال' ? 'block' : 'none';
   document.getElementById('upload-status').textContent = '';
   document.getElementById('upload-progress').style.display = 'none';
   document.getElementById('modal-content').className = 'modal-bg on';
