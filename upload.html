@@ -303,6 +303,8 @@ document.getElementById('btn-logout').addEventListener('click', async function()
 async function init() {
   await checkAuth();
   loadMyUploads();
+  // إظهار محرر المقال تلقائياً عند فتح الصفحة
+  document.getElementById('article-field').style.display = 'block';
 }
 init();
 </script>
