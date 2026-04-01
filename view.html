@@ -122,7 +122,7 @@
     <button class="ab-btn ab-green" id="btn-download-admin">⬇️ تحميل</button>
     <button class="ab-btn ab-blue" id="btn-edit">✏️ تعديل</button>
     <button class="ab-btn ab-orange" id="btn-toggle-hidden">🙈 إخفاء</button>
-    <button class="ab-btn ab-yellow" id="btn-toggle-download">🔒 منع التنزيل</button>
+    <button class="ab-btn ab-yellow" id="btn-toggle-download">🔒 منع التحميل</button>
     <button class="ab-btn ab-red" id="btn-delete">🗑️ حذف</button>
   </div>
 </div>
@@ -246,9 +246,9 @@ function updateAdminBar() {
   btnHidden.textContent = currentItem.is_hidden ? '👁 إظهار' : '🙈 إخفاء';
   btnHidden.className = 'ab-btn ' + (currentItem.is_hidden ? 'ab-green' : 'ab-orange');
 
-  // زر التنزيل
+  // زر التحميل
   var btnDl = document.getElementById('btn-toggle-download');
-  btnDl.textContent = currentItem.allow_download ? '🔒 منع التنزيل' : '✅ سماح التنزيل';
+  btnDl.textContent = currentItem.allow_download ? '🔒 منع التحميل' : '✅ سماح التحميل';
 
   // زر تحميل للمدير
   var btnDlAdmin = document.getElementById('btn-download-admin');
