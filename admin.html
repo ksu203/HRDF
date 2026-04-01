@@ -369,7 +369,7 @@ async function loadUsers() {
   data.forEach(function(u) {
     var badge = '<span class="badge badge-'+u.role+'">'+u.role+'</span>';
     html += '<tr><td style="font-size:12px;">'+(u.email||'-')+'</td><td>'+(u.full_name||'-')+'</td><td>'+badge+'</td>';
-    html += '<td><button class="btn btn-blue" onclick="openRoleModal(\''+u.id+'\',\''+(u.email||'')+'\',\''+u.role+'\')">صلاحية</button> <button class="btn btn-gray" onclick="window.location.href=\'./profile.html?id='+u.id+'\'">ملف</button></td></tr>';
+    html += '<td><button class="btn btn-blue" onclick="openRoleModal(\''+u.id+'\',\''+(u.email||'')+'\',\''+u.role+'\')">صلاحية</button> <button class="btn btn-gray" onclick="window.location.href=\'./profile.html?id='+u.id+'\'">ملف</button> <button class="btn btn-red" onclick="deleteUser(\''+u.id+'\',\''+(u.email||'')+'\')">حذف</button></td></tr>';
 
     mobileHtml += '<div class="mobile-card"><div class="mobile-card-title">'+(u.full_name||u.email||'-')+'</div>';
     mobileHtml += '<div class="mobile-card-meta">'+badge+'<span style="font-size:11px;color:#888;">'+(u.email||'-')+'</span></div>';
