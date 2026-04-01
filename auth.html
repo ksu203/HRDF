@@ -199,6 +199,7 @@ document.getElementById('btn-register').addEventListener('click', async function
 
   msg.className = 'msg ok';
   msg.textContent = '✅ تم إنشاء الحساب! في انتظار منح الصلاحية من المشرف.';
+  setTimeout(function(){ window.location.href = './auth.html#login'; }, 3000);
 });
 </script>
 </body>
