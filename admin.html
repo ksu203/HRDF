@@ -373,8 +373,7 @@ async function loadUsers() {
 
     mobileHtml += '<div class="mobile-card"><div class="mobile-card-title">'+(u.full_name||u.email||'-')+'</div>';
     mobileHtml += '<div class="mobile-card-meta">'+badge+'<span style="font-size:11px;color:#888;">'+(u.email||'-')+'</span></div>';
-    mobileHtml += '<div class="mobile-card-actions"><button class="btn btn-blue" onclick="openRoleModal(\''+u.id+'\',\''+(u.email||'')+'\',\''+u.role+'\')">تغيير الصلاحية</button><button class="btn btn-gray" onclick="window.location.href=\'./profile.html?id='+u.id+'\'">الملف الشخصي</button></div></div>';
-  });
+mobileHtml += '<div class="mobile-card-actions"><button class="btn btn-blue" onclick="openRoleModal(\''+u.id+'\',\''+(u.email||'')+'\',\''+u.role+'\')">تغيير الصلاحية</button><button class="btn btn-gray" onclick="window.location.href=\'./profile.html?id='+u.id+'\'">الملف الشخصي</button><button class="btn btn-red" onclick="deleteUser(\''+u.id+'\',\''+(u.email||'')+'\')">حذف</button></div></div>';  });
 
   document.getElementById('users-table').innerHTML = html || '<tr><td colspan="4" class="empty">لا يوجد مستخدمون</td></tr>';
   document.getElementById('users-mobile').innerHTML = mobileHtml || '<div class="empty">لا يوجد مستخدمون</div>';
