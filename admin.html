@@ -12,6 +12,7 @@
   <title>لوحة التحكم | HRDF</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; }
@@ -103,6 +104,16 @@
       .add-user-grid { grid-template-columns: 1fr; }
       .header h1 { font-size: 14px; }
     }
+    .action-menu { position: relative; display: inline-block; }
+.action-btn { background: #f0f0f0; border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 18px; font-weight: 700; color: #555; transition: background 0.2s; }
+.action-btn:hover { background: #ddd; }
+.action-dropdown { display: none; position: absolute; left: 0; top: 110%; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 999; min-width: 160px; overflow: hidden; }
+.action-dropdown.open { display: block; }
+.action-dropdown a { display: flex; align-items: center; gap: 8px; padding: 10px 16px; font-size: 14px; color: #333; text-decoration: none; cursor: pointer; border: none; background: none; width: 100%; font-family: 'Tajawal', sans-serif; transition: background 0.2s; }
+.action-dropdown a:hover { background: #f8f9fa; }
+.action-dropdown a.red { color: #dc3545; }
+.action-dropdown a.red:hover { background: #fff5f5; }
+.action-dropdown .divider { height: 1px; background: #eee; margin: 4px 0; }
   </style>
 </head>
 <body>
@@ -432,12 +443,14 @@ async function loadContent() {
     var download = c.allow_download ? '<span class="badge badge-editor">✓</span>' : '<span class="badge badge-hidden">✗</span>';
     var rowClass = c.is_hidden ? 'hidden-row' : '';
 
-  html += '<tr class="'+rowClass+'"><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+visibility+'</td><td>'+download+'</td>';
-html += '<td><button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button> ';
-html += '<button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button> ';
-html += '<button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button> ';
-html += '<button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button> ';
-html += '<button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button></td></tr>';
+html += '<td><div class="action-menu"><button class="action-btn" onclick="toggleMenu(\'menu-'+c.id+'\')">⠇</button><div class="action-dropdown" id="menu-'+c.id+'">';
+html += '<a onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</a>';
+html += '<a onclick="openEditContent('+c.id+')">✏️ تعديل</a>';
+html += '<a onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'👁 إظهار':'🙈 إخفاء')+'</a>';
+html += '<a onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'🔒 منع التنزيل':'✅ سماح التنزيل')+'</a>';
+html += '<div class="divider"></div>';
+html += '<a class="red" onclick="deleteContent('+c.id+')">🗑️ حذف</a>';
+html += '</div></div></td></tr>';
 
     mobileHtml += '<div class="mobile-card'+(c.is_hidden?' hidden-row':'')+'"><div class="mobile-card-title">'+c.title+'</div>';
     mobileHtml += '<div class="mobile-card-meta"><span class="badge badge-default">'+(c.content_type||'-')+'</span>'+visibility+download+'</div>';
@@ -620,7 +633,20 @@ async function init() {
   setupTabs();
   loadUsers();
   checkNotifications();
+
 }
+  function toggleMenu(id) {
+  document.querySelectorAll('.action-dropdown').forEach(function(d) {
+    if (d.id !== id) d.classList.remove('open');
+  });
+  document.getElementById(id).classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.action-menu')) {
+    document.querySelectorAll('.action-dropdown').forEach(function(d){ d.classList.remove('open'); });
+  }
+});
+  
 init();
 </script>
 </body>
