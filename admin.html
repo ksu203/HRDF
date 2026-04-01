@@ -443,14 +443,11 @@ async function loadContent() {
     var download = c.allow_download ? '<span class="badge badge-editor">✓</span>' : '<span class="badge badge-hidden">✗</span>';
     var rowClass = c.is_hidden ? 'hidden-row' : '';
 
-html += '<td><div class="action-menu"><button class="action-btn" onclick="toggleMenu(\'menu-'+c.id+'\')">⠇</button><div class="action-dropdown" id="menu-'+c.id+'">';
-html += '<a onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</a>';
-html += '<a onclick="openEditContent('+c.id+')">✏️ تعديل</a>';
-html += '<a onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'👁 إظهار':'🙈 إخفاء')+'</a>';
-html += '<a onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'🔒 منع التنزيل':'✅ سماح التنزيل')+'</a>';
-html += '<div class="divider"></div>';
-html += '<a class="red" onclick="deleteContent('+c.id+')">🗑️ حذف</a>';
-html += '</div></div></td></tr>';
+html += '<tr class="'+rowClass+'"><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+visibility+'</td><td>'+download+'</td>';
+html += '<td style="white-space:nowrap;"><button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button> ';
+html += '<button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button> ';
+html += '<button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button> ';
+html += '<button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button></td></tr>';
 
     mobileHtml += '<div class="mobile-card'+(c.is_hidden?' hidden-row':'')+'"><div class="mobile-card-title">'+c.title+'</div>';
     mobileHtml += '<div class="mobile-card-meta"><span class="badge badge-default">'+(c.content_type||'-')+'</span>'+visibility+download+'</div>';
