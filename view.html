@@ -4,142 +4,83 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="./irshad-logo.png">
-<link rel="apple-touch-icon" href="./irshad-logo.png">
-<meta property="og:title" content="عرض المحتوى | مبادرة الإرشاد المهني الشامل">
-<meta property="og:description" content="اطّلع على محتوى الإرشاد المهني الشامل">
-<meta property="og:image" content="https://careerguide.works/irshad-logo.png">
-<meta property="og:url" content="https://careerguide.works">
-<meta property="og:type" content="article">
-<meta name="description" content="محتوى الإرشاد المهني الشامل - HRDF">
+  <link rel="apple-touch-icon" href="./irshad-logo.png">
+  <meta property="og:title" content="عرض المحتوى | مبادرة الإرشاد المهني الشامل">
+  <meta property="og:description" content="اطّلع على محتوى الإرشاد المهني الشامل">
+  <meta property="og:image" content="https://careerguide.works/irshad-logo.png">
+  <meta property="og:url" content="https://careerguide.works">
+  <meta property="og:type" content="article">
+  <meta name="description" content="محتوى الإرشاد المهني الشامل - HRDF">
   <title>عرض المحتوى | HRDF</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; min-height: 100vh; }
-
-    .header {
-      background: #0B6B3A; color: white;
-      padding: 12px 20px;
-      display: flex; align-items: center; justify-content: space-between;
-      position: sticky; top: 0; z-index: 50;
-    }
+    .header { background: #0B6B3A; color: white; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
     .header-brand { display: flex; align-items: center; gap: 10px; }
     .header-brand img { width: 36px; }
     .header-brand span { font-size: 15px; font-weight: 700; }
-    .back-btn {
-      background: rgba(255,255,255,0.2); color: white;
-      border: none; padding: 8px 16px; border-radius: 8px;
-      font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px;
-      white-space: nowrap;
-    }
-
-    .container { max-width: 800px; margin: 24px auto; padding: 0 16px 60px; }
-
-    .content-card {
-      background: white; border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-      overflow: hidden;
-    }
-
-    .content-header {
-      background: linear-gradient(135deg, #0B6B3A, #1a9a5c);
-      padding: 28px 24px; color: white;
-    }
-    .content-meta {
-      display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
-    }
-    .badge {
-      padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;
-      background: rgba(255,255,255,0.2); color: white;
-    }
-    .content-title {
-      font-size: 22px; font-weight: 800; line-height: 1.5;
-    }
-
+    .back-btn { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-family: 'Tajawal', sans-serif; cursor: pointer; font-size: 14px; white-space: nowrap; }
+    .container { max-width: 800px; margin: 24px auto; padding: 0 16px 100px; }
+    .content-card { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
+    .content-header { background: linear-gradient(135deg, #0a1628, #0d2347); padding: 28px 24px; color: white; }
+    .content-meta { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .badge { padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; background: rgba(255,255,255,0.2); color: white; }
+    .content-title { font-size: 22px; font-weight: 800; line-height: 1.5; }
     .content-body { padding: 24px; }
-
-    .article-text {
-      font-size: 16px; line-height: 2; color: #333;
-      white-space: pre-wrap;
-    }
-
-    .image-viewer img {
-      width: 100%; border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    }
-
-    .video-viewer video {
-      width: 100%; border-radius: 12px; background: #000;
-    }
-
-    .audio-viewer {
-      background: #f8f9fa; border-radius: 12px; padding: 28px 20px;
-      text-align: center;
-    }
+    .article-text { font-size: 16px; line-height: 2; color: #333; }
+    .image-viewer img { width: 100%; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .video-viewer video { width: 100%; border-radius: 12px; background: #000; }
+    .audio-viewer { background: #f8f9fa; border-radius: 12px; padding: 28px 20px; text-align: center; }
     .audio-viewer .audio-icon { font-size: 56px; margin-bottom: 14px; }
     .audio-viewer h3 { font-size: 16px; color: #333; margin-bottom: 14px; }
     .audio-viewer audio { width: 100%; }
-
-    .pdf-viewer iframe {
-      width: 100%; height: 500px; border: none; border-radius: 12px;
-    }
-
-    .download-section {
-      margin-top: 20px; padding-top: 20px;
-      border-top: 1px solid #eee;
-    }
-    .download-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: #0B6B3A; color: white;
-      padding: 12px 24px; border-radius: 10px;
-      text-decoration: none; font-size: 15px; font-weight: 700;
-      transition: background 0.2s; border: none; cursor: pointer;
-      font-family: 'Tajawal', sans-serif;
-    }
+    .pdf-viewer iframe { width: 100%; height: 500px; border: none; border-radius: 12px; }
+    .download-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
+    .download-btn { display: inline-flex; align-items: center; gap: 8px; background: #0B6B3A; color: white; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 700; transition: background 0.2s; border: none; cursor: pointer; font-family: 'Tajawal', sans-serif; }
     .download-btn:hover { background: #094d2a; }
-
-    /* معلومات الكاتب */
-    .author-section {
-      margin-top: 20px; padding: 16px;
-      background: #f8f9fa; border-radius: 12px;
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-    }
-    .author-avatar {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: linear-gradient(135deg, #0B6B3A, #1a9a5c);
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 18px; font-weight: 700;
-      overflow: hidden; flex-shrink: 0;
-    }
+    .author-section { margin-top: 20px; padding: 16px; background: #f8f9fa; border-radius: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .author-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #0B6B3A, #1a9a5c); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 700; overflow: hidden; flex-shrink: 0; }
     .author-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .author-info h4 { font-size: 14px; font-weight: 700; color: #333; }
     .author-info span { font-size: 12px; color: #888; }
-    .author-profile-btn {
-      margin-right: auto; padding: 7px 16px;
-      border: 1.5px solid #0B6B3A; color: #0B6B3A;
-      background: transparent; border-radius: 8px;
-      font-family: 'Tajawal', sans-serif; font-size: 13px;
-      cursor: pointer; font-weight: 600;
-      transition: all 0.2s;
-    }
+    .author-profile-btn { margin-right: auto; padding: 7px 16px; border: 1.5px solid #0B6B3A; color: #0B6B3A; background: transparent; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
     .author-profile-btn:hover { background: #0B6B3A; color: white; }
 
-    .loading { text-align: center; padding: 80px 20px; color: #888; }
-    .loading .spinner {
-      width: 44px; height: 44px; border: 4px solid #eee;
-      border-top-color: #0B6B3A; border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* شريط إجراءات المدير */
+    .admin-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 2px solid #eee; padding: 12px 20px; display: none; z-index: 99; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
+    .admin-bar.show { display: block; }
+    .admin-bar-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .admin-bar-title { font-size: 13px; color: #888; margin-left: auto; }
+    .ab-btn { padding: 8px 16px; border: none; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+    .ab-btn:hover { opacity: 0.85; }
+    .ab-green { background: #0B6B3A; color: white; }
+    .ab-orange { background: #fd7e14; color: white; }
+    .ab-blue { background: #0066cc; color: white; }
+    .ab-yellow { background: #ffc107; color: #333; }
+    .ab-red { background: #dc3545; color: white; }
 
+    /* نافذة التعديل */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
+    .modal-bg.on { display: flex; }
+    .modal { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal h3 { font-size: 17px; color: #333; margin-bottom: 18px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; margin-bottom: 5px; font-size: 13px; color: #555; font-weight: 600; }
+    .field input, .field select { width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
+    .field input:focus, .field select:focus { outline: none; border-color: #0B6B3A; }
+    .modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+    .modal-btn { padding: 9px 20px; border: none; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
+
+    .loading { text-align: center; padding: 80px 20px; color: #888; }
+    .loading .spinner { width: 44px; height: 44px; border: 4px solid #eee; border-top-color: #0B6B3A; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .error-state { text-align: center; padding: 80px 20px; }
     .error-state .icon { font-size: 56px; margin-bottom: 14px; }
     .error-state h2 { color: #333; margin-bottom: 8px; font-size: 18px; }
     .error-state p { color: #888; font-size: 14px; }
 
-    /* Responsive */
     @media (max-width: 600px) {
       .content-title { font-size: 18px; }
       .content-header { padding: 20px 16px; }
@@ -147,6 +88,7 @@
       .pdf-viewer iframe { height: 350px; }
       .article-text { font-size: 15px; }
       .header-brand span { display: none; }
+      .ab-btn { padding: 7px 12px; font-size: 13px; }
     }
   </style>
 </head>
@@ -169,6 +111,54 @@
   </div>
 </div>
 
+<!-- شريط إجراءات المدير -->
+<div class="admin-bar" id="admin-bar">
+  <div class="admin-bar-inner">
+    <span class="admin-bar-title">🛡️ أدوات المشرف</span>
+    <button class="ab-btn ab-green" id="btn-download-admin">⬇️ تحميل</button>
+    <button class="ab-btn ab-blue" id="btn-edit">✏️ تعديل</button>
+    <button class="ab-btn ab-orange" id="btn-toggle-hidden">🙈 إخفاء</button>
+    <button class="ab-btn ab-yellow" id="btn-toggle-download">🔒 منع التنزيل</button>
+    <button class="ab-btn ab-red" id="btn-delete">🗑️ حذف</button>
+  </div>
+</div>
+
+<!-- نافذة التعديل -->
+<div class="modal-bg" id="modal-edit">
+  <div class="modal">
+    <h3>✏️ تعديل المحتوى</h3>
+    <div class="field"><label>العنوان</label><input type="text" id="e-title"></div>
+    <div class="field">
+      <label>نوع المحتوى</label>
+      <select id="e-type">
+        <option value="مقال">مقال</option>
+        <option value="فيديو">فيديو</option>
+        <option value="صور">صور</option>
+        <option value="انفوجرافيك">انفوجرافيك</option>
+        <option value="صوت">صوت</option>
+        <option value="بودكاست">بودكاست</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>الفئة المستهدفة</label>
+      <select id="e-audience">
+        <option value="الباحثين عن عمل">الباحثين عن عمل</option>
+        <option value="المعلمين">المعلمين</option>
+        <option value="طلاب المدارس">طلاب المدارس</option>
+        <option value="طلاب الجامعات">طلاب الجامعات</option>
+        <option value="طلاب المعاهد">طلاب المعاهد</option>
+        <option value="الموظفين">الموظفين</option>
+        <option value="أولياء الأمور">أولياء الأمور</option>
+        <option value="المرشدين المهنيين">المرشدين المهنيين</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn" style="background:#f0f0f0;color:#555;" onclick="document.getElementById('modal-edit').className='modal-bg'">إلغاء</button>
+      <button class="modal-btn" style="background:#0B6B3A;color:white;" id="btn-save-edit">حفظ</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
@@ -176,6 +166,8 @@ const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const params = new URLSearchParams(window.location.search);
 const contentId = params.get('id');
+let currentItem = null;
+let isAdmin = false;
 
 function getFileType(url) {
   if (!url) return null;
@@ -188,11 +180,9 @@ function getFileType(url) {
 }
 
 function renderContent(item, author) {
+  currentItem = item;
   var fileType = getFileType(item.file_url);
-  var typeIcons = {
-    'مقال': '📄', 'فيديو': '🎥', 'صور': '🖼️',
-    'انفوجرافيك': '📊', 'صوت': '🎵', 'بودكاست': '🎙️'
-  };
+  var typeIcons = { 'مقال': '📄', 'فيديو': '🎥', 'صور': '🖼️', 'انفوجرافيك': '📊', 'صوت': '🎵', 'بودكاست': '🎙️' };
   var icon = typeIcons[item.content_type] || '📄';
   var date = item.created_at ? new Date(item.created_at).toLocaleDateString('ar-SA') : '-';
 
@@ -208,7 +198,7 @@ function renderContent(item, author) {
   } else if (fileType === 'pdf') {
     mediaHtml = '<div class="pdf-viewer"><iframe src="' + item.file_url + '"></iframe></div>';
   } else if (item.file_url) {
-    mediaHtml = '<div style="text-align:center;padding:32px;"><div style="font-size:56px;margin-bottom:12px;">' + icon + '</div><p style="color:#666;margin-bottom:16px;font-size:14px;">اضغط لتحميل أو عرض الملف</p></div>';
+    mediaHtml = '<div style="text-align:center;padding:32px;"><div style="font-size:56px;margin-bottom:12px;">' + icon + '</div><p style="color:#666;margin-bottom:16px;font-size:14px;">اضغط لتحميل الملف</p></div>';
   } else {
     mediaHtml = '<div style="text-align:center;padding:32px;color:#888;"><div style="font-size:56px;margin-bottom:12px;">📭</div><p>لا يوجد محتوى للعرض</p></div>';
   }
@@ -232,23 +222,52 @@ function renderContent(item, author) {
           '<span class="badge">' + icon + ' ' + (item.content_type || 'محتوى') + '</span>' +
           (item.target_audience ? '<span class="badge">👥 ' + item.target_audience + '</span>' : '') +
           '<span class="badge">📅 ' + date + '</span>' +
+          (item.is_hidden ? '<span class="badge" style="background:rgba(220,53,69,0.3);">🙈 مخفي</span>' : '') +
         '</div>' +
         '<h1 class="content-title">' + item.title + '</h1>' +
       '</div>' +
-      '<div class="content-body">' +
-        mediaHtml +
-        downloadHtml +
-        authorHtml +
-      '</div>' +
+      '<div class="content-body">' + mediaHtml + downloadHtml + authorHtml + '</div>' +
     '</div>';
 
   document.title = item.title + ' | HRDF';
+  updateAdminBar();
+}
+
+function updateAdminBar() {
+  if (!isAdmin || !currentItem) return;
+  var bar = document.getElementById('admin-bar');
+  bar.className = 'admin-bar show';
+
+  // زر الإخفاء/الإظهار
+  var btnHidden = document.getElementById('btn-toggle-hidden');
+  btnHidden.textContent = currentItem.is_hidden ? '👁 إظهار' : '🙈 إخفاء';
+  btnHidden.className = 'ab-btn ' + (currentItem.is_hidden ? 'ab-green' : 'ab-orange');
+
+  // زر التنزيل
+  var btnDl = document.getElementById('btn-toggle-download');
+  btnDl.textContent = currentItem.allow_download ? '🔒 منع التنزيل' : '✅ سماح التنزيل';
+
+  // زر تحميل للمدير
+  var btnDlAdmin = document.getElementById('btn-download-admin');
+  if (currentItem.file_url) {
+    btnDlAdmin.style.display = 'flex';
+    btnDlAdmin.onclick = function(){ window.open(currentItem.file_url, '_blank'); };
+  } else {
+    btnDlAdmin.style.display = 'none';
+  }
 }
 
 async function loadContent() {
   if (!contentId) {
     document.getElementById('app').innerHTML = '<div class="content-card"><div class="error-state"><div class="icon">🔍</div><h2>لم يتم تحديد المحتوى</h2><p>يرجى العودة للصفحة الرئيسية</p></div></div>';
     return;
+  }
+
+  // تحقق من صلاحية المدير
+  var { data: session } = await sb.auth.getSession();
+  if (session && session.session) {
+    var { data: profile } = await sb.from('profiles').select('role').eq('id', session.session.user.id).single();
+    if (profile && profile.role === 'admin') isAdmin = true;
   }
 
   var { data, error } = await sb.from('content')
@@ -262,6 +281,44 @@ async function loadContent() {
 
   renderContent(data, data.profiles);
 }
+
+// ===== أزرار المدير =====
+document.getElementById('btn-edit').addEventListener('click', function() {
+  if (!currentItem) return;
+  document.getElementById('e-title').value = currentItem.title;
+  document.getElementById('e-type').value = currentItem.content_type || 'مقال';
+  document.getElementById('e-audience').value = currentItem.target_audience || '';
+  document.getElementById('modal-edit').className = 'modal-bg on';
+});
+
+document.getElementById('btn-save-edit').addEventListener('click', async function() {
+  var obj = {
+    title: document.getElementById('e-title').value,
+    content_type: document.getElementById('e-type').value,
+    target_audience: document.getElementById('e-audience').value
+  };
+  await sb.from('content').update(obj).eq('id', contentId);
+  document.getElementById('modal-edit').className = 'modal-bg';
+  loadContent();
+});
+
+document.getElementById('btn-toggle-hidden').addEventListener('click', async function() {
+  if (!currentItem) return;
+  await sb.from('content').update({ is_hidden: !currentItem.is_hidden }).eq('id', contentId);
+  loadContent();
+});
+
+document.getElementById('btn-toggle-download').addEventListener('click', async function() {
+  if (!currentItem) return;
+  await sb.from('content').update({ allow_download: !currentItem.allow_download }).eq('id', contentId);
+  loadContent();
+});
+
+document.getElementById('btn-delete').addEventListener('click', async function() {
+  if (!confirm('هل أنت متأكد من حذف هذا المحتوى؟')) return;
+  await sb.from('content').delete().eq('id', contentId);
+  window.location.href = './index.html';
+});
 
 loadContent();
 </script>
