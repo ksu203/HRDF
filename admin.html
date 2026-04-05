@@ -457,10 +457,13 @@ var download = c.allow_download ? '<span class="badge badge-editor">✓</span>' 
 var rowClass = c.is_hidden ? 'hidden-row' : '';
 var statusBadge = !c.is_reviewed ? '<span class="badge badge-pending">⏳ قيد المراجعة</span>' : (c.is_hidden ? '<span class="badge badge-hidden">🙈 مخفي</span>' : '<span class="badge badge-editor">✅ منشور</span>');
 
-html += '<tr class="'+rowClass+'"><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+statusBadge+'</td><td>'+visibility+'</td><td>'+download+'</td>';
-html += '<td style="white-space:nowrap;"><button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button> <button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button> ';html += '<button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button> ';
-html += '<button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button> ';
-html += '<button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button></td></tr>';
+html += '<td style="white-space:nowrap;">';
+html += '<span class="tooltip-wrap"><button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button><span class="tooltip-text">عرض المحتوى كما يراه الزوار</span></span> ';
+html += '<span class="tooltip-wrap"><button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button><span class="tooltip-text">تعديل العنوان والنوع والفئة</span></span> ';
+html += '<span class="tooltip-wrap"><button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button><span class="tooltip-text">'+(c.is_hidden?'إظهار المحتوى للزوار':'إخفاء المحتوى عن الزوار')+'</span></span> ';
+html += '<span class="tooltip-wrap"><button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button><span class="tooltip-text">'+(c.allow_download?'منع تنزيل الملف':'السماح بتنزيل الملف')+'</span></span> ';
+html += '<span class="tooltip-wrap"><button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button><span class="tooltip-text">حذف المحتوى نهائياً ⚠️</span></span>';
+html += '</td></tr>';
 
     mobileHtml += '<div class="mobile-card'+(c.is_hidden?' hidden-row':'')+'"><div class="mobile-card-title">'+c.title+'</div>';
 mobileHtml += '<div class="mobile-card-meta"><span class="badge badge-default">'+(c.content_type||'-')+'</span>'+statusBadge+visibility+download+'</div>';
