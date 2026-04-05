@@ -4,20 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0B6B3A" />
-<link rel="icon" type="image/png" href="./irshad-logo.png">
-<link rel="apple-touch-icon" href="./irshad-logo.png">
-  <!-- Open Graph -->
-<meta property="og:title" content="بنك المحتوى المهني | مبادرة الإرشاد المهني الشامل">
-<meta property="og:description" content="منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل - HRDF">
-<meta property="og:image" content="https://careerguide.works/irshad-logo.png">
-<meta property="og:url" content="https://careerguide.works">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="ar_SA">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="بنك المحتوى المهني | HRDF">
-<meta name="twitter:description" content="منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل">
-<meta name="twitter:image" content="https://careerguide.works/irshad-logo.png">
-<meta name="description" content="منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل - HRDF">
+  <link rel="icon" type="image/png" href="./irshad-logo.png">
+  <link rel="apple-touch-icon" href="./irshad-logo.png">
+  <meta property="og:title" content="بنك المحتوى المهني | مبادرة الإرشاد المهني الشامل">
+  <meta property="og:description" content="منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل - HRDF">
+  <meta property="og:image" content="https://careerguide.works/irshad-logo.png">
+  <meta property="og:url" content="https://careerguide.works">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ar_SA">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="بنك المحتوى المهني | HRDF">
+  <meta name="twitter:description" content="منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل">
+  <meta name="twitter:image" content="https://careerguide.works/irshad-logo.png">
+  <meta name="description" content="منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل - HRDF">
   <title>منصة إدارة المحتوى | مبادرة الإرشاد المهني الشامل - HRDF</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -25,16 +24,12 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; color: #333; }
-
-    /* ===== الهيدر ===== */
     .topbar { background: white; border-bottom: 3px solid #0B6B3A; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; min-height: 64px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); position: sticky; top: 0; z-index: 50; }
     .topbar__brand { display: flex; align-items: center; gap: 12px; }
     .topbar__logo { height: 56px; }
     .topbar__title .kicker { font-size: 10px; color: #888; }
     .topbar__title h1 { font-size: 16px; font-weight: 800; color: #0B6B3A; }
     .topbar__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-
-    /* قائمة الجوال */
     .menu-btn { display: none; background: none; border: none; cursor: pointer; font-size: 24px; color: #0B6B3A; padding: 4px; }
     .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; }
     .mobile-menu.open { display: block; }
@@ -50,27 +45,19 @@
     .mobile-menu__btn.green { background: #0B6B3A; color: white; }
     .mobile-menu__btn.green:hover { background: #094d2a; }
     .mobile-menu__btn.red { color: #dc3545; }
-
-    /* الأزرار */
     .btn { padding: 9px 18px; border-radius: 10px; border: none; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
     .btn--primary { background: #0B6B3A; color: white; }
     .btn--primary:hover { background: #094d2a; }
     .btn--ghost { background: transparent; color: #0B6B3A; border: 2px solid #0B6B3A; }
     .btn--ghost:hover { background: #0B6B3A; color: white; }
-
-    /* ===== Hero ===== */
-.hero {
-  background: linear-gradient(135deg, #0a1628 0%, #0d2347 50%, #0a1f3d 100%);
-  padding: 36px 20px 44px;
-  color: white;
-  text-align: center;
-}
-.hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; flex-direction: row; }
-.hero-stat { text-align: center; }
-    /* ===== Shell ===== */
+    .hero { background: linear-gradient(135deg, #0a1628 0%, #0d2347 50%, #0a1f3d 100%); padding: 36px 20px 44px; color: white; text-align: center; }
+    .hero h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 14px; opacity: 0.88; max-width: 500px; margin: 0 auto 24px; }
+    .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; flex-direction: row; }
+    .hero-stat { text-align: center; }
+    .hero-stat .num { font-size: 36px; font-weight: 800; }
+    .hero-stat .lbl { font-size: 12px; opacity: 0.8; margin-top: 2px; }
     .shell { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
-
-    /* ===== البحث ===== */
     .search-section { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 20px; overflow: hidden; }
     .search-main { padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
     .search-main input { flex: 1; border: none; outline: none; font-family: 'Tajawal', sans-serif; font-size: 15px; color: #333; min-width: 0; }
@@ -88,8 +75,6 @@
     .active-filters { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px; border-top: 1px solid #f0f0f0; }
     .filter-tag { background: #e8f5ef; color: #0B6B3A; padding: 3px 10px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 5px; }
     .filter-tag button { background: none; border: none; color: #0B6B3A; cursor: pointer; font-size: 14px; }
-
-    /* ===== الإحصائيات ===== */
     .stats-section { margin-bottom: 24px; }
     .stats-section h3 { font-size: 16px; color: #333; margin-bottom: 14px; font-weight: 700; }
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
@@ -103,8 +88,6 @@
     .progress-label strong { font-size: 12px; color: #0B6B3A; font-weight: 700; }
     .progress-bar { height: 7px; background: #e8f5ef; border-radius: 10px; overflow: hidden; }
     .progress-fill { height: 100%; background: linear-gradient(90deg, #0B6B3A, #1a9a5c); border-radius: 10px; transition: width 0.8s ease; }
-
-    /* ===== قائمة المحتوى — Desktop ===== */
     .content-section h3 { font-size: 16px; color: #333; margin-bottom: 14px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
     .content-table-wrap { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; }
     .desktop-table { width: 100%; border-collapse: collapse; }
@@ -114,8 +97,6 @@
     td { padding: 12px 14px; border-bottom: 1px solid #f5f5f5; font-size: 13px; vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #fafffe; }
-
-    /* ===== بطاقات الجوال ===== */
     .mobile-cards { display: none; }
     .content-card { background: white; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 16px; margin-bottom: 12px; }
     .content-card__header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
@@ -123,8 +104,6 @@
     .content-card__meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
     .content-card__author { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
     .content-card__actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-    /* الكاتب */
     .author-cell { display: flex; align-items: center; gap: 8px; }
     .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #0B6B3A, #1a9a5c); display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 700; flex-shrink: 0; overflow: hidden; }
     .avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -142,25 +121,25 @@
     .badge-podcast { background: #fde8d8; color: #7d3c00; }
     .badge-default { background: #f0f0f0; color: #555; }
 
-    /* الأزرار الصغيرة */
+    /* شارات حالة النشر */
+    .status-badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+    .status-published { background: #d4edda; color: #155724; }
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-hidden { background: #f8d7da; color: #721c24; }
+
     .btn-view { padding: 7px 14px; border-radius: 8px; border: none; background: #0B6B3A; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
     .btn-edit { padding: 7px 14px; border-radius: 8px; border: none; background: #0066cc; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
     .btn-delete { padding: 7px 14px; border-radius: 8px; border: none; background: #dc3545; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
-
-    /* Pagination */
     .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 20px; flex-wrap: wrap; }
     .page-btn { padding: 8px 14px; border-radius: 8px; border: 1.5px solid #ddd; background: white; color: #333; font-family: 'Tajawal', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.2s; min-width: 40px; }
     .page-btn.active { background: #0B6B3A; color: white; border-color: #0B6B3A; }
     .page-btn:hover:not(.active) { border-color: #0B6B3A; color: #0B6B3A; }
     .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .page-info { font-size: 13px; color: #888; }
-
     .empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
     .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
     .no-results { text-align: center; padding: 40px 20px; color: #888; }
     .no-results .icon { font-size: 40px; margin-bottom: 10px; }
-
-    /* نافذة الكاتب */
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
     .modal-bg.on { display: flex; }
     .modal-author { background: white; border-radius: 20px; width: 100%; max-width: 400px; overflow: hidden; }
@@ -177,8 +156,6 @@
     .info-row a { color: #0B6B3A; text-decoration: none; }
     .modal-author-footer { padding: 14px 20px; background: #f8f9fa; text-align: center; }
     .close-btn { padding: 10px 28px; background: #0B6B3A; color: white; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 15px; cursor: pointer; font-weight: 700; }
-
-    /* نافذة التعديل */
     .modal-edit { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
     .modal-edit.active { display: flex; }
     .modal-edit__dialog { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
@@ -191,7 +168,10 @@
     .input:focus { outline: none; border-color: #0B6B3A; }
     .modal-edit__foot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
 
-    /* ===== Responsive ===== */
+    /* شريط تنبيه للمدير */
+    .admin-notice { background: #fff3cd; border: 1px solid #ffc107; border-radius: 10px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #856404; display: none; }
+    .admin-notice.show { display: flex; align-items: center; gap: 8px; }
+
     @media (max-width: 768px) {
       .topbar__actions { display: none; }
       .menu-btn { display: block; }
@@ -213,14 +193,12 @@
     }
   </style>
 </head>
-  <body>
- 
+<body>
 
-<!-- الهيدر -->
 <header class="topbar">
   <div class="topbar__brand">
-<img class="topbar__logo" src="./irshad-logo.png" alt="HRDF">
-  <div class="topbar__title">
+    <img class="topbar__logo" src="./irshad-logo.png" alt="HRDF">
+    <div class="topbar__title">
       <div class="kicker">مبادرة الإرشاد المهني الشامل</div>
       <h1>منصة إدارة المحتوى</h1>
     </div>
@@ -229,7 +207,6 @@
   <button class="menu-btn" onclick="openMobileMenu()">☰</button>
 </header>
 
-<!-- قائمة الجوال -->
 <div class="mobile-menu" id="mobile-menu" onclick="closeMobileMenu(event)">
   <div class="mobile-menu__panel">
     <button class="mobile-menu__close" onclick="closeMobileMenu()">✕</button>
@@ -238,20 +215,23 @@
   </div>
 </div>
 
-<!-- Hero -->
 <div class="hero">
-  <div class="hero-dot"></div>
-  <div class="hero-dot2"></div>
   <h2>بنك المحتوى المهني</h2>
   <p>منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل</p>
   <div class="hero-stats">
     <div class="hero-stat"><div class="num" id="hero-total">0</div><div class="lbl">إجمالي المحتوى</div></div>
+    <div class="hero-stat"><div class="num" id="hero-published">0</div><div class="lbl">✅ منشور</div></div>
+    <div class="hero-stat"><div class="num" id="hero-pending">0</div><div class="lbl">⏳ قيد المراجعة</div></div>
     <div class="hero-stat"><div class="num" id="hero-authors">0</div><div class="lbl">المساهمون</div></div>
-    <div class="hero-stat"><div class="num" id="hero-types">0</div><div class="lbl">أنواع المحتوى</div></div>
   </div>
 </div>
 
 <div class="shell">
+
+  <!-- تنبيه للمدير -->
+  <div class="admin-notice" id="admin-notice">
+    🛡️ أنت تشاهد كمشرف — يظهر لك كل المحتوى بما فيه غير المنشور والمخفي
+  </div>
 
   <!-- البحث المتقدم -->
   <div class="search-section">
@@ -294,6 +274,15 @@
           <select id="f-author"><option value="">— الكل —</option></select>
         </div>
         <div class="filter-item">
+          <label>حالة النشر</label>
+          <select id="f-status">
+            <option value="">— الكل —</option>
+            <option value="published">✅ منشور</option>
+            <option value="pending">⏳ قيد المراجعة</option>
+            <option value="hidden">🙈 مخفي</option>
+          </select>
+        </div>
+        <div class="filter-item">
           <label>حالة الملف</label>
           <select id="f-file">
             <option value="">— الكل —</option>
@@ -324,6 +313,7 @@
     <div class="stats-grid">
       <div class="stat-card"><h4>حسب نوع المحتوى</h4><div id="type-stats"></div></div>
       <div class="stat-card"><h4>حسب الفئة المستهدفة</h4><div id="target-stats"></div></div>
+      <div class="stat-card" id="status-stats-card" style="display:none;"><h4>حسب حالة النشر</h4><div id="status-stats"></div></div>
     </div>
   </div>
 
@@ -333,8 +323,6 @@
       <span>📋 قائمة المحتوى</span>
       <span id="sort-label" style="font-size:12px;color:#888;font-weight:400;">الأحدث أولاً</span>
     </h3>
-
-    <!-- Desktop Table -->
     <div class="content-table-wrap">
       <table class="desktop-table">
         <thead>
@@ -343,6 +331,7 @@
             <th onclick="sortBy('title')">العنوان ↕</th>
             <th>النوع</th>
             <th>الفئة</th>
+            <th>حالة النشر</th>
             <th>الكاتب</th>
             <th onclick="sortBy('date')">التاريخ ↕</th>
             <th>إجراءات</th>
@@ -350,21 +339,9 @@
         </thead>
         <tbody id="rows"></tbody>
       </table>
-
-      <!-- Mobile Cards -->
       <div class="mobile-cards" id="mobile-cards"></div>
-
-      <div class="empty-state" id="empty-state" style="display:none;">
-        <div class="icon">📭</div>
-        <p>لا يوجد محتوى متاح حالياً</p>
-      </div>
-      <div class="no-results" id="no-results" style="display:none;">
-        <div class="icon">🔍</div>
-        <p>لا توجد نتائج مطابقة</p>
-        <button class="btn-filter btn-reset" onclick="resetFilters()" style="margin-top:10px;">إعادة تعيين</button>
-      </div>
-
-      <!-- Pagination -->
+      <div class="empty-state" id="empty-state" style="display:none;"><div class="icon">📭</div><p>لا يوجد محتوى متاح حالياً</p></div>
+      <div class="no-results" id="no-results" style="display:none;"><div class="icon">🔍</div><p>لا توجد نتائج مطابقة</p><button class="btn-filter btn-reset" onclick="resetFilters()" style="margin-top:10px;">إعادة تعيين</button></div>
       <div class="pagination" id="pagination" style="display:none;"></div>
     </div>
   </div>
@@ -451,7 +428,12 @@ const typeLabels = {
 };
 const roleMap = { admin: '🛡️ مشرف', editor: '✏️ محرر', viewer: '👁 قارئ', pending: '⏳ في الانتظار' };
 
-// ===== قائمة الجوال =====
+function getStatusBadge(item) {
+  if (!item.is_reviewed) return '<span class="status-badge status-pending">⏳ قيد المراجعة</span>';
+  if (item.is_hidden) return '<span class="status-badge status-hidden">🙈 مخفي</span>';
+  return '<span class="status-badge status-published">✅ منشور</span>';
+}
+
 function openMobileMenu() { document.getElementById('mobile-menu').classList.add('open'); }
 function closeMobileMenu(e) {
   if (!e || e.target === document.getElementById('mobile-menu')) {
@@ -459,7 +441,6 @@ function closeMobileMenu(e) {
   }
 }
 
-// ===== Auth =====
 async function checkAuth() {
   var { data } = await sb.auth.getSession();
   if (!data.session) { renderTopbar(null); return; }
@@ -468,6 +449,10 @@ async function checkAuth() {
   if (profile) currentRole = profile.role;
   renderTopbar(profile);
   renderMobileMenu(profile);
+  if (currentRole === 'admin' || currentRole === 'editor') {
+    document.getElementById('admin-notice').className = 'admin-notice show';
+    document.getElementById('status-stats-card').style.display = 'block';
+  }
 }
 
 function renderTopbar(profile) {
@@ -515,11 +500,8 @@ function renderMobileMenu(profile) {
     return;
   }
   var name = profile.full_name || currentUser.email || 'مستخدم';
-  var avatarHtml = profile.avatar_url
-    ? '<img src="' + profile.avatar_url + '">'
-    : name.charAt(0);
+  var avatarHtml = profile.avatar_url ? '<img src="' + profile.avatar_url + '">' : name.charAt(0);
   userSection.innerHTML = '<div class="mobile-menu__user"><div class="avatar">' + avatarHtml + '</div><div><div class="name">' + name + '</div><div class="role">' + (roleMap[currentRole] || currentRole) + '</div></div></div>';
-
   var html = '<button class="mobile-menu__btn" onclick="window.location.href=\'./profile.html\';closeMobileMenu()">👤 ملفي الشخصي</button>';
   if (currentRole === 'admin') html += '<button class="mobile-menu__btn" onclick="window.location.href=\'./admin.html\';closeMobileMenu()">⚙️ لوحة التحكم</button>';
   if (currentRole === 'editor' || currentRole === 'admin') html += '<button class="mobile-menu__btn" onclick="window.location.href=\'./upload.html\';closeMobileMenu()">📤 رفع محتوى</button>';
@@ -529,19 +511,22 @@ function renderMobileMenu(profile) {
 
 async function signout() { await sb.auth.signOut(); window.location.reload(); }
 
-// ===== تحميل المحتوى =====
 async function loadContent() {
-  var { data } = await sb.from('content')
+  var query = sb.from('content')
     .select('*, profiles!content_created_by_fkey(id, full_name, email, role, organization, city, phone, linkedin, avatar_url)')
-    .eq('is_hidden', false)
     .order('created_at', { ascending: false });
 
+  // المدير والمحرر يرون كل المحتوى، الباقي يرى المنشور فقط
+  if (currentRole !== 'admin' && currentRole !== 'editor') {
+    query = query.eq('is_hidden', false).eq('is_reviewed', true);
+  }
+
+  var { data } = await query;
   allItems = (data || []).map(function(item) {
     if (item.profiles) { authorsMap[item.created_by] = item.profiles; }
     return item;
   });
 
-  // تعبئة قائمة الكتّاب
   var authorSelect = document.getElementById('f-author');
   var seen = {};
   allItems.forEach(function(i) {
@@ -562,9 +547,12 @@ async function loadContent() {
 }
 
 function updateHeroStats() {
+  var published = allItems.filter(function(i){ return i.is_reviewed && !i.is_hidden; }).length;
+  var pending = allItems.filter(function(i){ return !i.is_reviewed; }).length;
   document.getElementById('hero-total').textContent = allItems.length;
+  document.getElementById('hero-published').textContent = published;
+  document.getElementById('hero-pending').textContent = pending;
   document.getElementById('hero-authors').textContent = new Set(allItems.filter(function(i){ return i.created_by; }).map(function(i){ return i.created_by; })).size;
-  document.getElementById('hero-types').textContent = new Set(allItems.map(function(i){ return i.content_type; })).size;
 }
 
 function updateProgressStats() {
@@ -587,9 +575,18 @@ function updateProgressStats() {
     targetHtml += '<div class="progress-item"><div class="progress-label"><span onclick="quickFilter(\'audience\',\''+key+'\')">' +key+'</span><strong>'+targetCounts[key]+' ('+pct+'%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div></div>';
   });
   document.getElementById('target-stats').innerHTML = targetHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد</p>';
+
+  // إحصائيات حالة النشر للمدير
+  var published = allItems.filter(function(i){ return i.is_reviewed && !i.is_hidden; }).length;
+  var pending = allItems.filter(function(i){ return !i.is_reviewed; }).length;
+  var hidden = allItems.filter(function(i){ return i.is_reviewed && i.is_hidden; }).length;
+  var statusHtml = '';
+  statusHtml += '<div class="progress-item"><div class="progress-label"><span>✅ منشور</span><strong>'+published+'</strong></div><div class="progress-bar"><div class="progress-fill" style="width:'+Math.round(published/total*100)+'%;background:#0B6B3A;"></div></div></div>';
+  statusHtml += '<div class="progress-item"><div class="progress-label"><span>⏳ قيد المراجعة</span><strong>'+pending+'</strong></div><div class="progress-bar"><div class="progress-fill" style="width:'+Math.round(pending/total*100)+'%;background:#ffc107;"></div></div></div>';
+  statusHtml += '<div class="progress-item"><div class="progress-label"><span>🙈 مخفي</span><strong>'+hidden+'</strong></div><div class="progress-bar"><div class="progress-fill" style="width:'+Math.round(hidden/total*100)+'%;background:#dc3545;"></div></div></div>';
+  document.getElementById('status-stats').innerHTML = statusHtml;
 }
 
-// ===== البحث والفلترة =====
 function toggleAdvanced() {
   var f = document.getElementById('advanced-filters');
   var t = document.getElementById('advanced-toggle');
@@ -602,6 +599,7 @@ function applyFilters() {
   var type = document.getElementById('f-type').value;
   var audience = document.getElementById('f-audience').value;
   var author = document.getElementById('f-author').value;
+  var status = document.getElementById('f-status').value;
   var file = document.getElementById('f-file').value;
   var dateFrom = document.getElementById('f-date-from').value;
   var dateTo = document.getElementById('f-date-to').value;
@@ -611,6 +609,9 @@ function applyFilters() {
     if (type && i.content_type !== type) return false;
     if (audience && i.target_audience !== audience) return false;
     if (author && i.created_by !== author) return false;
+    if (status === 'published' && !(i.is_reviewed && !i.is_hidden)) return false;
+    if (status === 'pending' && i.is_reviewed) return false;
+    if (status === 'hidden' && !(i.is_reviewed && i.is_hidden)) return false;
     if (file === 'has' && !i.file_url) return false;
     if (file === 'none' && i.file_url) return false;
     if (dateFrom && new Date(i.created_at) < new Date(dateFrom)) return false;
@@ -619,7 +620,7 @@ function applyFilters() {
   });
 
   currentPage = 1;
-  updateActiveTags(q, type, audience, author, file, dateFrom, dateTo);
+  updateActiveTags(q, type, audience, author, status, file, dateFrom, dateTo);
   render();
 }
 
@@ -631,12 +632,14 @@ function quickFilter(field, value) {
   applyFilters();
 }
 
-function updateActiveTags(q, type, audience, author, file, dateFrom, dateTo) {
+function updateActiveTags(q, type, audience, author, status, file, dateFrom, dateTo) {
   var tags = [];
+  var statusLabels = { published: '✅ منشور', pending: '⏳ قيد المراجعة', hidden: '🙈 مخفي' };
   if (q) tags.push({ label: 'بحث: '+q, clear: function(){ document.getElementById('q').value=''; } });
   if (type) tags.push({ label: 'النوع: '+type, clear: function(){ document.getElementById('f-type').value=''; } });
   if (audience) tags.push({ label: 'الفئة: '+audience, clear: function(){ document.getElementById('f-audience').value=''; } });
   if (author) { var a=authorsMap[author]; tags.push({ label: 'الكاتب: '+(a?(a.full_name||a.email):author), clear: function(){ document.getElementById('f-author').value=''; } }); }
+  if (status) tags.push({ label: 'الحالة: '+(statusLabels[status]||status), clear: function(){ document.getElementById('f-status').value=''; } });
   if (file==='has') tags.push({ label: 'يوجد ملف', clear: function(){ document.getElementById('f-file').value=''; } });
   if (file==='none') tags.push({ label: 'بدون ملف', clear: function(){ document.getElementById('f-file').value=''; } });
   if (dateFrom) tags.push({ label: 'من: '+dateFrom, clear: function(){ document.getElementById('f-date-from').value=''; } });
@@ -663,6 +666,7 @@ function resetFilters() {
   document.getElementById('f-type').value='';
   document.getElementById('f-audience').value='';
   document.getElementById('f-author').value='';
+  document.getElementById('f-status').value='';
   document.getElementById('f-file').value='';
   document.getElementById('f-date-from').value='';
   document.getElementById('f-date-to').value='';
@@ -672,7 +676,6 @@ function resetFilters() {
   render();
 }
 
-// ===== الترتيب =====
 function sortBy(field) {
   if (sortField===field) sortDir=sortDir==='asc'?'desc':'asc';
   else { sortField=field; sortDir='asc'; }
@@ -681,7 +684,6 @@ function sortBy(field) {
   render();
 }
 
-// ===== Render =====
 function render() {
   var sorted = [...filteredItems].sort(function(a,b) {
     var dir=sortDir==='asc'?1:-1;
@@ -701,7 +703,6 @@ function render() {
     return;
   }
   document.getElementById('empty-state').style.display='none';
-
   if (sorted.length===0) {
     document.getElementById('no-results').style.display='block';
     document.getElementById('rows').innerHTML='';
@@ -711,7 +712,6 @@ function render() {
   }
   document.getElementById('no-results').style.display='none';
 
-  // Pagination
   var totalPages = Math.ceil(sorted.length/PAGE_SIZE);
   if (currentPage>totalPages) currentPage=1;
   var start=(currentPage-1)*PAGE_SIZE;
@@ -731,12 +731,14 @@ function renderTable(items, startIdx) {
     var authorName=author?(author.full_name||author.email||'مجهول'):'غير محدد';
     var date=item.created_at?new Date(item.created_at).toLocaleDateString('ar-SA'):'-';
     var avatarContent=author&&author.avatar_url?'<img src="'+author.avatar_url+'">':authorName.charAt(0);
+    var statusBadge = getStatusBadge(item);
     var tr=document.createElement('tr');
     tr.innerHTML=
       '<td style="color:#888;font-weight:700;">'+String(startIdx+idx+1).padStart(3,'0')+'</td>'+
-      '<td style="font-weight:700;max-width:180px;">'+item.title+'</td>'+
+      '<td style="font-weight:700;max-width:160px;">'+item.title+'</td>'+
       '<td><span class="badge '+info.cls+'">'+(info.icon||'')+' '+(item.content_type||'-')+'</span></td>'+
       '<td style="color:#555;font-size:12px;">'+(item.target_audience||'-')+'</td>'+
+      '<td>'+statusBadge+'</td>'+
       '<td><div class="author-cell"><div class="avatar">'+avatarContent+'</div><div class="author-info"><h5>'+authorName+'</h5><span>'+date+'</span></div>'+(author?'<button class="btn-author" onclick="showAuthor(\''+item.created_by+'\')">بيانات</button>':'')+'</div></td>'+
       '<td style="color:#888;font-size:12px;">'+date+'</td>'+
       '<td><div style="display:flex;gap:4px;flex-wrap:wrap;"><button class="btn-view" onclick="window.location.href=\'./view.html?id='+item.id+'\'">👁 عرض</button>'+(currentRole==='admin'?'<button class="btn-edit" onclick="editItem('+item.id+')">تعديل</button><button class="btn-delete" onclick="deleteItem('+item.id+')">حذف</button>':'')+'</div></td>';
@@ -753,6 +755,7 @@ function renderMobileCards(items, startIdx) {
     var authorName=author?(author.full_name||author.email||'مجهول'):'غير محدد';
     var date=item.created_at?new Date(item.created_at).toLocaleDateString('ar-SA'):'-';
     var avatarContent=author&&author.avatar_url?'<img src="'+author.avatar_url+'">':authorName.charAt(0);
+    var statusBadge = getStatusBadge(item);
     var div=document.createElement('div');
     div.className='content-card';
     div.innerHTML=
@@ -762,6 +765,7 @@ function renderMobileCards(items, startIdx) {
       '</div>'+
       '<div class="content-card__meta">'+
         '<span class="badge '+info.cls+'">'+(info.icon||'')+' '+(item.content_type||'-')+'</span>'+
+        statusBadge+
         (item.target_audience?'<span class="badge badge-default">👥 '+item.target_audience+'</span>':'')+
         '<span class="badge badge-default">📅 '+date+'</span>'+
       '</div>'+
@@ -781,14 +785,11 @@ function renderMobileCards(items, startIdx) {
 function renderPagination(total, totalPages) {
   var pag = document.getElementById('pagination');
   if (totalPages<=1) { pag.style.display='none'; return; }
-  pag.style.display='flex';
-  pag.innerHTML='';
-
+  pag.style.display='flex'; pag.innerHTML='';
   var prev=document.createElement('button');
   prev.className='page-btn'; prev.textContent='‹ السابق'; prev.disabled=currentPage===1;
   prev.onclick=function(){ currentPage--; render(); window.scrollTo(0,400); };
   pag.appendChild(prev);
-
   for (var i=1; i<=totalPages; i++) {
     if (totalPages>7 && i>2 && i<totalPages-1 && Math.abs(i-currentPage)>1) {
       if (i===3 || i===totalPages-2) { var dots=document.createElement('span'); dots.textContent='...'; dots.style.padding='8px 4px'; pag.appendChild(dots); }
@@ -800,18 +801,15 @@ function renderPagination(total, totalPages) {
     btn.onclick=(function(p){ return function(){ currentPage=p; render(); window.scrollTo(0,400); }; })(i);
     pag.appendChild(btn);
   }
-
   var next=document.createElement('button');
   next.className='page-btn'; next.textContent='التالي ›'; next.disabled=currentPage===totalPages;
   next.onclick=function(){ currentPage++; render(); window.scrollTo(0,400); };
   pag.appendChild(next);
-
   var info=document.createElement('span');
   info.className='page-info'; info.textContent='صفحة '+currentPage+' من '+totalPages+' ('+total+' عنصر)';
   pag.appendChild(info);
 }
 
-// ===== بيانات الكاتب =====
 function showAuthor(id) {
   var a=authorsMap[id]; if(!a) return;
   var name=a.full_name||a.email||'مجهول';
@@ -828,7 +826,6 @@ function showAuthor(id) {
   document.getElementById('author-modal').className='modal-bg on';
 }
 
-// ===== تعديل وحذف =====
 function editItem(id) {
   var item=allItems.find(function(x){ return x.id===id; }); if(!item) return;
   document.getElementById('fid').value=item.id;
@@ -855,25 +852,21 @@ document.getElementById('btnCancel').addEventListener('click',function(){ docume
 document.getElementById('q').addEventListener('input', applyFilters);
 
 async function init() {
-  // عرض قائمة الجوال فوراً حتى قبل تحميل البيانات
   renderMobileMenu(null);
   await checkAuth();
   await loadContent();
 }
-  init();
+init();
 </script>
-    <!-- Footer -->
+
+<!-- Footer -->
 <footer style="background:#1a1a2e;color:white;padding:40px 20px 20px;margin-top:40px;">
   <div style="max-width:1200px;margin:0 auto;">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:32px;margin-bottom:32px;">
-
-      <!-- عن المبادرة -->
       <div>
         <img src="./irshad-logo.png" style="height:50px;margin-bottom:16px;">
         <p style="color:#aaa;font-size:14px;line-height:1.8;">مبادرة الإرشاد المهني الشامل — منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني.</p>
       </div>
-
-      <!-- روابط سريعة -->
       <div>
         <h4 style="font-size:16px;margin-bottom:16px;color:#df7c2e;">روابط سريعة</h4>
         <ul style="list-style:none;line-height:2.2;">
@@ -882,8 +875,6 @@ async function init() {
           <li><a href="./upload.html" style="color:#aaa;text-decoration:none;font-size:14px;">📤 رفع محتوى</a></li>
         </ul>
       </div>
-
-      <!-- تواصل معنا -->
       <div>
         <h4 style="font-size:16px;margin-bottom:16px;color:#df7c2e;">تواصل معنا</h4>
         <ul style="list-style:none;line-height:2.2;">
@@ -891,10 +882,7 @@ async function init() {
           <li style="color:#aaa;font-size:14px;margin-top:8px;">🛠️ للدعم الفني راسلنا عبر البريد</li>
         </ul>
       </div>
-
     </div>
-
-    <!-- حقوق النشر -->
     <div style="border-top:1px solid #333;padding-top:20px;text-align:center;">
       <p style="color:#666;font-size:13px;">© 2025 مبادرة الإرشاد المهني الشامل — جميع الحقوق محفوظة</p>
     </div>
