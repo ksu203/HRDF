@@ -557,10 +557,27 @@ async function loadContent() {
   render();
 }
 
+function animateCount(id, target) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  var start = 0;
+  var duration = 1500;
+  var startTime = null;
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    var progress = Math.min((timestamp - startTime) / duration, 1);
+    var ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(ease * target);
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(step);
+}
+
 function updateHeroStats() {
-  document.getElementById('hero-total').textContent = allItems.length;
-  document.getElementById('hero-authors').textContent = new Set(allItems.filter(function(i){ return i.created_by; }).map(function(i){ return i.created_by; })).size;
-  document.getElementById('hero-types').textContent = new Set(allItems.map(function(i){ return i.content_type; })).size;
+  animateCount('hero-total', allItems.length);
+  animateCount('hero-authors', new Set(allItems.filter(function(i){ return i.created_by; }).map(function(i){ return i.created_by; })).size);
+  animateCount('hero-types', new Set(allItems.map(function(i){ return i.content_type; })).size);
 }
 
 function updateProgressStats() {
