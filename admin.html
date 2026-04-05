@@ -192,7 +192,7 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>العنوان</th><th>النوع</th><th>الظهور</th><th>التحميل</th><th>إجراءات</th></tr></thead>
+<thead><tr><th>العنوان</th><th>النوع</th><th>الحالة</th><th>الظهور</th><th>التنزيل</th><th>إجراءات</th></tr></thead>
           <tbody id="content-table"><tr><td colspan="5" class="empty">جاري التحميل...</td></tr></tbody>
         </table>
       </div>
@@ -439,17 +439,18 @@ async function loadContent() {
   var html = '';
   var mobileHtml = '';
   data.forEach(function(c) {
-    var visibility = c.is_hidden ? '<span class="badge badge-hidden">مخفي</span>' : '<span class="badge badge-visible">ظاهر</span>';
-    var download = c.allow_download ? '<span class="badge badge-editor">✓</span>' : '<span class="badge badge-hidden">✗</span>';
-    var rowClass = c.is_hidden ? 'hidden-row' : '';
+  var visibility = c.is_hidden ? '<span class="badge badge-hidden">مخفي</span>' : '<span class="badge badge-visible">ظاهر</span>';
+var download = c.allow_download ? '<span class="badge badge-editor">✓</span>' : '<span class="badge badge-hidden">✗</span>';
+var rowClass = c.is_hidden ? 'hidden-row' : '';
+var statusBadge = !c.is_reviewed ? '<span class="badge badge-pending">⏳ قيد المراجعة</span>' : (c.is_hidden ? '<span class="badge badge-hidden">🙈 مخفي</span>' : '<span class="badge badge-editor">✅ منشور</span>');
 
-html += '<tr class="'+rowClass+'"><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+visibility+'</td><td>'+download+'</td>';
+html += '<tr class="'+rowClass+'"><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+statusBadge+'</td><td>'+visibility+'</td><td>'+download+'</td>';
 html += '<td style="white-space:nowrap;"><button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button> <button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button> ';html += '<button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button> ';
 html += '<button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button> ';
 html += '<button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button></td></tr>';
 
     mobileHtml += '<div class="mobile-card'+(c.is_hidden?' hidden-row':'')+'"><div class="mobile-card-title">'+c.title+'</div>';
-    mobileHtml += '<div class="mobile-card-meta"><span class="badge badge-default">'+(c.content_type||'-')+'</span>'+visibility+download+'</div>';
+mobileHtml += '<div class="mobile-card-meta"><span class="badge badge-default">'+(c.content_type||'-')+'</span>'+statusBadge+visibility+download+'</div>';
     mobileHtml += '<div class="mobile-card-actions">';
     mobileHtml += '<button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button>';
     mobileHtml += '<button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button>';
