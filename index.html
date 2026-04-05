@@ -273,9 +273,9 @@
           <label>الكاتب</label>
           <select id="f-author"><option value="">— الكل —</option></select>
         </div>
-        <div class="filter-item">
-          <label>حالة النشر</label>
-          <select id="f-status">
+       <div class="filter-item" id="status-filter-item" style="display:none;">
+  <label>حالة النشر</label>
+  <select id="f-status">
             <option value="">— الكل —</option>
             <option value="published">✅ منشور</option>
             <option value="pending">⏳ قيد المراجعة</option>
@@ -449,10 +449,11 @@ async function checkAuth() {
   if (profile) currentRole = profile.role;
   renderTopbar(profile);
   renderMobileMenu(profile);
-  if (currentRole === 'admin' || currentRole === 'editor') {
-    document.getElementById('admin-notice').className = 'admin-notice show';
-    document.getElementById('status-stats-card').style.display = 'block';
-  }
+if (currentRole === 'admin' || currentRole === 'editor') {
+  document.getElementById('admin-notice').className = 'admin-notice show';
+  document.getElementById('status-stats-card').style.display = 'block';
+  document.getElementById('status-filter-item').style.display = 'block';
+}
 }
 
 function renderTopbar(profile) {
