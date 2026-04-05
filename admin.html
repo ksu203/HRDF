@@ -87,7 +87,20 @@
     .progress-bar { width: 100%; height: 5px; background: #eee; border-radius: 4px; margin-top: 6px; display: none; }
     .progress-bar-fill { height: 100%; background: #0B6B3A; border-radius: 4px; width: 0%; transition: width 0.3s; }
     .notif-badge { background: #dc3545; color: white; border-radius: 50%; padding: 1px 6px; font-size: 11px; margin-right: 4px; }
-
+/* Tooltip */
+.tooltip-wrap { position: relative; display: inline-block; }
+.tooltip-wrap .tooltip-text {
+  visibility: hidden; opacity: 0;
+  background: #333; color: white;
+  font-size: 12px; border-radius: 8px;
+  padding: 6px 10px; white-space: nowrap;
+  position: absolute; bottom: 110%; right: 50%;
+  transform: translateX(50%);
+  transition: opacity 0.2s;
+  z-index: 999; pointer-events: none;
+  font-family: 'Tajawal', sans-serif;
+}
+.tooltip-wrap:hover .tooltip-text { visibility: visible; opacity: 1; }
     /* نموذج إضافة مستخدم */
     .add-user-form { display: none; padding: 16px; border-top: 1px solid #eee; }
     .add-user-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
