@@ -52,11 +52,12 @@
     .btn--ghost:hover { background: #0B6B3A; color: white; }
     .hero { background: linear-gradient(135deg, #0a1628 0%, #0d2347 50%, #0a1f3d 100%); padding: 36px 20px 44px; color: white; text-align: center; }
     .hero h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
-    .hero p { font-size: 14px; opacity: 0.88; max-width: 500px; margin: 0 auto 24px; }
-    .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; flex-direction: row; }
-    .hero-stat { text-align: center; }
-    .hero-stat .num { font-size: 36px; font-weight: 800; }
-    .hero-stat .lbl { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+   .hero-stats { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-top: 8px; }
+.hero-stat { text-align: center; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 20px 32px; min-width: 140px; backdrop-filter: blur(4px); transition: transform 0.2s; }
+.hero-stat:hover { transform: translateY(-4px); background: rgba(255,255,255,0.15); }
+.stat-icon { font-size: 28px; margin-bottom: 8px; }
+.hero-stat .num { font-size: 40px; font-weight: 800; line-height: 1; }
+.hero-stat .lbl { font-size: 13px; opacity: 0.85; margin-top: 6px; }
     .shell { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
     .search-section { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 20px; overflow: hidden; }
     .search-main { padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
@@ -218,14 +219,23 @@
 <div class="hero">
   <h2>بنك المحتوى المهني</h2>
   <p>منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل</p>
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="num" id="hero-total">0</div><div class="lbl">إجمالي المحتوى</div></div>
-    <div class="hero-stat"><div class="num" id="hero-published">0</div><div class="lbl">✅ منشور</div></div>
-    <div class="hero-stat"><div class="num" id="hero-pending">0</div><div class="lbl">⏳ قيد المراجعة</div></div>
-    <div class="hero-stat"><div class="num" id="hero-authors">0</div><div class="lbl">المساهمون</div></div>
+ <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="stat-icon">📚</div>
+      <div class="num" id="hero-total">0</div>
+      <div class="lbl">إجمالي المحتوى</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-icon">👥</div>
+      <div class="num" id="hero-authors">0</div>
+      <div class="lbl">المساهمون</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-icon">🗂️</div>
+      <div class="num" id="hero-types">0</div>
+      <div class="lbl">أنواع المحتوى</div>
+    </div>
   </div>
-</div>
-
 <div class="shell">
 
   <!-- تنبيه للمدير -->
@@ -548,12 +558,9 @@ async function loadContent() {
 }
 
 function updateHeroStats() {
-  var published = allItems.filter(function(i){ return i.is_reviewed && !i.is_hidden; }).length;
-  var pending = allItems.filter(function(i){ return !i.is_reviewed; }).length;
   document.getElementById('hero-total').textContent = allItems.length;
-  document.getElementById('hero-published').textContent = published;
-  document.getElementById('hero-pending').textContent = pending;
   document.getElementById('hero-authors').textContent = new Set(allItems.filter(function(i){ return i.created_by; }).map(function(i){ return i.created_by; })).size;
+  document.getElementById('hero-types').textContent = new Set(allItems.map(function(i){ return i.content_type; })).size;
 }
 
 function updateProgressStats() {
