@@ -230,12 +230,11 @@ async function loadUserContent(userId) {
   data.forEach(function(c) {
     var date = new Date(c.created_at).toLocaleDateString('ar-SA');
     var cls = typeMap[c.content_type] || 'badge-default';
-    var statusBadge = !c.is_reviewed
+var statusBadge = !c.is_reviewed
   ? '<span class="badge" style="background:#fff3cd;color:#856404;">⏳ قيد المراجعة</span>'
   : (c.is_hidden ? '<span class="badge" style="background:#f8d7da;color:#721c24;">🙈 مخفي</span>' : '<span class="badge" style="background:#d4edda;color:#155724;">✅ منشور</span>');
-html += '<div class="content-item"><div><div class="title">' + c.title + '</div><div class="meta">' + date + '</div></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><span class="badge ' + cls + '">' + (c.content_type||'-') + '</span>' + statusBadge + '<button class="view-btn" onclick="window.location.href=\'./view.html?id=' + c.id + '\'">عرض</button></div></div>';
-  document.getElementById('content-list').innerHTML = html;
-}
+var viewUrl = './view.html?id=' + c.id;
+html += '<div class="content-item"><div><div class="title">' + c.title + '</div><div class="meta">' + date + '</div></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;"><span class="badge ' + cls + '">' + (c.content_type||'-') + '</span>' + statusBadge + '<button class="view-btn" onclick="window.location.href=\'' + viewUrl + '\'">عرض</button></div></div>';
 
 document.getElementById('btn-logout').addEventListener('click', async function() {
   await sb.auth.signOut();
