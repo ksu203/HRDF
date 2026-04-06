@@ -629,8 +629,52 @@ async function init() {
   setupTabs();
   loadUsers();
   checkNotifications();
+watchNewUsers(); //
 }
 init();
 </script>
+// ===== مراقبة تسجيل مستخدمين جدد =====
+function watchNewUsers() {
+  sb.channel('new-users')
+    .on('postgres_changes', {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'profiles'
+    }, function(payload) {
+      var user = payload.new;
+      var name = user.full_name || user.email || 'مستخدم جديد';
+      showUserNotification(name, user.email);
+      checkNotifications(); // تحديث عداد المحتوى أيضاً
+    })
+    .subscribe();
+}
+
+function showUserNotification(name, email) {
+  // إنشاء البانر إذا لم يكن موجوداً
+  var banner = document.getElementById('user-notif-banner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'user-notif-banner';
+    banner.style.cssText = `
+      position: fixed; bottom: 20px; left: 20px;
+      background: #0B6B3A; color: white;
+      padding: 14px 20px; border-radius: 12px;
+      font-family: 'Tajawal', sans-serif; font-size: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      z-index: 9999; max-width: 300px;
+      animation: slideIn 0.3s ease;
+    `;
+    document.body.appendChild(banner);
+  }
+  banner.innerHTML = '👤 مستخدم جديد: <strong>' + name + '</strong><br>'
+    + '<span style="font-size:12px;opacity:0.85;">' + (email||'') + '</span>';
+  banner.style.display = 'block';
+
+  // إخفاء تلقائي بعد 6 ثوان
+  clearTimeout(window._notifTimer);
+  window._notifTimer = setTimeout(function() {
+    banner.style.display = 'none';
+  }, 6000);
+}
 </body>
 </html>
