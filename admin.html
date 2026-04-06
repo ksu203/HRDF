@@ -88,6 +88,23 @@
     .add-user-field label { display: block; margin-bottom: 4px; font-size: 13px; color: #444; font-weight: 600; }
     .add-user-field input, .add-user-field select { width: 100%; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; }
     .create-msg { margin-top: 10px; padding: 10px; border-radius: 8px; text-align: center; font-size: 13px; display: none; }
+
+    @keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes slideOutDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(30px); opacity: 0; } }
+    #user-notif-banner {
+      display: none; position: fixed; bottom: 24px; left: 24px;
+      background: #0B6B3A; color: white; padding: 14px 18px;
+      border-radius: 14px; font-family: 'Tajawal', sans-serif; font-size: 14px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.22); z-index: 9999;
+      max-width: 300px; line-height: 1.6; animation: slideInUp 0.3s ease;
+    }
+    #user-notif-banner.hide { animation: slideOutDown 0.3s ease forwards; }
+    #user-notif-banner .close-btn {
+      position: absolute; top: 8px; left: 10px; cursor: pointer;
+      font-size: 16px; opacity: 0.7; background: none; border: none; color: white; line-height: 1;
+    }
+    #user-notif-banner .close-btn:hover { opacity: 1; }
+
     @media (max-width: 640px) {
       .stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
       .stat-card .num { font-size: 22px; }
@@ -96,6 +113,7 @@
       .mobile-list { display: block; }
       .add-user-grid { grid-template-columns: 1fr; }
       .header h1 { font-size: 14px; }
+      #user-notif-banner { left: 12px; right: 12px; max-width: none; bottom: 16px; }
     }
   </style>
 </head>
@@ -117,8 +135,6 @@
 </div>
 
 <div class="content">
-
-  <!-- المستخدمون -->
   <div class="section on" id="s1">
     <div class="stats">
       <div class="stat-card"><div class="num" id="cnt-total">-</div><div class="lbl">الكل</div></div>
@@ -161,7 +177,6 @@
     </div>
   </div>
 
-  <!-- المحتوى -->
   <div class="section" id="s2">
     <div class="card">
       <div class="card-header">
@@ -178,7 +193,6 @@
     </div>
   </div>
 
-  <!-- التصنيفات -->
   <div class="section" id="s3">
     <div class="card">
       <div class="card-header">
@@ -194,7 +208,6 @@
     </div>
   </div>
 
-  <!-- الإشعارات -->
   <div class="section" id="s4">
     <div class="card">
       <div class="card-header"><h3>🔔 إشعارات المحتوى الجديد</h3></div>
@@ -207,7 +220,12 @@
       <div class="mobile-list" id="notif-mobile"></div>
     </div>
   </div>
+</div>
 
+<!-- بانر إشعار المستخدم الجديد -->
+<div id="user-notif-banner">
+  <button class="close-btn" id="close-notif-banner">✕</button>
+  <div id="user-notif-content"></div>
 </div>
 
 <!-- نافذة تغيير الصلاحية -->
@@ -290,7 +308,7 @@
 
 <script>
 const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
+const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq'; // ← استبدل بـ eyJ...
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUserId = null;
@@ -343,38 +361,26 @@ document.getElementById('toggle-add-user').addEventListener('click', function() 
   }
 });
 
-// ===== المستخدمون =====
 async function loadUsers() {
   var { data } = await sb.from('profiles').select('*');
   if (!data) return;
   document.getElementById('cnt-total').textContent = data.length;
   document.getElementById('cnt-pending').textContent = data.filter(function(u){ return u.role==='pending'; }).length;
   document.getElementById('cnt-active').textContent = data.filter(function(u){ return u.role!=='pending'; }).length;
-
-  var html = '';
-  var mobileHtml = '';
+  var html = '', mobileHtml = '';
   data.forEach(function(u) {
     var badge = '<span class="badge badge-'+u.role+'">'+u.role+'</span>';
-    html += '<tr>';
-    html += '<td style="font-size:12px;">'+(u.email||'-')+'</td>';
-    html += '<td>'+(u.full_name||'-')+'</td>';
-    html += '<td>'+badge+'</td>';
-    html += '<td>';
+    html += '<tr><td style="font-size:12px;">'+(u.email||'-')+'</td><td>'+(u.full_name||'-')+'</td><td>'+badge+'</td><td>';
     html += '<button class="btn btn-blue" onclick="openRoleModal(\''+u.id+'\',\''+(u.email||'')+'\',\''+u.role+'\')">صلاحية</button> ';
     html += '<button class="btn btn-gray" onclick="window.location.href=\'./profile.html?id='+u.id+'\'">ملف</button> ';
-    html += '<button class="btn btn-red" onclick="deleteUser(\''+u.id+'\',\''+(u.email||'')+'\')">حذف</button>';
-    html += '</td></tr>';
-
-    mobileHtml += '<div class="mobile-card">';
-    mobileHtml += '<div class="mobile-card-title">'+(u.full_name||u.email||'-')+'</div>';
+    html += '<button class="btn btn-red" onclick="deleteUser(\''+u.id+'\',\''+(u.email||'')+'\')">حذف</button></td></tr>';
+    mobileHtml += '<div class="mobile-card"><div class="mobile-card-title">'+(u.full_name||u.email||'-')+'</div>';
     mobileHtml += '<div class="mobile-card-meta">'+badge+'<span style="font-size:11px;color:#888;">'+(u.email||'-')+'</span></div>';
     mobileHtml += '<div class="mobile-card-actions">';
     mobileHtml += '<button class="btn btn-blue" onclick="openRoleModal(\''+u.id+'\',\''+(u.email||'')+'\',\''+u.role+'\')">تغيير الصلاحية</button>';
     mobileHtml += '<button class="btn btn-gray" onclick="window.location.href=\'./profile.html?id='+u.id+'\'">الملف الشخصي</button>';
-    mobileHtml += '<button class="btn btn-red" onclick="deleteUser(\''+u.id+'\',\''+(u.email||'')+'\')">حذف</button>';
-    mobileHtml += '</div></div>';
+    mobileHtml += '<button class="btn btn-red" onclick="deleteUser(\''+u.id+'\',\''+(u.email||'')+'\')">حذف</button></div></div>';
   });
-
   document.getElementById('users-table').innerHTML = html || '<tr><td colspan="4" class="empty">لا يوجد مستخدمون</td></tr>';
   document.getElementById('users-mobile').innerHTML = mobileHtml || '<div class="empty">لا يوجد مستخدمون</div>';
 }
@@ -422,38 +428,21 @@ document.getElementById('btn-create-admin').addEventListener('click', async func
   loadUsers();
 });
 
-// ===== المحتوى =====
 async function loadContent() {
   var { data } = await sb.from('content').select('*').order('id', { ascending: false });
   if (!data) return;
-
-  var html = '';
-  var mobileHtml = '';
-
+  var html = '', mobileHtml = '';
   data.forEach(function(c) {
     var visibility = c.is_hidden ? '<span class="badge badge-hidden">مخفي</span>' : '<span class="badge badge-visible">ظاهر</span>';
     var download = c.allow_download ? '<span class="badge badge-editor">✓</span>' : '<span class="badge badge-hidden">✗</span>';
     var rowClass = c.is_hidden ? 'hidden-row' : '';
-    var statusBadge = !c.is_reviewed
-      ? '<span class="badge badge-pending">⏳ قيد المراجعة</span>'
-      : (c.is_hidden ? '<span class="badge badge-hidden">🙈 مخفي</span>' : '<span class="badge badge-editor">✅ منشور</span>');
-
-    // Desktop row
-    html += '<tr class="'+rowClass+'">';
-    html += '<td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td>';
-    html += '<td>'+(c.content_type||'-')+'</td>';
-    html += '<td>'+statusBadge+'</td>';
-    html += '<td>'+visibility+'</td>';
-    html += '<td>'+download+'</td>';
-    html += '<td style="white-space:nowrap;">';
+    var statusBadge = !c.is_reviewed ? '<span class="badge badge-pending">⏳ قيد المراجعة</span>' : (c.is_hidden ? '<span class="badge badge-hidden">🙈 مخفي</span>' : '<span class="badge badge-editor">✅ منشور</span>');
+    html += '<tr class="'+rowClass+'"><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+statusBadge+'</td><td>'+visibility+'</td><td>'+download+'</td><td style="white-space:nowrap;">';
     html += '<span class="tooltip-wrap"><button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button><span class="tooltip-text">عرض المحتوى كما يراه الزوار</span></span> ';
     html += '<span class="tooltip-wrap"><button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button><span class="tooltip-text">تعديل العنوان والنوع والفئة</span></span> ';
     html += '<span class="tooltip-wrap"><button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button><span class="tooltip-text">'+(c.is_hidden?'إظهار المحتوى للزوار':'إخفاء المحتوى عن الزوار')+'</span></span> ';
     html += '<span class="tooltip-wrap"><button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button><span class="tooltip-text">'+(c.allow_download?'منع تنزيل الملف':'السماح بتنزيل الملف')+'</span></span> ';
-    html += '<span class="tooltip-wrap"><button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button><span class="tooltip-text">حذف المحتوى نهائياً ⚠️</span></span>';
-    html += '</td></tr>';
-
-    // Mobile card
+    html += '<span class="tooltip-wrap"><button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button><span class="tooltip-text">حذف المحتوى نهائياً ⚠️</span></span></td></tr>';
     mobileHtml += '<div class="mobile-card'+(c.is_hidden?' hidden-row':'')+'"><div class="mobile-card-title">'+c.title+'</div>';
     mobileHtml += '<div class="mobile-card-meta"><span class="badge badge-default">'+(c.content_type||'-')+'</span>'+statusBadge+' '+visibility+' '+download+'</div>';
     mobileHtml += '<div class="mobile-card-actions">';
@@ -461,10 +450,8 @@ async function loadContent() {
     mobileHtml += '<button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button>';
     mobileHtml += '<button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button>';
     mobileHtml += '<button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button>';
-    mobileHtml += '<button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button>';
-    mobileHtml += '</div></div>';
+    mobileHtml += '<button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button></div></div>';
   });
-
   document.getElementById('content-table').innerHTML = html || '<tr><td colspan="6" class="empty">لا يوجد محتوى</td></tr>';
   document.getElementById('content-mobile').innerHTML = mobileHtml || '<div class="empty">لا يوجد محتوى</div>';
 }
@@ -479,14 +466,10 @@ document.getElementById('c-type').addEventListener('change', function() {
 document.getElementById('btn-add-content').addEventListener('click', function() {
   editContentId = null;
   document.getElementById('content-modal-title').textContent = 'إضافة محتوى';
-  document.getElementById('c-title').value='';
-  document.getElementById('c-article-text').value='';
-  document.getElementById('c-file').value='';
-  document.getElementById('c-visible').checked=true;
-  document.getElementById('c-download').checked=true;
-  document.getElementById('article-text-field').style.display='none';
-  document.getElementById('upload-status').textContent='';
-  document.getElementById('upload-progress').style.display='none';
+  document.getElementById('c-title').value=''; document.getElementById('c-article-text').value='';
+  document.getElementById('c-file').value=''; document.getElementById('c-visible').checked=true;
+  document.getElementById('c-download').checked=true; document.getElementById('article-text-field').style.display='none';
+  document.getElementById('upload-status').textContent=''; document.getElementById('upload-progress').style.display='none';
   document.getElementById('modal-content').className='modal-bg on';
 });
 
@@ -505,8 +488,7 @@ async function openEditContent(id) {
   document.getElementById('c-visible').checked = !c.is_hidden;
   document.getElementById('c-download').checked = c.allow_download!==false;
   document.getElementById('article-text-field').style.display = c.content_type==='مقال'?'block':'none';
-  document.getElementById('c-file').value='';
-  document.getElementById('upload-status').textContent='';
+  document.getElementById('c-file').value=''; document.getElementById('upload-status').textContent='';
   document.getElementById('upload-progress').style.display='none';
   document.getElementById('modal-content').className='modal-bg on';
 }
@@ -557,7 +539,6 @@ async function deleteContent(id) {
   loadContent();
 }
 
-// ===== التصنيفات =====
 async function loadCategories() {
   var { data } = await sb.from('categories').select('*');
   if (!data) return;
@@ -584,7 +565,6 @@ async function deleteCat(id) {
   loadCategories();
 }
 
-// ===== الإشعارات =====
 async function loadNotifications() {
   var { data } = await sb.from('content').select('*, profiles!content_created_by_fkey(email, full_name)').eq('is_reviewed', false).order('created_at', { ascending: false });
   var count = data ? data.length : 0;
@@ -596,8 +576,7 @@ async function loadNotifications() {
     document.getElementById('notif-mobile').innerHTML = '<div class="empty">لا توجد إشعارات ✅</div>';
     return;
   }
-  var html = '';
-  var mobileHtml = '';
+  var html = '', mobileHtml = '';
   data.forEach(function(c) {
     var date = new Date(c.created_at).toLocaleDateString('ar-SA');
     var uploader = c.profiles ? (c.profiles.full_name||c.profiles.email) : '-';
@@ -624,57 +603,61 @@ async function checkNotifications() {
   if (count>0) badge.textContent = count;
 }
 
-async function init() {
-  await checkAuth();
-  setupTabs();
-  loadUsers();
-  checkNotifications();
-watchNewUsers(); //
-}
-init();
-</script>
-// ===== مراقبة تسجيل مستخدمين جدد =====
+// ===== مراقبة تسجيل مستخدمين جدد (Realtime) =====
 function watchNewUsers() {
-  sb.channel('new-users')
+  sb.channel('watch-new-users')
     .on('postgres_changes', {
       event: 'INSERT',
       schema: 'public',
       table: 'profiles'
     }, function(payload) {
       var user = payload.new;
+      if (user.id === currentUserId) return;
       var name = user.full_name || user.email || 'مستخدم جديد';
-      showUserNotification(name, user.email);
-      checkNotifications(); // تحديث عداد المحتوى أيضاً
+      showUserNotification(name, user.email, user.role || 'pending');
+      loadUsers();
+      checkNotifications();
     })
-    .subscribe();
+    .subscribe(function(status) {
+      if (status === 'SUBSCRIBED') console.log('✅ Realtime: يراقب تسجيل مستخدمين جدد');
+    });
 }
 
-function showUserNotification(name, email) {
-  // إنشاء البانر إذا لم يكن موجوداً
+function showUserNotification(name, email, role) {
   var banner = document.getElementById('user-notif-banner');
-  if (!banner) {
-    banner = document.createElement('div');
-    banner.id = 'user-notif-banner';
-    banner.style.cssText = `
-      position: fixed; bottom: 20px; left: 20px;
-      background: #0B6B3A; color: white;
-      padding: 14px 20px; border-radius: 12px;
-      font-family: 'Tajawal', sans-serif; font-size: 14px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      z-index: 9999; max-width: 300px;
-      animation: slideIn 0.3s ease;
-    `;
-    document.body.appendChild(banner);
-  }
-  banner.innerHTML = '👤 مستخدم جديد: <strong>' + name + '</strong><br>'
-    + '<span style="font-size:12px;opacity:0.85;">' + (email||'') + '</span>';
+  var contentEl = document.getElementById('user-notif-content');
+  banner.classList.remove('hide');
+  contentEl.innerHTML =
+    '<div style="font-size:13px;opacity:0.8;margin-bottom:4px;">👤 مستخدم جديد انضم</div>' +
+    '<div style="font-weight:700;font-size:15px;">' + name + '</div>' +
+    (email ? '<div style="font-size:12px;opacity:0.75;margin-top:2px;">' + email + '</div>' : '') +
+    '<div style="margin-top:8px;">' +
+      '<span style="background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:20px;font-size:11px;">' + role + '</span> ' +
+      '<button onclick="document.getElementById(\'nt1\').click()" style="background:rgba(255,255,255,0.25);border:none;color:white;padding:3px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:Tajawal,sans-serif;">عرض المستخدمين</button>' +
+    '</div>';
   banner.style.display = 'block';
-
-  // إخفاء تلقائي بعد 6 ثوان
   clearTimeout(window._notifTimer);
   window._notifTimer = setTimeout(function() {
-    banner.style.display = 'none';
-  }, 6000);
+    banner.classList.add('hide');
+    setTimeout(function() { banner.style.display = 'none'; banner.classList.remove('hide'); }, 300);
+  }, 8000);
 }
+
+document.getElementById('close-notif-banner').addEventListener('click', function() {
+  var banner = document.getElementById('user-notif-banner');
+  banner.classList.add('hide');
+  clearTimeout(window._notifTimer);
+  setTimeout(function() { banner.style.display = 'none'; banner.classList.remove('hide'); }, 300);
+});
+
+async function init() {
+  await checkAuth();
+  setupTabs();
+  loadUsers();
+  checkNotifications();
+  watchNewUsers();
+}
+init();
+</script>
 </body>
 </html>
