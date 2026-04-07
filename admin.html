@@ -671,11 +671,14 @@ async function approveUser(notifId, encodedEmail) {
   var email = decodeURIComponent(encodedEmail);
   if (!email) { alert('البريد غير موجود'); return; }
   if (!confirm('هل تريد قبول تسجيل: ' + email + '؟')) return;
+
   // تغيير دور المستخدم إلى viewer
   var { error } = await sb.from('profiles').update({ role: 'viewer' }).eq('email', email);
   if (error) { alert('خطأ: ' + error.message); return; }
-  // تحديث الإشعار
-  await sb.from('admin_notifications').update({ role: 'viewer', is_read: true }).eq('id', notifId);
+
+  // حذف الإشعار تلقائياً بعد القبول
+  await sb.from('admin_notifications').delete().eq('id', notifId);
+
   alert('✅ تم قبول ' + email + ' كقارئ');
   loadUserNotifs();
   loadUsers();
