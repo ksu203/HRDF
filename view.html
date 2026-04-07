@@ -36,14 +36,11 @@
     .audio-viewer .audio-icon { font-size: 56px; margin-bottom: 14px; }
     .audio-viewer h3 { font-size: 16px; color: #333; margin-bottom: 14px; }
     .audio-viewer audio { width: 100%; }
-
-    /* عارض PDF مدمج */
     .pdf-container { border-radius: 12px; overflow: hidden; border: 1px solid #ddd; }
     .pdf-toolbar { background: #3d3d3d; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
     .pdf-toolbar span { color: white; font-size: 13px; font-weight: 600; }
     .pdf-toolbar a { background: #0B6B3A; color: white; padding: 7px 16px; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
     .pdf-frame { width: 100%; height: 600px; border: none; display: block; background: #525659; }
-
     .download-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
     .download-btn { display: inline-flex; align-items: center; gap: 8px; background: #0B6B3A; color: white; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 700; transition: background 0.2s; border: none; cursor: pointer; font-family: 'Tajawal', sans-serif; }
     .download-btn:hover { background: #094d2a; }
@@ -54,6 +51,24 @@
     .author-info span { font-size: 12px; color: #888; }
     .author-profile-btn { margin-right: auto; padding: 7px 16px; border: 1.5px solid #0B6B3A; color: #0B6B3A; background: transparent; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
     .author-profile-btn:hover { background: #0B6B3A; color: white; }
+
+    /* سجل الإجراءات */
+    .actions-log { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
+    .actions-log h4 { font-size: 14px; font-weight: 700; color: #555; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .action-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+    .action-item:last-child { border-bottom: none; }
+    .action-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .action-icon.approved { background: #d4edda; }
+    .action-icon.hidden { background: #fff3cd; }
+    .action-icon.unhidden { background: #cce5ff; }
+    .action-icon.edited { background: #e2e3e5; }
+    .action-icon.download_blocked { background: #f8d7da; }
+    .action-icon.download_allowed { background: #d4edda; }
+    .action-icon.deleted { background: #f8d7da; }
+    .action-info { flex: 1; }
+    .action-info .action-text { font-size: 13px; color: #333; font-weight: 600; }
+    .action-info .action-meta { font-size: 11px; color: #888; margin-top: 2px; }
+    .actions-empty { font-size: 13px; color: #aaa; text-align: center; padding: 12px; }
 
     .admin-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 2px solid #eee; padding: 12px 20px; display: none; z-index: 99; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
     .admin-bar.show { display: block; }
@@ -66,7 +81,6 @@
     .ab-blue { background: #0066cc; color: white; }
     .ab-yellow { background: #ffc107; color: #333; }
     .ab-red { background: #dc3545; color: white; }
-
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
     .modal-bg.on { display: flex; }
     .modal { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
@@ -77,7 +91,6 @@
     .field input:focus, .field select:focus { outline: none; border-color: #0B6B3A; }
     .modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
     .modal-btn { padding: 9px 20px; border: none; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
-
     .loading { text-align: center; padding: 80px 20px; color: #888; }
     .loading .spinner { width: 44px; height: 44px; border: 4px solid #eee; border-top-color: #0B6B3A; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -85,7 +98,6 @@
     .error-state .icon { font-size: 56px; margin-bottom: 14px; }
     .error-state h2 { color: #333; margin-bottom: 8px; font-size: 18px; }
     .error-state p { color: #888; font-size: 14px; }
-
     @media (max-width: 600px) {
       .content-title { font-size: 18px; }
       .content-header { padding: 20px 16px; }
@@ -173,6 +185,60 @@ const params = new URLSearchParams(window.location.search);
 const contentId = params.get('id');
 let currentItem = null;
 let isAdmin = false;
+let currentUserId = null;
+
+// ===== خريطة الإجراءات =====
+const actionMap = {
+  'approved':         { icon: '✅', label: 'تم الاعتماد والنشر',       cls: 'approved' },
+  'hidden':           { icon: '🙈', label: 'تم إخفاء المحتوى',         cls: 'hidden' },
+  'unhidden':         { icon: '👁',  label: 'تم إظهار المحتوى',         cls: 'unhidden' },
+  'edited':           { icon: '✏️', label: 'تم تعديل المحتوى',          cls: 'edited' },
+  'download_blocked': { icon: '🔒', label: 'تم منع التحميل',            cls: 'download_blocked' },
+  'download_allowed': { icon: '✅', label: 'تم السماح بالتحميل',        cls: 'download_allowed' },
+  'deleted':          { icon: '🗑️', label: 'تم حذف المحتوى',           cls: 'deleted' },
+};
+
+// ===== تسجيل الإجراء =====
+async function logAction(action, note) {
+  if (!currentUserId || !contentId) return;
+  await sb.from('content_actions').insert({
+    content_id: parseInt(contentId),
+    admin_id: currentUserId,
+    action: action,
+    note: note || null
+  });
+}
+
+// ===== تحميل سجل الإجراءات =====
+async function loadActionsLog() {
+  var el = document.getElementById('actions-log-list');
+  if (!el) return;
+  var { data } = await sb.from('content_actions')
+    .select('*, profiles!content_actions_admin_id_fkey(full_name, email, avatar_url)')
+    .eq('content_id', contentId)
+    .order('created_at', { ascending: false });
+
+  if (!data || !data.length) {
+    el.innerHTML = '<div class="actions-empty">لا توجد إجراءات مسجّلة بعد</div>';
+    return;
+  }
+
+  var html = '';
+  data.forEach(function(a) {
+    var info = actionMap[a.action] || { icon: '📌', label: a.action, cls: 'edited' };
+    var adminName = a.profiles ? (a.profiles.full_name || a.profiles.email) : 'مجهول';
+    var time = new Date(a.created_at).toLocaleString('ar-SA');
+    html +=
+      '<div class="action-item">' +
+        '<div class="action-icon ' + info.cls + '">' + info.icon + '</div>' +
+        '<div class="action-info">' +
+          '<div class="action-text">' + info.label + '</div>' +
+          '<div class="action-meta">بواسطة: ' + adminName + ' · ' + time + (a.note ? ' · ' + a.note : '') + '</div>' +
+        '</div>' +
+      '</div>';
+  });
+  el.innerHTML = html;
+}
 
 function getFileType(url) {
   if (!url) return null;
@@ -192,21 +258,15 @@ function renderContent(item, author) {
   var date = item.created_at ? new Date(item.created_at).toLocaleDateString('ar-SA') : '-';
 
   var mediaHtml = '';
-
   if (item.content_type === 'مقال' && item.article_text) {
     mediaHtml = '<div class="article-text">' + item.article_text + '</div>';
-
   } else if (fileType === 'image') {
     mediaHtml = '<div class="image-viewer"><img src="' + item.file_url + '" alt="' + item.title + '"></div>';
-
   } else if (fileType === 'video') {
     mediaHtml = '<div class="video-viewer"><video controls playsinline><source src="' + item.file_url + '">متصفحك لا يدعم تشغيل الفيديو</video></div>';
-
   } else if (fileType === 'audio') {
     mediaHtml = '<div class="audio-viewer"><div class="audio-icon">' + icon + '</div><h3>' + item.title + '</h3><audio controls><source src="' + item.file_url + '">متصفحك لا يدعم تشغيل الصوت</audio></div>';
-
   } else if (fileType === 'pdf') {
-    // عرض PDF مباشرة في الصفحة
     mediaHtml =
       '<div class="pdf-container">' +
         '<div class="pdf-toolbar">' +
@@ -215,15 +275,12 @@ function renderContent(item, author) {
         '</div>' +
         '<iframe class="pdf-frame" src="' + item.file_url + '#toolbar=0" allowfullscreen></iframe>' +
       '</div>';
-
   } else if (item.file_url) {
     mediaHtml = '<div style="text-align:center;padding:32px;"><div style="font-size:56px;margin-bottom:12px;">' + icon + '</div><p style="color:#666;margin-bottom:16px;font-size:14px;">اضغط لتحميل الملف</p><a href="' + item.file_url + '" target="_blank" class="download-btn">⬇️ تحميل الملف</a></div>';
-
   } else {
     mediaHtml = '<div style="text-align:center;padding:32px;color:#888;"><div style="font-size:56px;margin-bottom:12px;">📭</div><p>لا يوجد محتوى للعرض</p></div>';
   }
 
-  // زر التحميل أسفل المحتوى (للملفات غير PDF)
   var downloadHtml = '';
   if (item.file_url && item.allow_download !== false && fileType !== 'pdf') {
     downloadHtml = '<div class="download-section"><a href="' + item.file_url + '" target="_blank" class="download-btn">⬇️ تحميل الملف</a></div>';
@@ -236,6 +293,13 @@ function renderContent(item, author) {
     authorHtml = '<div class="author-section"><div class="author-avatar">' + avatarContent + '</div><div class="author-info"><h4>' + authorName + '</h4><span>📅 ' + date + (author.organization ? ' · 🏢 ' + author.organization : '') + '</span></div><button class="author-profile-btn" onclick="window.location.href=\'./profile.html?id=' + author.id + '\'">الملف الشخصي</button></div>';
   }
 
+  // سجل الإجراءات — يظهر للمشرفين فقط
+  var actionsHtml = isAdmin ?
+    '<div class="actions-log">' +
+      '<h4>📋 سجل الإجراءات</h4>' +
+      '<div id="actions-log-list"><div class="actions-empty">جاري التحميل...</div></div>' +
+    '</div>' : '';
+
   document.getElementById('app').innerHTML =
     '<div class="content-card">' +
       '<div class="content-header">' +
@@ -247,11 +311,14 @@ function renderContent(item, author) {
         '</div>' +
         '<h1 class="content-title">' + item.title + '</h1>' +
       '</div>' +
-      '<div class="content-body">' + mediaHtml + downloadHtml + authorHtml + '</div>' +
+      '<div class="content-body">' + mediaHtml + downloadHtml + authorHtml + actionsHtml + '</div>' +
     '</div>';
 
   document.title = item.title + ' | HRDF';
   updateAdminBar();
+
+  // تحميل سجل الإجراءات
+  if (isAdmin) loadActionsLog();
 }
 
 function updateAdminBar() {
@@ -283,7 +350,8 @@ async function loadContent() {
 
   var { data: session } = await sb.auth.getSession();
   if (session && session.session) {
-    var { data: profile } = await sb.from('profiles').select('role').eq('id', session.session.user.id).single();
+    currentUserId = session.session.user.id;
+    var { data: profile } = await sb.from('profiles').select('role').eq('id', currentUserId).single();
     if (profile && profile.role === 'admin') isAdmin = true;
   }
 
@@ -315,27 +383,51 @@ document.getElementById('btn-save-edit').addEventListener('click', async functio
     target_audience: document.getElementById('e-audience').value
   };
   await sb.from('content').update(obj).eq('id', contentId);
+  await logAction('edited', 'العنوان: ' + obj.title);
   document.getElementById('modal-edit').className = 'modal-bg';
   loadContent();
 });
 
 document.getElementById('btn-toggle-hidden').addEventListener('click', async function() {
   if (!currentItem) return;
-  await sb.from('content').update({ is_hidden: !currentItem.is_hidden }).eq('id', contentId);
+  var newHidden = !currentItem.is_hidden;
+  await sb.from('content').update({ is_hidden: newHidden }).eq('id', contentId);
+  await logAction(newHidden ? 'hidden' : 'unhidden');
+  // إذا كان الإظهار يعني الاعتماد أيضاً
+  if (!newHidden && !currentItem.is_reviewed) {
+    await sb.from('content').update({ is_reviewed: true }).eq('id', contentId);
+    await logAction('approved');
+  }
   loadContent();
 });
 
 document.getElementById('btn-toggle-download').addEventListener('click', async function() {
   if (!currentItem) return;
-  await sb.from('content').update({ allow_download: !currentItem.allow_download }).eq('id', contentId);
+  var newAllow = !currentItem.allow_download;
+  await sb.from('content').update({ allow_download: newAllow }).eq('id', contentId);
+  await logAction(newAllow ? 'download_allowed' : 'download_blocked');
   loadContent();
 });
 
 document.getElementById('btn-delete').addEventListener('click', async function() {
   if (!confirm('هل أنت متأكد من حذف هذا المحتوى؟')) return;
+  await logAction('deleted');
   await sb.from('content').delete().eq('id', contentId);
   window.location.href = './index.html';
 });
+
+// زر الاعتماد في شريط المدير — يسجل approved مباشرة
+document.getElementById('admin-bar').addEventListener('click', function(e) {
+  if (e.target && e.target.id === 'btn-approve') {
+    approveContent();
+  }
+});
+
+async function approveContent() {
+  await sb.from('content').update({ is_reviewed: true, is_hidden: false }).eq('id', contentId);
+  await logAction('approved');
+  loadContent();
+}
 
 loadContent();
 </script>
