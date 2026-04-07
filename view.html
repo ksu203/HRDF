@@ -377,13 +377,29 @@ document.getElementById('btn-edit').addEventListener('click', function() {
 });
 
 document.getElementById('btn-save-edit').addEventListener('click', async function() {
+  var newTitle = document.getElementById('e-title').value;
+  var newType = document.getElementById('e-type').value;
+  var newAudience = document.getElementById('e-audience').value;
+
+  // بناء ملاحظة التعديل بالتفصيل
+  var changes = [];
+  if (newTitle !== currentItem.title)
+    changes.push('العنوان: "' + currentItem.title + '" ← "' + newTitle + '"');
+  if (newType !== currentItem.content_type)
+    changes.push('النوع: ' + currentItem.content_type + ' ← ' + newType);
+  if (newAudience !== currentItem.target_audience)
+    changes.push('الفئة: ' + currentItem.target_audience + ' ← ' + newAudience);
+
+  var note = changes.length > 0 ? changes.join(' | ') : 'لا تغييرات';
+
   var obj = {
-    title: document.getElementById('e-title').value,
-    content_type: document.getElementById('e-type').value,
-    target_audience: document.getElementById('e-audience').value
+    title: newTitle,
+    content_type: newType,
+    target_audience: newAudience
   };
+
   await sb.from('content').update(obj).eq('id', contentId);
-  await logAction('edited', 'العنوان: ' + obj.title);
+  await logAction('edited', note);
   document.getElementById('modal-edit').className = 'modal-bg';
   loadContent();
 });
