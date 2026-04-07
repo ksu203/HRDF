@@ -88,6 +88,7 @@
     .add-user-field label { display: block; margin-bottom: 4px; font-size: 13px; color: #444; font-weight: 600; }
     .add-user-field input, .add-user-field select { width: 100%; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; }
     .create-msg { margin-top: 10px; padding: 10px; border-radius: 8px; text-align: center; font-size: 13px; display: none; }
+    .unread-row { background: #f0fff8 !important; }
     @keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     @keyframes slideOutDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(30px); opacity: 0; } }
     #user-notif-banner {
@@ -220,9 +221,12 @@
     <div class="card">
       <div class="card-header">
         <h3>👤 مستخدمون جدد انضموا</h3>
-        <button class="btn btn-gray" onclick="clearUserNotifs()" style="font-size:11px;">مسح الكل</button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-green" onclick="markAllUserNotifsRead()" style="font-size:11px;">✓ تحديد كمقروء</button>
+          <button class="btn btn-gray" onclick="clearAllUserNotifs()" style="font-size:11px;">مسح الكل</button>
+        </div>
       </div>
-      <div id="user-notif-list"><div class="empty">لا توجد إشعارات مستخدمين جدد</div></div>
+      <div id="user-notif-list"><div class="empty">جاري التحميل...</div></div>
     </div>
 
     <!-- إشعارات المحتوى -->
@@ -349,7 +353,7 @@ function setupTabs() {
     { tab: 'nt1', sec: 's1', load: loadUsers },
     { tab: 'nt2', sec: 's2', load: loadContent },
     { tab: 'nt3', sec: 's3', load: loadCategories },
-    { tab: 'nt4', sec: 's4', load: function() { loadNotifications(); renderUserNotifs(); } }
+    { tab: 'nt4', sec: 's4', load: function() { loadNotifications(); loadUserNotifs(); } }
   ];
   tabs.forEach(function(t) {
     document.getElementById(t.tab).addEventListener('click', function() {
@@ -464,7 +468,7 @@ async function loadContent() {
     html += '<span class="tooltip-wrap"><button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button><span class="tooltip-text">'+(c.allow_download?'منع تنزيل الملف':'السماح بتنزيل الملف')+'</span></span> ';
     html += '<span class="tooltip-wrap"><button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button><span class="tooltip-text">حذف المحتوى نهائياً ⚠️</span></span></td></tr>';
     mobileHtml += '<div class="mobile-card'+(c.is_hidden?' hidden-row':'')+'"><div class="mobile-card-title">'+c.title+'</div>';
-    mobileHtml += '<div class="mobile-card-meta"><span class="badge badge-default">'+(c.content_type||'-')+'</span>'+statusBadge+' '+visibility+' '+download+'</div>';
+    mobileHtml += '<div class="mobile-card-meta"><span class="badge">'+(c.content_type||'-')+'</span>'+statusBadge+' '+visibility+' '+download+'</div>';
     mobileHtml += '<div class="mobile-card-actions">';
     mobileHtml += '<button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button>';
     mobileHtml += '<button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button>';
@@ -586,7 +590,7 @@ async function deleteCat(id) {
   loadCategories();
 }
 
-// ===== الإشعارات (محتوى) =====
+// ===== إشعارات المحتوى =====
 async function loadNotifications() {
   var { data } = await sb.from('content').select('*, profiles!content_created_by_fkey(email, full_name)').eq('is_reviewed', false).order('created_at', { ascending: false });
   var count = data ? data.length : 0;
@@ -625,45 +629,64 @@ async function checkNotifications() {
   if (count>0) badge.textContent = count;
 }
 
-// ===== إشعارات المستخدمين الجدد =====
-function saveUserNotif(notif) {
-  var list = JSON.parse(localStorage.getItem('user_notifs') || '[]');
-  list.unshift(notif);
-  if (list.length > 50) list = list.slice(0, 50);
-  localStorage.setItem('user_notifs', JSON.stringify(list));
-}
-
-function clearUserNotifs() {
-  localStorage.removeItem('user_notifs');
-  renderUserNotifs();
-  updateUserNotifBadge();
-}
-
-function updateUserNotifBadge() {
-  var list = JSON.parse(localStorage.getItem('user_notifs') || '[]');
-  var badge = document.getElementById('user-notif-count');
-  badge.style.display = list.length > 0 ? 'inline' : 'none';
-  badge.textContent = list.length;
-}
-
-function renderUserNotifs() {
-  var list = JSON.parse(localStorage.getItem('user_notifs') || '[]');
+// ===== إشعارات المستخدمين الجدد (Supabase) =====
+async function loadUserNotifs() {
   var el = document.getElementById('user-notif-list');
-  if (!el) return;
-  if (!list.length) {
+  el.innerHTML = '<div class="empty">جاري التحميل...</div>';
+  var { data } = await sb.from('admin_notifications').select('*').eq('type','new_user').order('created_at', { ascending: false });
+  var unread = data ? data.filter(function(n){ return !n.is_read; }).length : 0;
+  var badge = document.getElementById('user-notif-count');
+  badge.style.display = unread>0?'inline':'none';
+  badge.textContent = unread;
+  if (!data || !data.length) {
     el.innerHTML = '<div class="empty">لا توجد إشعارات مستخدمين جدد</div>';
     return;
   }
   var html = '';
-  list.forEach(function(n) {
-    var time = new Date(n.time).toLocaleString('ar-SA');
-    html += '<div style="padding:12px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">';
-    html += '<div><div style="font-weight:700;font-size:14px;">👤 ' + n.name + '</div>';
-    html += '<div style="font-size:12px;color:#888;margin-top:2px;">' + (n.email||'') + ' · ' + time + '</div></div>';
-    html += '<span class="badge badge-' + n.role + '">' + n.role + '</span>';
+  data.forEach(function(n) {
+    var time = new Date(n.created_at).toLocaleString('ar-SA');
+    var rowStyle = !n.is_read ? 'background:#f0fff8;' : '';
+    html += '<div style="'+rowStyle+'padding:12px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">';
+    html += '<div>';
+    html += '<div style="font-weight:700;font-size:14px;">' + (!n.is_read?'🔵 ':'') + '👤 ' + (n.title||'مستخدم جديد') + '</div>';
+    html += '<div style="font-size:12px;color:#888;margin-top:2px;">' + (n.email||'') + ' · ' + time + '</div>';
     html += '</div>';
+    html += '<div style="display:flex;gap:6px;align-items:center;">';
+    html += '<span class="badge badge-'+(n.role||'pending')+'">'+(n.role||'pending')+'</span>';
+    if (!n.is_read) html += '<button class="btn btn-gray" style="font-size:11px;" onclick="markUserNotifRead('+n.id+')">تحديد كمقروء</button>';
+    html += '<button class="btn btn-red" style="font-size:11px;" onclick="deleteUserNotif('+n.id+')">حذف</button>';
+    html += '</div></div>';
   });
   el.innerHTML = html;
+}
+
+async function markUserNotifRead(id) {
+  await sb.from('admin_notifications').update({ is_read: true }).eq('id', id);
+  loadUserNotifs();
+}
+
+async function markAllUserNotifsRead() {
+  await sb.from('admin_notifications').update({ is_read: true }).eq('type', 'new_user');
+  loadUserNotifs();
+}
+
+async function deleteUserNotif(id) {
+  await sb.from('admin_notifications').delete().eq('id', id);
+  loadUserNotifs();
+}
+
+async function clearAllUserNotifs() {
+  if (!confirm('هل تريد حذف جميع إشعارات المستخدمين؟')) return;
+  await sb.from('admin_notifications').delete().eq('type', 'new_user');
+  loadUserNotifs();
+}
+
+async function updateUserNotifBadge() {
+  var { data } = await sb.from('admin_notifications').select('id').eq('type','new_user').eq('is_read', false);
+  var count = data ? data.length : 0;
+  var badge = document.getElementById('user-notif-count');
+  badge.style.display = count>0?'inline':'none';
+  badge.textContent = count;
 }
 
 // ===== مراقبة تسجيل مستخدمين جدد (Realtime) =====
@@ -673,15 +696,21 @@ function watchNewUsers() {
       event: 'INSERT',
       schema: 'public',
       table: 'profiles'
-    }, function(payload) {
+    }, async function(payload) {
       var user = payload.new;
       if (user.id === currentUserId) return;
       var name = user.full_name || user.email || 'مستخدم جديد';
-      saveUserNotif({ name: name, email: user.email, role: user.role || 'pending', time: new Date().toISOString() });
+      // حفظ الإشعار في Supabase
+      await sb.from('admin_notifications').insert({
+        type: 'new_user',
+        title: name,
+        email: user.email,
+        role: user.role || 'pending',
+        is_read: false
+      });
       showUserNotification(name, user.email, user.role || 'pending');
       loadUsers();
       checkNotifications();
-      renderUserNotifs();
       updateUserNotifBadge();
     })
     .subscribe(function(status) {
@@ -722,7 +751,6 @@ async function init() {
   setupTabs();
   loadUsers();
   checkNotifications();
-  renderUserNotifs();
   updateUserNotifBadge();
   watchNewUsers();
 }
