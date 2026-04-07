@@ -51,8 +51,6 @@
     .author-info span { font-size: 12px; color: #888; }
     .author-profile-btn { margin-right: auto; padding: 7px 16px; border: 1.5px solid #0B6B3A; color: #0B6B3A; background: transparent; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
     .author-profile-btn:hover { background: #0B6B3A; color: white; }
-
-    /* سجل الإجراءات */
     .actions-log { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
     .actions-log h4 { font-size: 14px; font-weight: 700; color: #555; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
     .action-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
@@ -69,7 +67,6 @@
     .action-info .action-text { font-size: 13px; color: #333; font-weight: 600; }
     .action-info .action-meta { font-size: 11px; color: #888; margin-top: 2px; }
     .actions-empty { font-size: 13px; color: #aaa; text-align: center; padding: 12px; }
-
     .admin-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 2px solid #eee; padding: 12px 20px; display: none; z-index: 99; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
     .admin-bar.show { display: block; }
     .admin-bar-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -83,12 +80,13 @@
     .ab-red { background: #dc3545; color: white; }
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
     .modal-bg.on { display: flex; }
-    .modal { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
     .modal h3 { font-size: 17px; color: #333; margin-bottom: 18px; }
     .field { margin-bottom: 14px; }
     .field label { display: block; margin-bottom: 5px; font-size: 13px; color: #555; font-weight: 600; }
-    .field input, .field select { width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
-    .field input:focus, .field select:focus { outline: none; border-color: #0B6B3A; }
+    .field input, .field select, .field textarea { width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
+    .field textarea { resize: vertical; min-height: 180px; line-height: 1.8; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #0B6B3A; }
     .modal-btns { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
     .modal-btn { padding: 9px 20px; border: none; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
     .loading { text-align: center; padding: 80px 20px; color: #888; }
@@ -169,6 +167,11 @@
         <option value="المرشدين المهنيين">المرشدين المهنيين</option>
       </select>
     </div>
+    <!-- حقل نص المقال — يظهر فقط للمقالات -->
+    <div class="field" id="edit-article-field" style="display:none;">
+      <label>نص المقال</label>
+      <textarea id="e-article-text" placeholder="اكتب أو الصق نص المقال..."></textarea>
+    </div>
     <div class="modal-btns">
       <button class="modal-btn" style="background:#f0f0f0;color:#555;" onclick="document.getElementById('modal-edit').className='modal-bg'">إلغاء</button>
       <button class="modal-btn" style="background:#0B6B3A;color:white;" id="btn-save-edit">حفظ</button>
@@ -189,13 +192,13 @@ let currentUserId = null;
 
 // ===== خريطة الإجراءات =====
 const actionMap = {
-  'approved':         { icon: '✅', label: 'تم الاعتماد والنشر',       cls: 'approved' },
-  'hidden':           { icon: '🙈', label: 'تم إخفاء المحتوى',         cls: 'hidden' },
-  'unhidden':         { icon: '👁',  label: 'تم إظهار المحتوى',         cls: 'unhidden' },
-  'edited':           { icon: '✏️', label: 'تم تعديل المحتوى',          cls: 'edited' },
-  'download_blocked': { icon: '🔒', label: 'تم منع التحميل',            cls: 'download_blocked' },
-  'download_allowed': { icon: '✅', label: 'تم السماح بالتحميل',        cls: 'download_allowed' },
-  'deleted':          { icon: '🗑️', label: 'تم حذف المحتوى',           cls: 'deleted' },
+  'approved':         { icon: '✅', label: 'تم الاعتماد والنشر',    cls: 'approved' },
+  'hidden':           { icon: '🙈', label: 'تم إخفاء المحتوى',      cls: 'hidden' },
+  'unhidden':         { icon: '👁',  label: 'تم إظهار المحتوى',      cls: 'unhidden' },
+  'edited':           { icon: '✏️', label: 'تم تعديل المحتوى',       cls: 'edited' },
+  'download_blocked': { icon: '🔒', label: 'تم منع التحميل',         cls: 'download_blocked' },
+  'download_allowed': { icon: '✅', label: 'تم السماح بالتحميل',     cls: 'download_allowed' },
+  'deleted':          { icon: '🗑️', label: 'تم حذف المحتوى',        cls: 'deleted' },
 };
 
 // ===== تسجيل الإجراء =====
@@ -233,7 +236,7 @@ async function loadActionsLog() {
         '<div class="action-icon ' + info.cls + '">' + info.icon + '</div>' +
         '<div class="action-info">' +
           '<div class="action-text">' + info.label + '</div>' +
-          '<div class="action-meta">بواسطة: ' + adminName + ' · ' + time + (a.note ? ' · ' + a.note : '') + '</div>' +
+          '<div class="action-meta">بواسطة: ' + adminName + ' · ' + time + (a.note ? '<br><span style="color:#555;">📝 ' + a.note + '</span>' : '') + '</div>' +
         '</div>' +
       '</div>';
   });
@@ -293,7 +296,6 @@ function renderContent(item, author) {
     authorHtml = '<div class="author-section"><div class="author-avatar">' + avatarContent + '</div><div class="author-info"><h4>' + authorName + '</h4><span>📅 ' + date + (author.organization ? ' · 🏢 ' + author.organization : '') + '</span></div><button class="author-profile-btn" onclick="window.location.href=\'./profile.html?id=' + author.id + '\'">الملف الشخصي</button></div>';
   }
 
-  // سجل الإجراءات — يظهر للمشرفين فقط
   var actionsHtml = isAdmin ?
     '<div class="actions-log">' +
       '<h4>📋 سجل الإجراءات</h4>' +
@@ -316,8 +318,6 @@ function renderContent(item, author) {
 
   document.title = item.title + ' | HRDF';
   updateAdminBar();
-
-  // تحميل سجل الإجراءات
   if (isAdmin) loadActionsLog();
 }
 
@@ -368,34 +368,51 @@ async function loadContent() {
 }
 
 // ===== أزرار المدير =====
+
+// إظهار/إخفاء حقل النص عند تغيير النوع
+document.getElementById('e-type').addEventListener('change', function() {
+  document.getElementById('edit-article-field').style.display =
+    this.value === 'مقال' ? 'block' : 'none';
+});
+
 document.getElementById('btn-edit').addEventListener('click', function() {
   if (!currentItem) return;
   document.getElementById('e-title').value = currentItem.title;
   document.getElementById('e-type').value = currentItem.content_type || 'مقال';
   document.getElementById('e-audience').value = currentItem.target_audience || '';
+  document.getElementById('e-article-text').value = currentItem.article_text || '';
+  // إظهار حقل النص فقط للمقالات
+  document.getElementById('edit-article-field').style.display =
+    currentItem.content_type === 'مقال' ? 'block' : 'none';
   document.getElementById('modal-edit').className = 'modal-bg on';
 });
 
 document.getElementById('btn-save-edit').addEventListener('click', async function() {
-  var newTitle = document.getElementById('e-title').value;
-  var newType = document.getElementById('e-type').value;
+  var newTitle    = document.getElementById('e-title').value.trim();
+  var newType     = document.getElementById('e-type').value;
   var newAudience = document.getElementById('e-audience').value;
+  var newText     = document.getElementById('e-article-text').value.trim();
 
-  // بناء ملاحظة التعديل بالتفصيل
+  if (!newTitle) { alert('يرجى إدخال العنوان'); return; }
+
+  // بناء ملاحظة التغييرات بالتفصيل
   var changes = [];
   if (newTitle !== currentItem.title)
     changes.push('العنوان: "' + currentItem.title + '" ← "' + newTitle + '"');
   if (newType !== currentItem.content_type)
     changes.push('النوع: ' + currentItem.content_type + ' ← ' + newType);
   if (newAudience !== currentItem.target_audience)
-    changes.push('الفئة: ' + currentItem.target_audience + ' ← ' + newAudience);
+    changes.push('الفئة: ' + (currentItem.target_audience||'-') + ' ← ' + newAudience);
+  if (newType === 'مقال' && newText !== (currentItem.article_text || ''))
+    changes.push('تم تعديل نص المقال');
 
   var note = changes.length > 0 ? changes.join(' | ') : 'لا تغييرات';
 
   var obj = {
     title: newTitle,
     content_type: newType,
-    target_audience: newAudience
+    target_audience: newAudience,
+    article_text: newType === 'مقال' ? newText : null
   };
 
   await sb.from('content').update(obj).eq('id', contentId);
@@ -409,7 +426,6 @@ document.getElementById('btn-toggle-hidden').addEventListener('click', async fun
   var newHidden = !currentItem.is_hidden;
   await sb.from('content').update({ is_hidden: newHidden }).eq('id', contentId);
   await logAction(newHidden ? 'hidden' : 'unhidden');
-  // إذا كان الإظهار يعني الاعتماد أيضاً
   if (!newHidden && !currentItem.is_reviewed) {
     await sb.from('content').update({ is_reviewed: true }).eq('id', contentId);
     await logAction('approved');
@@ -430,13 +446,6 @@ document.getElementById('btn-delete').addEventListener('click', async function()
   await logAction('deleted');
   await sb.from('content').delete().eq('id', contentId);
   window.location.href = './index.html';
-});
-
-// زر الاعتماد في شريط المدير — يسجل approved مباشرة
-document.getElementById('admin-bar').addEventListener('click', function(e) {
-  if (e.target && e.target.id === 'btn-approve') {
-    approveContent();
-  }
 });
 
 async function approveContent() {
