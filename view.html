@@ -36,11 +36,14 @@
     .audio-viewer .audio-icon { font-size: 56px; margin-bottom: 14px; }
     .audio-viewer h3 { font-size: 16px; color: #333; margin-bottom: 14px; }
     .audio-viewer audio { width: 100%; }
-.pdf-viewer { position: fixed; inset: 0; z-index: 150; background: #333; display: flex; flex-direction: column; }
-.pdf-viewer-header { background: #222; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
-.pdf-viewer-header span { color: white; font-size: 14px; font-weight: 700; }
-.pdf-viewer-header button { background: #dc3545; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700; }
-.pdf-viewer iframe { flex: 1; width: 100%; border: none; }
+
+    /* عارض PDF مدمج */
+    .pdf-container { border-radius: 12px; overflow: hidden; border: 1px solid #ddd; }
+    .pdf-toolbar { background: #3d3d3d; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .pdf-toolbar span { color: white; font-size: 13px; font-weight: 600; }
+    .pdf-toolbar a { background: #0B6B3A; color: white; padding: 7px 16px; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .pdf-frame { width: 100%; height: 600px; border: none; display: block; background: #525659; }
+
     .download-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee; }
     .download-btn { display: inline-flex; align-items: center; gap: 8px; background: #0B6B3A; color: white; padding: 12px 24px; border-radius: 10px; text-decoration: none; font-size: 15px; font-weight: 700; transition: background 0.2s; border: none; cursor: pointer; font-family: 'Tajawal', sans-serif; }
     .download-btn:hover { background: #094d2a; }
@@ -52,7 +55,6 @@
     .author-profile-btn { margin-right: auto; padding: 7px 16px; border: 1.5px solid #0B6B3A; color: #0B6B3A; background: transparent; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
     .author-profile-btn:hover { background: #0B6B3A; color: white; }
 
-    /* شريط إجراءات المدير */
     .admin-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 2px solid #eee; padding: 12px 20px; display: none; z-index: 99; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
     .admin-bar.show { display: block; }
     .admin-bar-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -65,7 +67,6 @@
     .ab-yellow { background: #ffc107; color: #333; }
     .ab-red { background: #dc3545; color: white; }
 
-    /* نافذة التعديل */
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
     .modal-bg.on { display: flex; }
     .modal { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
@@ -89,7 +90,7 @@
       .content-title { font-size: 18px; }
       .content-header { padding: 20px 16px; }
       .content-body { padding: 16px; }
-      .pdf-viewer iframe { height: 350px; }
+      .pdf-frame { height: 400px; }
       .article-text { font-size: 15px; }
       .header-brand span { display: none; }
       .ab-btn { padding: 7px 12px; font-size: 13px; }
@@ -165,7 +166,7 @@
 
 <script>
 const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const params = new URLSearchParams(window.location.search);
@@ -191,21 +192,38 @@ function renderContent(item, author) {
   var date = item.created_at ? new Date(item.created_at).toLocaleDateString('ar-SA') : '-';
 
   var mediaHtml = '';
+
   if (item.content_type === 'مقال' && item.article_text) {
     mediaHtml = '<div class="article-text">' + item.article_text + '</div>';
+
   } else if (fileType === 'image') {
     mediaHtml = '<div class="image-viewer"><img src="' + item.file_url + '" alt="' + item.title + '"></div>';
+
   } else if (fileType === 'video') {
     mediaHtml = '<div class="video-viewer"><video controls playsinline><source src="' + item.file_url + '">متصفحك لا يدعم تشغيل الفيديو</video></div>';
+
   } else if (fileType === 'audio') {
     mediaHtml = '<div class="audio-viewer"><div class="audio-icon">' + icon + '</div><h3>' + item.title + '</h3><audio controls><source src="' + item.file_url + '">متصفحك لا يدعم تشغيل الصوت</audio></div>';
+
   } else if (fileType === 'pdf') {
-mediaHtml = '<div style="text-align:center;padding:32px;"><div style="font-size:56px;margin-bottom:12px;">📄</div><p style="color:#666;margin-bottom:16px;font-size:15px;">ملف PDF</p><button onclick="openPDF(\'' + item.file_url + '\')" style="background:#0B6B3A;color:white;border:none;padding:12px 28px;border-radius:10px;font-family:Tajawal,sans-serif;font-size:15px;font-weight:700;cursor:pointer;">📄 عرض الملف كاملاً</button></div>';  } else if (item.file_url) {
-    mediaHtml = '<div style="text-align:center;padding:32px;"><div style="font-size:56px;margin-bottom:12px;">' + icon + '</div><p style="color:#666;margin-bottom:16px;font-size:14px;">اضغط لتحميل الملف</p></div>';
+    // عرض PDF مباشرة في الصفحة
+    mediaHtml =
+      '<div class="pdf-container">' +
+        '<div class="pdf-toolbar">' +
+          '<span>📄 ' + item.title + '</span>' +
+          (item.allow_download !== false ? '<a href="' + item.file_url + '" target="_blank" download>⬇️ تحميل الملف</a>' : '') +
+        '</div>' +
+        '<iframe class="pdf-frame" src="' + item.file_url + '#toolbar=0" allowfullscreen></iframe>' +
+      '</div>';
+
+  } else if (item.file_url) {
+    mediaHtml = '<div style="text-align:center;padding:32px;"><div style="font-size:56px;margin-bottom:12px;">' + icon + '</div><p style="color:#666;margin-bottom:16px;font-size:14px;">اضغط لتحميل الملف</p><a href="' + item.file_url + '" target="_blank" class="download-btn">⬇️ تحميل الملف</a></div>';
+
   } else {
     mediaHtml = '<div style="text-align:center;padding:32px;color:#888;"><div style="font-size:56px;margin-bottom:12px;">📭</div><p>لا يوجد محتوى للعرض</p></div>';
   }
 
+  // زر التحميل أسفل المحتوى (للملفات غير PDF)
   var downloadHtml = '';
   if (item.file_url && item.allow_download !== false && fileType !== 'pdf') {
     downloadHtml = '<div class="download-section"><a href="' + item.file_url + '" target="_blank" class="download-btn">⬇️ تحميل الملف</a></div>';
@@ -241,16 +259,13 @@ function updateAdminBar() {
   var bar = document.getElementById('admin-bar');
   bar.className = 'admin-bar show';
 
-  // زر الإخفاء/الإظهار
   var btnHidden = document.getElementById('btn-toggle-hidden');
   btnHidden.textContent = currentItem.is_hidden ? '👁 إظهار' : '🙈 إخفاء';
   btnHidden.className = 'ab-btn ' + (currentItem.is_hidden ? 'ab-green' : 'ab-orange');
 
-  // زر التحميل
   var btnDl = document.getElementById('btn-toggle-download');
   btnDl.textContent = currentItem.allow_download ? '🔒 منع التحميل' : '✅ سماح التحميل';
 
-  // زر تحميل للمدير
   var btnDlAdmin = document.getElementById('btn-download-admin');
   if (currentItem.file_url) {
     btnDlAdmin.style.display = 'flex';
@@ -259,19 +274,13 @@ function updateAdminBar() {
     btnDlAdmin.style.display = 'none';
   }
 }
-function openPDF(url) {
-  var viewer = document.createElement('div');
-  viewer.className = 'pdf-viewer';
-  viewer.innerHTML = '<div class="pdf-viewer-header"><span>📄 عرض الملف</span><button onclick="this.closest(\'.pdf-viewer\').remove()">✕ إغلاق</button></div><iframe src="' + url + '"></iframe>';
-  document.body.appendChild(viewer);
-}
+
 async function loadContent() {
   if (!contentId) {
     document.getElementById('app').innerHTML = '<div class="content-card"><div class="error-state"><div class="icon">🔍</div><h2>لم يتم تحديد المحتوى</h2><p>يرجى العودة للصفحة الرئيسية</p></div></div>';
     return;
   }
 
-  // تحقق من صلاحية المدير
   var { data: session } = await sb.auth.getSession();
   if (session && session.session) {
     var { data: profile } = await sb.from('profiles').select('role').eq('id', session.session.user.id).single();
