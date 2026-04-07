@@ -79,7 +79,7 @@
     .empty { text-align: center; padding: 32px; color: #aaa; font-size: 13px; }
     .progress-bar { width: 100%; height: 5px; background: #eee; border-radius: 4px; margin-top: 6px; display: none; }
     .progress-bar-fill { height: 100%; background: #0B6B3A; border-radius: 4px; width: 0%; transition: width 0.3s; }
-    .notif-badge { background: #dc3545; color: white; border-radius: 50%; padding: 1px 6px; font-size: 11px; margin-right: 4px; }
+    .notif-badge { background: #dc3545; color: white; border-radius: 50%; padding: 1px 6px; font-size: 11px; margin-right: 2px; }
     .tooltip-wrap { position: relative; display: inline-block; }
     .tooltip-wrap .tooltip-text { visibility: hidden; opacity: 0; background: #333; color: white; font-size: 12px; border-radius: 8px; padding: 6px 10px; white-space: nowrap; position: absolute; bottom: 110%; right: 50%; transform: translateX(50%); transition: opacity 0.2s; z-index: 999; pointer-events: none; font-family: 'Tajawal', sans-serif; }
     .tooltip-wrap:hover .tooltip-text { visibility: visible; opacity: 1; }
@@ -88,7 +88,6 @@
     .add-user-field label { display: block; margin-bottom: 4px; font-size: 13px; color: #444; font-weight: 600; }
     .add-user-field input, .add-user-field select { width: 100%; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 13px; }
     .create-msg { margin-top: 10px; padding: 10px; border-radius: 8px; text-align: center; font-size: 13px; display: none; }
-
     @keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     @keyframes slideOutDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(30px); opacity: 0; } }
     #user-notif-banner {
@@ -104,7 +103,6 @@
       font-size: 16px; opacity: 0.7; background: none; border: none; color: white; line-height: 1;
     }
     #user-notif-banner .close-btn:hover { opacity: 1; }
-
     @media (max-width: 640px) {
       .stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
       .stat-card .num { font-size: 22px; }
@@ -131,10 +129,15 @@
   <div class="nav-tab on" id="nt1">👥 المستخدمون</div>
   <div class="nav-tab" id="nt2">📋 المحتوى</div>
   <div class="nav-tab" id="nt3">🏷️ التصنيفات</div>
-  <div class="nav-tab" id="nt4">🔔 الإشعارات <span class="notif-badge" id="notif-count" style="display:none">0</span></div>
+  <div class="nav-tab" id="nt4">🔔 الإشعارات
+    <span class="notif-badge" id="notif-count" style="display:none">0</span>
+    <span class="notif-badge" id="user-notif-count" style="display:none;background:#0B6B3A;">0</span>
+  </div>
 </div>
 
 <div class="content">
+
+  <!-- المستخدمون -->
   <div class="section on" id="s1">
     <div class="stats">
       <div class="stat-card"><div class="num" id="cnt-total">-</div><div class="lbl">الكل</div></div>
@@ -177,6 +180,7 @@
     </div>
   </div>
 
+  <!-- المحتوى -->
   <div class="section" id="s2">
     <div class="card">
       <div class="card-header">
@@ -193,6 +197,7 @@
     </div>
   </div>
 
+  <!-- التصنيفات -->
   <div class="section" id="s3">
     <div class="card">
       <div class="card-header">
@@ -208,7 +213,19 @@
     </div>
   </div>
 
+  <!-- الإشعارات -->
   <div class="section" id="s4">
+
+    <!-- إشعارات المستخدمين الجدد -->
+    <div class="card">
+      <div class="card-header">
+        <h3>👤 مستخدمون جدد انضموا</h3>
+        <button class="btn btn-gray" onclick="clearUserNotifs()" style="font-size:11px;">مسح الكل</button>
+      </div>
+      <div id="user-notif-list"><div class="empty">لا توجد إشعارات مستخدمين جدد</div></div>
+    </div>
+
+    <!-- إشعارات المحتوى -->
     <div class="card">
       <div class="card-header"><h3>🔔 إشعارات المحتوى الجديد</h3></div>
       <div class="table-wrap">
@@ -219,6 +236,7 @@
       </div>
       <div class="mobile-list" id="notif-mobile"></div>
     </div>
+
   </div>
 </div>
 
@@ -308,7 +326,7 @@
 
 <script>
 const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq'; // ← استبدل بـ eyJ...
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUserId = null;
@@ -331,7 +349,7 @@ function setupTabs() {
     { tab: 'nt1', sec: 's1', load: loadUsers },
     { tab: 'nt2', sec: 's2', load: loadContent },
     { tab: 'nt3', sec: 's3', load: loadCategories },
-    { tab: 'nt4', sec: 's4', load: loadNotifications }
+    { tab: 'nt4', sec: 's4', load: function() { loadNotifications(); renderUserNotifs(); } }
   ];
   tabs.forEach(function(t) {
     document.getElementById(t.tab).addEventListener('click', function() {
@@ -361,6 +379,7 @@ document.getElementById('toggle-add-user').addEventListener('click', function() 
   }
 });
 
+// ===== المستخدمون =====
 async function loadUsers() {
   var { data } = await sb.from('profiles').select('*');
   if (!data) return;
@@ -428,6 +447,7 @@ document.getElementById('btn-create-admin').addEventListener('click', async func
   loadUsers();
 });
 
+// ===== المحتوى =====
 async function loadContent() {
   var { data } = await sb.from('content').select('*').order('id', { ascending: false });
   if (!data) return;
@@ -539,6 +559,7 @@ async function deleteContent(id) {
   loadContent();
 }
 
+// ===== التصنيفات =====
 async function loadCategories() {
   var { data } = await sb.from('categories').select('*');
   if (!data) return;
@@ -565,6 +586,7 @@ async function deleteCat(id) {
   loadCategories();
 }
 
+// ===== الإشعارات (محتوى) =====
 async function loadNotifications() {
   var { data } = await sb.from('content').select('*, profiles!content_created_by_fkey(email, full_name)').eq('is_reviewed', false).order('created_at', { ascending: false });
   var count = data ? data.length : 0;
@@ -603,6 +625,47 @@ async function checkNotifications() {
   if (count>0) badge.textContent = count;
 }
 
+// ===== إشعارات المستخدمين الجدد =====
+function saveUserNotif(notif) {
+  var list = JSON.parse(localStorage.getItem('user_notifs') || '[]');
+  list.unshift(notif);
+  if (list.length > 50) list = list.slice(0, 50);
+  localStorage.setItem('user_notifs', JSON.stringify(list));
+}
+
+function clearUserNotifs() {
+  localStorage.removeItem('user_notifs');
+  renderUserNotifs();
+  updateUserNotifBadge();
+}
+
+function updateUserNotifBadge() {
+  var list = JSON.parse(localStorage.getItem('user_notifs') || '[]');
+  var badge = document.getElementById('user-notif-count');
+  badge.style.display = list.length > 0 ? 'inline' : 'none';
+  badge.textContent = list.length;
+}
+
+function renderUserNotifs() {
+  var list = JSON.parse(localStorage.getItem('user_notifs') || '[]');
+  var el = document.getElementById('user-notif-list');
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = '<div class="empty">لا توجد إشعارات مستخدمين جدد</div>';
+    return;
+  }
+  var html = '';
+  list.forEach(function(n) {
+    var time = new Date(n.time).toLocaleString('ar-SA');
+    html += '<div style="padding:12px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">';
+    html += '<div><div style="font-weight:700;font-size:14px;">👤 ' + n.name + '</div>';
+    html += '<div style="font-size:12px;color:#888;margin-top:2px;">' + (n.email||'') + ' · ' + time + '</div></div>';
+    html += '<span class="badge badge-' + n.role + '">' + n.role + '</span>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
 // ===== مراقبة تسجيل مستخدمين جدد (Realtime) =====
 function watchNewUsers() {
   sb.channel('watch-new-users')
@@ -614,9 +677,12 @@ function watchNewUsers() {
       var user = payload.new;
       if (user.id === currentUserId) return;
       var name = user.full_name || user.email || 'مستخدم جديد';
+      saveUserNotif({ name: name, email: user.email, role: user.role || 'pending', time: new Date().toISOString() });
       showUserNotification(name, user.email, user.role || 'pending');
       loadUsers();
       checkNotifications();
+      renderUserNotifs();
+      updateUserNotifBadge();
     })
     .subscribe(function(status) {
       if (status === 'SUBSCRIBED') console.log('✅ Realtime: يراقب تسجيل مستخدمين جدد');
@@ -633,7 +699,7 @@ function showUserNotification(name, email, role) {
     (email ? '<div style="font-size:12px;opacity:0.75;margin-top:2px;">' + email + '</div>' : '') +
     '<div style="margin-top:8px;">' +
       '<span style="background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:20px;font-size:11px;">' + role + '</span> ' +
-      '<button onclick="document.getElementById(\'nt1\').click()" style="background:rgba(255,255,255,0.25);border:none;color:white;padding:3px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:Tajawal,sans-serif;">عرض المستخدمين</button>' +
+      '<button onclick="document.getElementById(\'nt4\').click()" style="background:rgba(255,255,255,0.25);border:none;color:white;padding:3px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:Tajawal,sans-serif;">عرض الإشعارات</button>' +
     '</div>';
   banner.style.display = 'block';
   clearTimeout(window._notifTimer);
@@ -650,11 +716,14 @@ document.getElementById('close-notif-banner').addEventListener('click', function
   setTimeout(function() { banner.style.display = 'none'; banner.classList.remove('hide'); }, 300);
 });
 
+// ===== التهيئة =====
 async function init() {
   await checkAuth();
   setupTabs();
   loadUsers();
   checkNotifications();
+  renderUserNotifs();
+  updateUserNotifBadge();
   watchNewUsers();
 }
 init();
