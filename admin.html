@@ -538,7 +538,7 @@ document.getElementById('save-content').addEventListener('click', async function
   var fileInput = document.getElementById('c-file');
   if (fileInput.files && fileInput.files[0]) {
     var file = fileInput.files[0];
-    var fileName = Date.now()+'_'+file.name;
+  var fileName = Date.now() + '_' + encodeURIComponent(file.name);
     document.getElementById('upload-progress').style.display='block';
     document.getElementById('upload-progress-fill').style.width='30%';
     document.getElementById('upload-status').textContent='جاري رفع الملف...';
