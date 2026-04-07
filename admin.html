@@ -422,8 +422,22 @@ document.getElementById('save-role').addEventListener('click', async function() 
 async function deleteUser(id, email) {
   if (id === currentUserId) { alert('لا يمكنك حذف حسابك الخاص!'); return; }
   if (!confirm('هل أنت متأكد من حذف المستخدم: ' + email + '؟')) return;
-  await sb.from('profiles').delete().eq('id', id);
-  alert('✅ تم الحذف');
+
+  var { data: { session } } = await sb.auth.getSession();
+  
+  var res = await fetch('https://fmsxnznoynnhcwvstheu.supabase.co/functions/v1/delete-user', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + session.access_token
+    },
+    body: JSON.stringify({ userId: id })
+  });
+
+  var result = await res.json();
+  if (result.error) { alert('خطأ: ' + result.error); return; }
+  
+  alert('✅ تم الحذف نهائياً');
   loadUsers();
 }
 
