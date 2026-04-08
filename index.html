@@ -6,6 +6,34 @@
   <meta name="theme-color" content="#0B6B3A" />
   <link rel="icon" type="image/png" href="./irshad-logo.png">
   <link rel="apple-touch-icon" href="./irshad-logo.png">
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!--           Security Headers (Meta Tags)          -->
+  <!-- ═══════════════════════════════════════════════ -->
+
+  <!-- CSP: يسمح فقط بـ Supabase وموارد الموقع -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: blob: https:;
+    connect-src 'self'
+      https://fmsxnznoynnhcwvstheu.supabase.co
+      wss://fmsxnznoynnhcwvstheu.supabase.co;
+    frame-ancestors 'none';
+    form-action 'self';
+    base-uri 'self';
+    upgrade-insecure-requests
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!--              SEO & Social Meta Tags             -->
+  <!-- ═══════════════════════════════════════════════ -->
   <meta property="og:title" content="بنك المحتوى المهني | مبادرة الإرشاد المهني الشامل">
   <meta property="og:description" content="منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل - HRDF">
   <meta property="og:image" content="https://careerguide.works/irshad-logo.png">
@@ -17,6 +45,7 @@
   <meta name="twitter:description" content="منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل">
   <meta name="twitter:image" content="https://careerguide.works/irshad-logo.png">
   <meta name="description" content="منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل - HRDF">
+
   <title>منصة إدارة المحتوى | مبادرة الإرشاد المهني الشامل - HRDF</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -405,9 +434,15 @@ body { font-family: 'SST Arabic', 'Tajawal', sans-serif; background: #f0f4f8; co
 </div>
 
 <script>
-const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  // ═══════════════════════════════════════════════════════
+  // ملاحظة أمنية مهمة:
+  // SUPABASE_KEY هنا هو "anon key" وهو مصمم ليكون عاماً.
+  // الحماية الحقيقية تعتمد على Row Level Security (RLS)
+  // في Supabase — تأكد أن RLS مفعّل على جميع الجداول.
+  // ═══════════════════════════════════════════════════════
+  const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUser = null;
 let currentRole = null;
