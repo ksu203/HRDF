@@ -405,10 +405,20 @@
           <option value="المرشدين المهنيين">المرشدين المهنيين</option>
         </select>
       </div>
-<div class="field" id="edit-article-field" style="display:none;">
-      <label>نص المقال</label>
-      <textarea id="e-article-text" style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-family:'Tajawal',sans-serif;font-size:14px;resize:vertical;min-height:150px;"></textarea>
-    </div>
+document.getElementById('form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  var id = document.getElementById('fid').value;
+  var newType = document.getElementById('ftype').value;
+  var obj = {
+    title: document.getElementById('ftitle').value,
+    content_type: newType,
+    target_audience: document.getElementById('ftarget').value,
+    article_text: newType === 'مقال' ? document.getElementById('e-article-text').value : null
+  };
+  if (id) await sb.from('content').update(obj).eq('id', id);
+  document.getElementById('modal').className = 'modal-edit';
+  await loadContent();
+});
       <div class="modal-edit__foot">
         <button class="btn btn--ghost" type="button" id="btnCancel">إلغاء</button>
         <button class="btn btn--primary" type="submit">حفظ</button>
@@ -418,7 +428,7 @@
 </div>
 
 <script>
-const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
+const SUPABASE_URL = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
 const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -885,7 +895,11 @@ async function init() {
   await checkAuth();
   await loadContent();
 }
-init();
+document.getElementById('ftype').addEventListener('change', function() {
+  document.getElementById('edit-article-field').style.display =
+    this.value === 'مقال' ? 'block' : 'none';
+});
+  init();
 </script>
 
 <!-- Footer -->
