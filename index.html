@@ -112,22 +112,22 @@
     .author-info span { font-size: 11px; color: #888; }
     .btn-author { padding: 3px 8px; border-radius: 6px; border: 1px solid #0B6B3A; color: #0B6B3A; background: transparent; font-size: 11px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
     .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; }
-    .badge-article { background: #e8f5ef; color: #0B6B3A; }
-    .badge-video { background: #fff3cd; color: #856404; }
-    .badge-images { background: #cce5ff; color: #004085; }
-    .badge-infographic { background: #f8d7da; color: #721c24; }
-    .badge-audio { background: #e2d9f3; color: #4a235a; }
-    .badge-podcast { background: #fde8d8; color: #7d3c00; }
-    .badge-default { background: #f0f0f0; color: #555; }
-.badge-book      { background: #e8d5f5; color: #6a1b9a; }
-.badge-theory    { background: #d1ecf1; color: #0c5460; }
-.badge-translate { background: #ffeeba; color: #856404; }
+    .badge-article    { background: #e8f5ef; color: #0B6B3A; }
+    .badge-video      { background: #fff3cd; color: #856404; }
+    .badge-images     { background: #cce5ff; color: #004085; }
+    .badge-infographic{ background: #f8d7da; color: #721c24; }
+    .badge-audio      { background: #e2d9f3; color: #4a235a; }
+    .badge-podcast    { background: #fde8d8; color: #7d3c00; }
+    .badge-book       { background: #e8d5f5; color: #6a1b9a; }
+    .badge-theory     { background: #d1ecf1; color: #0c5460; }
+    .badge-translate  { background: #ffeeba; color: #856404; }
+    .badge-default    { background: #f0f0f0; color: #555; }
     .status-badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
     .status-published { background: #d4edda; color: #155724; }
-    .status-pending { background: #fff3cd; color: #856404; }
-    .status-hidden { background: #f8d7da; color: #721c24; }
-    .btn-view { padding: 7px 14px; border-radius: 8px; border: none; background: #0B6B3A; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
-    .btn-edit { padding: 7px 14px; border-radius: 8px; border: none; background: #0066cc; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
+    .status-pending   { background: #fff3cd; color: #856404; }
+    .status-hidden    { background: #f8d7da; color: #721c24; }
+    .btn-view   { padding: 7px 14px; border-radius: 8px; border: none; background: #0B6B3A; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
+    .btn-edit   { padding: 7px 14px; border-radius: 8px; border: none; background: #0066cc; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
     .btn-delete { padding: 7px 14px; border-radius: 8px; border: none; background: #dc3545; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
     .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 20px; flex-wrap: wrap; }
     .page-btn { padding: 8px 14px; border-radius: 8px; border: 1.5px solid #ddd; background: white; color: #333; font-family: 'Tajawal', sans-serif; font-size: 14px; cursor: pointer; transition: all 0.2s; min-width: 40px; }
@@ -215,28 +215,14 @@
   <h2>بنك المحتوى المهني</h2>
   <p>منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل</p>
   <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="stat-icon">📚</div>
-      <div class="num" id="hero-total">0</div>
-      <div class="lbl">إجمالي المحتوى</div>
-    </div>
-    <div class="hero-stat">
-      <div class="stat-icon">👥</div>
-      <div class="num" id="hero-authors">0</div>
-      <div class="lbl">المساهمون</div>
-    </div>
-    <div class="hero-stat">
-      <div class="stat-icon">🗂️</div>
-      <div class="num" id="hero-types">0</div>
-      <div class="lbl">أنواع المحتوى</div>
-    </div>
+    <div class="hero-stat"><div class="stat-icon">📚</div><div class="num" id="hero-total">0</div><div class="lbl">إجمالي المحتوى</div></div>
+    <div class="hero-stat"><div class="stat-icon">👥</div><div class="num" id="hero-authors">0</div><div class="lbl">المساهمون</div></div>
+    <div class="hero-stat"><div class="stat-icon">🗂️</div><div class="num" id="hero-types">0</div><div class="lbl">أنواع المحتوى</div></div>
   </div>
 </div>
 
 <div class="shell">
-  <div class="admin-notice" id="admin-notice">
-    🛡️ أنت تشاهد كمشرف — يظهر لك كل المحتوى بما فيه غير المنشور والمخفي
-  </div>
+  <div class="admin-notice" id="admin-notice">🛡️ أنت تشاهد كمشرف — يظهر لك كل المحتوى بما فيه غير المنشور والمخفي</div>
 
   <div class="search-section">
     <div class="search-main">
@@ -259,7 +245,7 @@
             <option value="بودكاست">بودكاست</option>
             <option value="تلخيص كتب">تلخيص كتب</option>
             <option value="تلخيص نظريات">تلخيص نظريات</option>
-            <option value="ترجمة محتوى">ترجمة محتوى</option>         
+            <option value="ترجمة محتوى">ترجمة محتوى</option>
           </select>
         </div>
         <div class="filter-item">
@@ -297,14 +283,8 @@
             <option value="none">بدون ملف</option>
           </select>
         </div>
-        <div class="filter-item">
-          <label>من تاريخ</label>
-          <input type="date" id="f-date-from">
-        </div>
-        <div class="filter-item">
-          <label>إلى تاريخ</label>
-          <input type="date" id="f-date-to">
-        </div>
+        <div class="filter-item"><label>من تاريخ</label><input type="date" id="f-date-from"></div>
+        <div class="filter-item"><label>إلى تاريخ</label><input type="date" id="f-date-to"></div>
       </div>
       <div class="filters-actions">
         <button class="btn-filter btn-reset" onclick="resetFilters()">🔄 إعادة تعيين</button>
@@ -405,7 +385,6 @@
           <option value="المرشدين المهنيين">المرشدين المهنيين</option>
         </select>
       </div>
-      <!-- حقل نص المقال -->
       <div class="field" id="edit-article-field" style="display:none;">
         <label class="label">نص المقال</label>
         <textarea class="input" id="e-article-text" style="resize:vertical;min-height:160px;"></textarea>
@@ -434,16 +413,17 @@ let currentPage = 1;
 const PAGE_SIZE = 20;
 
 const typeLabels = {
-  'مقال': { cls: 'badge-article', icon: '📄' },
-  'فيديو': { cls: 'badge-video', icon: '🎥' },
-  'صور': { cls: 'badge-images', icon: '🖼️' },
-  'انفوجرافيك': { cls: 'badge-infographic', icon: '📊' },
-  'صوت': { cls: 'badge-audio', icon: '🎵' },
-  'بودكاست': { cls: 'badge-podcast', icon: '🎙️' }
-  'تلخيص كتب':    { cls: 'badge-book',    icon: '📚' },
-  'تلخيص نظريات': { cls: 'badge-theory',  icon: '🧠' },
-  'ترجمة محتوى':  { cls: 'badge-translate', icon: '🌐' },
+  'مقال':           { cls: 'badge-article',    icon: '📄' },
+  'فيديو':          { cls: 'badge-video',      icon: '🎥' },
+  'صور':            { cls: 'badge-images',     icon: '🖼️' },
+  'انفوجرافيك':     { cls: 'badge-infographic',icon: '📊' },
+  'صوت':            { cls: 'badge-audio',      icon: '🎵' },
+  'بودكاست':        { cls: 'badge-podcast',    icon: '🎙️' },
+  'تلخيص كتب':     { cls: 'badge-book',       icon: '📚' },
+  'تلخيص نظريات':  { cls: 'badge-theory',     icon: '🧠' },
+  'ترجمة محتوى':   { cls: 'badge-translate',  icon: '🌐' }
 };
+
 const roleMap = { admin: '🛡️ مشرف', editor: '✏️ محرر', viewer: '👁 قارئ', pending: '⏳ في الانتظار' };
 
 function getStatusBadge(item) {
