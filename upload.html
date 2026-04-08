@@ -23,29 +23,17 @@
     .card-header h2 { font-size: 22px; margin-bottom: 6px; }
     .card-header p { opacity: 0.85; font-size: 14px; }
     .card-body { padding: 32px; }
-
-    /* عنوان المقال البارز */
     .title-field { margin-bottom: 24px; }
     .title-field label { display: block; margin-bottom: 8px; font-size: 15px; color: #333; font-weight: 700; }
-    .title-input {
-      width: 100%; padding: 16px 20px;
-      border: 2px solid #0B6B3A; border-radius: 12px;
-      font-family: 'Tajawal', sans-serif; font-size: 20px;
-      font-weight: 700; color: #333;
-      background: #f8fffe;
-      transition: all 0.2s;
-    }
+    .title-input { width: 100%; padding: 16px 20px; border: 2px solid #0B6B3A; border-radius: 12px; font-family: 'Tajawal', sans-serif; font-size: 20px; font-weight: 700; color: #333; background: #f8fffe; transition: all 0.2s; }
     .title-input:focus { outline: none; border-color: #094d2a; box-shadow: 0 0 0 4px rgba(11,107,58,0.1); }
     .title-input::placeholder { color: #bbb; font-weight: 400; font-size: 17px; }
-
     .field { margin-bottom: 18px; }
     .field label { display: block; margin-bottom: 6px; font-size: 14px; color: #444; font-weight: 600; }
     .field input, .field select { width: 100%; padding: 11px 14px; border: 1.5px solid #ddd; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 15px; transition: border 0.2s; }
     .field input:focus, .field select:focus { outline: none; border-color: #0B6B3A; }
     .field input[type="file"] { padding: 10px; background: #f8f9fa; cursor: pointer; }
     .file-types { font-size: 12px; color: #888; margin-top: 5px; }
-
-    /* Quill Editor */
     .editor-field { margin-bottom: 18px; display: none; }
     .editor-field label { display: block; margin-bottom: 8px; font-size: 14px; color: #444; font-weight: 600; }
     .ql-container { font-family: 'Tajawal', sans-serif !important; font-size: 15px !important; border-radius: 0 0 10px 10px !important; min-height: 250px; }
@@ -53,7 +41,6 @@
     .ql-container { border-color: #ddd !important; }
     .ql-editor { min-height: 250px; text-align: right; direction: rtl; }
     .ql-editor.ql-blank::before { right: 15px; left: auto; font-style: normal; color: #bbb; }
-
     .btn-submit { width: 100%; padding: 14px; background: #0B6B3A; color: white; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
     .btn-submit:hover { background: #094d2a; }
     .btn-submit:disabled { background: #aaa; cursor: not-allowed; }
@@ -71,9 +58,7 @@
     .badge-pending { background: #fff3cd; color: #856404; }
     .badge-reviewed { background: #d4edda; color: #155724; }
     .badge-hidden { background: #f8d7da; color: #721c24; }
-
     .char-count { font-size: 12px; color: #888; text-align: left; margin-top: 4px; }
-
     @media (max-width: 600px) {
       .card-body { padding: 20px 16px; }
       .title-input { font-size: 16px; }
@@ -98,7 +83,6 @@
     </div>
     <div class="card-body">
 
-      <!-- عنوان المقال البارز -->
       <div class="title-field">
         <label>📝 عنوان المحتوى *</label>
         <input type="text" id="u-title" class="title-input" placeholder="اكتب عنواناً واضحاً ومعبراً...">
@@ -114,6 +98,9 @@
           <option value="انفوجرافيك">انفوجرافيك</option>
           <option value="صوت">صوت</option>
           <option value="بودكاست">بودكاست</option>
+          <option value="تلخيص كتب">تلخيص كتب 📚</option>
+          <option value="تلخيص نظريات">تلخيص نظريات 🧠</option>
+          <option value="ترجمة محتوى">ترجمة محتوى 🌐</option>
         </select>
       </div>
 
@@ -152,23 +139,20 @@
     </div>
   </div>
 
-  <!-- محتواي المرفوع -->
   <div class="my-uploads">
     <h3>📋 محتواي المرفوع</h3>
     <div id="my-uploads-list">جاري التحميل...</div>
   </div>
-
 </div>
 
 <script>
 const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUserId = null;
 let quill = null;
 
-// تهيئة Quill
 quill = new Quill('#quill-editor', {
   theme: 'snow',
   direction: 'rtl',
@@ -188,16 +172,17 @@ quill = new Quill('#quill-editor', {
   }
 });
 
-// عداد الأحرف للعنوان
 document.getElementById('u-title').addEventListener('input', function() {
   var len = this.value.length;
   document.getElementById('title-count').textContent = len;
   if (len > 100) { this.value = this.value.substring(0, 100); }
 });
 
-// إظهار محرر المقال
+// إظهار محرر المقال للأنواع النصية
 document.getElementById('u-type').addEventListener('change', function() {
-  document.getElementById('article-field').style.display = this.value === 'مقال' ? 'block' : 'none';
+  var textTypes = ['مقال', 'تلخيص كتب', 'تلخيص نظريات', 'ترجمة محتوى'];
+  document.getElementById('article-field').style.display =
+    textTypes.includes(this.value) ? 'block' : 'none';
 });
 
 async function checkAuth() {
@@ -211,7 +196,6 @@ async function checkAuth() {
   }
 }
 
-// رفع المحتوى
 document.getElementById('btn-upload').addEventListener('click', async function() {
   var title = document.getElementById('u-title').value.trim();
   if (!title) { alert('يرجى إدخال العنوان'); return; }
@@ -227,7 +211,8 @@ document.getElementById('btn-upload').addEventListener('click', async function()
 
   if (fileInput.files && fileInput.files[0]) {
     var file = fileInput.files[0];
-    var fileName = Date.now() + '_' + file.name;
+    var ext = file.name.split('.').pop().toLowerCase();
+    var fileName = 'file_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + ext;
     document.getElementById('u-progress').style.display = 'block';
     document.getElementById('u-progress-fill').style.width = '30%';
     document.getElementById('u-status').textContent = 'جاري رفع الملف...';
@@ -244,7 +229,8 @@ document.getElementById('btn-upload').addEventListener('click', async function()
   }
 
   var contentType = document.getElementById('u-type').value;
-  var articleContent = contentType === 'مقال' ? quill.root.innerHTML : null;
+  var textTypes = ['مقال', 'تلخيص كتب', 'تلخيص نظريات', 'ترجمة محتوى'];
+  var articleContent = textTypes.includes(contentType) ? quill.root.innerHTML : null;
 
   var obj = {
     title: title,
@@ -303,7 +289,6 @@ document.getElementById('btn-logout').addEventListener('click', async function()
 async function init() {
   await checkAuth();
   loadMyUploads();
-  // إظهار محرر المقال تلقائياً عند فتح الصفحة
   document.getElementById('article-field').style.display = 'block';
 }
 init();
