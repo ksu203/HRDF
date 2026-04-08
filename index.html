@@ -52,12 +52,12 @@
     .btn--ghost:hover { background: #0B6B3A; color: white; }
     .hero { background: linear-gradient(135deg, #0a1628 0%, #0d2347 50%, #0a1f3d 100%); padding: 36px 20px 44px; color: white; text-align: center; }
     .hero h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
-   .hero-stats { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-top: 8px; }
-.hero-stat { text-align: center; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 20px 32px; min-width: 140px; backdrop-filter: blur(4px); transition: transform 0.2s; }
-.hero-stat:hover { transform: translateY(-4px); background: rgba(255,255,255,0.15); }
-.stat-icon { font-size: 28px; margin-bottom: 8px; }
-.hero-stat .num { font-size: 40px; font-weight: 800; line-height: 1; }
-.hero-stat .lbl { font-size: 13px; opacity: 0.85; margin-top: 6px; }
+    .hero-stats { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-top: 8px; }
+    .hero-stat { text-align: center; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 20px 32px; min-width: 140px; backdrop-filter: blur(4px); transition: transform 0.2s; }
+    .hero-stat:hover { transform: translateY(-4px); background: rgba(255,255,255,0.15); }
+    .stat-icon { font-size: 28px; margin-bottom: 8px; }
+    .hero-stat .num { font-size: 40px; font-weight: 800; line-height: 1; }
+    .hero-stat .lbl { font-size: 13px; opacity: 0.85; margin-top: 6px; }
     .shell { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
     .search-section { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 20px; overflow: hidden; }
     .search-main { padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
@@ -111,8 +111,6 @@
     .author-info h5 { font-size: 12px; font-weight: 700; color: #333; }
     .author-info span { font-size: 11px; color: #888; }
     .btn-author { padding: 3px 8px; border-radius: 6px; border: 1px solid #0B6B3A; color: #0B6B3A; background: transparent; font-size: 11px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
-
-    /* الشارات */
     .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; }
     .badge-article { background: #e8f5ef; color: #0B6B3A; }
     .badge-video { background: #fff3cd; color: #856404; }
@@ -121,13 +119,10 @@
     .badge-audio { background: #e2d9f3; color: #4a235a; }
     .badge-podcast { background: #fde8d8; color: #7d3c00; }
     .badge-default { background: #f0f0f0; color: #555; }
-
-    /* شارات حالة النشر */
     .status-badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
     .status-published { background: #d4edda; color: #155724; }
     .status-pending { background: #fff3cd; color: #856404; }
     .status-hidden { background: #f8d7da; color: #721c24; }
-
     .btn-view { padding: 7px 14px; border-radius: 8px; border: none; background: #0B6B3A; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
     .btn-edit { padding: 7px 14px; border-radius: 8px; border: none; background: #0066cc; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
     .btn-delete { padding: 7px 14px; border-radius: 8px; border: none; background: #dc3545; color: white; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 700; }
@@ -159,7 +154,7 @@
     .close-btn { padding: 10px 28px; background: #0B6B3A; color: white; border: none; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 15px; cursor: pointer; font-weight: 700; }
     .modal-edit { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
     .modal-edit.active { display: flex; }
-    .modal-edit__dialog { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal-edit__dialog { background: white; border-radius: 16px; padding: 24px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
     .modal-edit__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
     .modal-edit__head h3 { font-size: 17px; color: #333; }
     .iconBtn { background: none; border: none; font-size: 18px; cursor: pointer; color: #888; }
@@ -168,11 +163,8 @@
     .input { width: 100%; padding: 10px 14px; border: 1.5px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 14px; }
     .input:focus { outline: none; border-color: #0B6B3A; }
     .modal-edit__foot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
-
-    /* شريط تنبيه للمدير */
     .admin-notice { background: #fff3cd; border: 1px solid #ffc107; border-radius: 10px; padding: 10px 16px; margin-bottom: 16px; font-size: 13px; color: #856404; display: none; }
     .admin-notice.show { display: flex; align-items: center; gap: 8px; }
-
     @media (max-width: 768px) {
       .topbar__actions { display: none; }
       .menu-btn { display: block; }
@@ -219,7 +211,7 @@
 <div class="hero">
   <h2>بنك المحتوى المهني</h2>
   <p>منصة متكاملة لإدارة وعرض محتوى الإرشاد المهني الشامل</p>
- <div class="hero-stats">
+  <div class="hero-stats">
     <div class="hero-stat">
       <div class="stat-icon">📚</div>
       <div class="num" id="hero-total">0</div>
@@ -236,14 +228,13 @@
       <div class="lbl">أنواع المحتوى</div>
     </div>
   </div>
-<div class="shell">
+</div>
 
-  <!-- تنبيه للمدير -->
+<div class="shell">
   <div class="admin-notice" id="admin-notice">
     🛡️ أنت تشاهد كمشرف — يظهر لك كل المحتوى بما فيه غير المنشور والمخفي
   </div>
 
-  <!-- البحث المتقدم -->
   <div class="search-section">
     <div class="search-main">
       <span style="color:#0B6B3A;font-size:18px;">🔍</span>
@@ -283,9 +274,9 @@
           <label>الكاتب</label>
           <select id="f-author"><option value="">— الكل —</option></select>
         </div>
-       <div class="filter-item" id="status-filter-item" style="display:none;">
-  <label>حالة النشر</label>
-  <select id="f-status">
+        <div class="filter-item" id="status-filter-item" style="display:none;">
+          <label>حالة النشر</label>
+          <select id="f-status">
             <option value="">— الكل —</option>
             <option value="published">✅ منشور</option>
             <option value="pending">⏳ قيد المراجعة</option>
@@ -317,7 +308,6 @@
     <div class="active-filters" id="active-filters" style="display:none;"></div>
   </div>
 
-  <!-- الإحصائيات -->
   <div class="stats-section">
     <h3>📊 إحصائيات المحتوى</h3>
     <div class="stats-grid">
@@ -327,7 +317,6 @@
     </div>
   </div>
 
-  <!-- قائمة المحتوى -->
   <div class="content-section">
     <h3>
       <span>📋 قائمة المحتوى</span>
@@ -355,7 +344,6 @@
       <div class="pagination" id="pagination" style="display:none;"></div>
     </div>
   </div>
-
 </div>
 
 <!-- نافذة الكاتب -->
@@ -386,9 +374,12 @@
       <div class="field">
         <label class="label">نوع المحتوى</label>
         <select class="input" id="ftype">
-          <option value="مقال">مقال</option><option value="فيديو">فيديو</option>
-          <option value="صور">صور</option><option value="انفوجرافيك">انفوجرافيك</option>
-          <option value="صوت">صوت</option><option value="بودكاست">بودكاست</option>
+          <option value="مقال">مقال</option>
+          <option value="فيديو">فيديو</option>
+          <option value="صور">صور</option>
+          <option value="انفوجرافيك">انفوجرافيك</option>
+          <option value="صوت">صوت</option>
+          <option value="بودكاست">بودكاست</option>
         </select>
       </div>
       <div class="field">
@@ -405,20 +396,11 @@
           <option value="المرشدين المهنيين">المرشدين المهنيين</option>
         </select>
       </div>
-document.getElementById('form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  var id = document.getElementById('fid').value;
-  var newType = document.getElementById('ftype').value;
-  var obj = {
-    title: document.getElementById('ftitle').value,
-    content_type: newType,
-    target_audience: document.getElementById('ftarget').value,
-    article_text: newType === 'مقال' ? document.getElementById('e-article-text').value : null
-  };
-  if (id) await sb.from('content').update(obj).eq('id', id);
-  document.getElementById('modal').className = 'modal-edit';
-  await loadContent();
-});
+      <!-- حقل نص المقال -->
+      <div class="field" id="edit-article-field" style="display:none;">
+        <label class="label">نص المقال</label>
+        <textarea class="input" id="e-article-text" style="resize:vertical;min-height:160px;"></textarea>
+      </div>
       <div class="modal-edit__foot">
         <button class="btn btn--ghost" type="button" id="btnCancel">إلغاء</button>
         <button class="btn btn--primary" type="submit">حفظ</button>
@@ -428,8 +410,8 @@ document.getElementById('form').addEventListener('submit', async function(e) {
 </div>
 
 <script>
-const SUPABASE_URL = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
-const SUPABASE_KEY = 'sb_publishable_OGDFqdQK4gWgJ4EOtTna0g_24Mv7WYq';
+const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUser = null;
@@ -473,11 +455,11 @@ async function checkAuth() {
   if (profile) currentRole = profile.role;
   renderTopbar(profile);
   renderMobileMenu(profile);
-if (currentRole === 'admin' || currentRole === 'editor') {
-  document.getElementById('admin-notice').className = 'admin-notice show';
-  document.getElementById('status-stats-card').style.display = 'block';
-  document.getElementById('status-filter-item').style.display = 'block';
-}
+  if (currentRole === 'admin' || currentRole === 'editor') {
+    document.getElementById('admin-notice').className = 'admin-notice show';
+    document.getElementById('status-stats-card').style.display = 'block';
+    document.getElementById('status-filter-item').style.display = 'block';
+  }
 }
 
 function renderTopbar(profile) {
@@ -540,18 +522,14 @@ async function loadContent() {
   var query = sb.from('content')
     .select('*, profiles!content_created_by_fkey(id, full_name, email, role, organization, city, phone, linkedin, avatar_url)')
     .order('created_at', { ascending: false });
-
-  // المدير والمحرر يرون كل المحتوى، الباقي يرى المنشور فقط
   if (currentRole !== 'admin' && currentRole !== 'editor') {
     query = query.eq('is_hidden', false).eq('is_reviewed', true);
   }
-
   var { data } = await query;
   allItems = (data || []).map(function(item) {
     if (item.profiles) { authorsMap[item.created_by] = item.profiles; }
     return item;
   });
-
   var authorSelect = document.getElementById('f-author');
   var seen = {};
   allItems.forEach(function(i) {
@@ -564,7 +542,6 @@ async function loadContent() {
       authorSelect.appendChild(opt);
     }
   });
-
   filteredItems = [...allItems];
   updateHeroStats();
   updateProgressStats();
@@ -574,7 +551,6 @@ async function loadContent() {
 function animateCount(id, target) {
   var el = document.getElementById(id);
   if (!el) return;
-  var start = 0;
   var duration = 1500;
   var startTime = null;
   function step(timestamp) {
@@ -605,7 +581,6 @@ function updateProgressStats() {
     typeHtml += '<div class="progress-item"><div class="progress-label"><span onclick="quickFilter(\'type\',\''+key+'\')">'+(info.icon||'')+' '+key+'</span><strong>'+typeCounts[key]+' ('+pct+'%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div></div>';
   });
   document.getElementById('type-stats').innerHTML = typeHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد</p>';
-
   var targetCounts = {};
   allItems.forEach(function(i){ var t = i.target_audience||'غير محدد'; targetCounts[t]=(targetCounts[t]||0)+1; });
   var targetHtml = '';
@@ -614,8 +589,6 @@ function updateProgressStats() {
     targetHtml += '<div class="progress-item"><div class="progress-label"><span onclick="quickFilter(\'audience\',\''+key+'\')">' +key+'</span><strong>'+targetCounts[key]+' ('+pct+'%)</strong></div><div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div></div>';
   });
   document.getElementById('target-stats').innerHTML = targetHtml || '<p style="color:#aaa;font-size:13px;">لا يوجد</p>';
-
-  // إحصائيات حالة النشر للمدير
   var published = allItems.filter(function(i){ return i.is_reviewed && !i.is_hidden; }).length;
   var pending = allItems.filter(function(i){ return !i.is_reviewed; }).length;
   var hidden = allItems.filter(function(i){ return i.is_reviewed && i.is_hidden; }).length;
@@ -642,7 +615,6 @@ function applyFilters() {
   var file = document.getElementById('f-file').value;
   var dateFrom = document.getElementById('f-date-from').value;
   var dateTo = document.getElementById('f-date-to').value;
-
   filteredItems = allItems.filter(function(i) {
     if (q && !i.title.toLowerCase().includes(q)) return false;
     if (type && i.content_type !== type) return false;
@@ -657,7 +629,6 @@ function applyFilters() {
     if (dateTo && new Date(i.created_at) > new Date(dateTo+'T23:59:59')) return false;
     return true;
   });
-
   currentPage = 1;
   updateActiveTags(q, type, audience, author, status, file, dateFrom, dateTo);
   render();
@@ -730,9 +701,7 @@ function render() {
     if (sortField==='date') return dir*(new Date(a.created_at)-new Date(b.created_at));
     return 0;
   });
-
   document.getElementById('stats-pill').textContent = sorted.length+' عنصر';
-
   if (allItems.length===0) {
     document.getElementById('empty-state').style.display='block';
     document.getElementById('no-results').style.display='none';
@@ -750,12 +719,10 @@ function render() {
     return;
   }
   document.getElementById('no-results').style.display='none';
-
   var totalPages = Math.ceil(sorted.length/PAGE_SIZE);
   if (currentPage>totalPages) currentPage=1;
   var start=(currentPage-1)*PAGE_SIZE;
   var pageItems=sorted.slice(start, start+PAGE_SIZE);
-
   renderTable(pageItems, start);
   renderMobileCards(pageItems, start);
   renderPagination(sorted.length, totalPages);
@@ -866,43 +833,56 @@ function showAuthor(id) {
 }
 
 function editItem(id) {
-  var item=allItems.find(function(x){ return x.id===id; }); if(!item) return;
-  document.getElementById('fid').value=item.id;
-  document.getElementById('ftitle').value=item.title;
-  document.getElementById('ftype').value=item.content_type||'مقال';
-  document.getElementById('ftarget').value=item.target_audience||'';
-  document.getElementById('modal').className='modal-edit active';
+  var item = allItems.find(function(x){ return x.id === id; });
+  if (!item) return;
+  document.getElementById('fid').value = item.id;
+  document.getElementById('ftitle').value = item.title;
+  document.getElementById('ftype').value = item.content_type || 'مقال';
+  document.getElementById('ftarget').value = item.target_audience || '';
+  document.getElementById('e-article-text').value = item.article_text || '';
+  document.getElementById('edit-article-field').style.display =
+    item.content_type === 'مقال' ? 'block' : 'none';
+  document.getElementById('modal').className = 'modal-edit active';
 }
+
 async function deleteItem(id) {
-  if(!confirm('هل أنت متأكد؟')) return;
-  await sb.from('content').delete().eq('id',id);
+  if (!confirm('هل أنت متأكد؟')) return;
+  await sb.from('content').delete().eq('id', id);
   await loadContent();
 }
+
 document.getElementById('form').addEventListener('submit', async function(e) {
   e.preventDefault();
-  var id=document.getElementById('fid').value;
-  var obj={title:document.getElementById('ftitle').value,content_type:document.getElementById('ftype').value,target_audience:document.getElementById('ftarget').value};
-  if(id) await sb.from('content').update(obj).eq('id',id);
-  document.getElementById('modal').className='modal-edit';
+  var id = document.getElementById('fid').value;
+  var newType = document.getElementById('ftype').value;
+  var obj = {
+    title: document.getElementById('ftitle').value,
+    content_type: newType,
+    target_audience: document.getElementById('ftarget').value,
+    article_text: newType === 'مقال' ? document.getElementById('e-article-text').value : null
+  };
+  if (id) await sb.from('content').update(obj).eq('id', id);
+  document.getElementById('modal').className = 'modal-edit';
   await loadContent();
 });
-document.getElementById('btnClose').addEventListener('click',function(){ document.getElementById('modal').className='modal-edit'; });
-document.getElementById('btnCancel').addEventListener('click',function(){ document.getElementById('modal').className='modal-edit'; });
+
+document.getElementById('btnClose').addEventListener('click', function(){ document.getElementById('modal').className = 'modal-edit'; });
+document.getElementById('btnCancel').addEventListener('click', function(){ document.getElementById('modal').className = 'modal-edit'; });
 document.getElementById('q').addEventListener('input', applyFilters);
+
+document.getElementById('ftype').addEventListener('change', function() {
+  document.getElementById('edit-article-field').style.display =
+    this.value === 'مقال' ? 'block' : 'none';
+});
 
 async function init() {
   renderMobileMenu(null);
   await checkAuth();
   await loadContent();
 }
-document.getElementById('ftype').addEventListener('change', function() {
-  document.getElementById('edit-article-field').style.display =
-    this.value === 'مقال' ? 'block' : 'none';
-});
-  init();
+init();
 </script>
 
-<!-- Footer -->
 <footer style="background:#1a1a2e;color:white;padding:40px 20px 20px;margin-top:40px;">
   <div style="max-width:1200px;margin:0 auto;">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:32px;margin-bottom:32px;">
