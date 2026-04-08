@@ -5,12 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="./irshad-logo.png">
   <link rel="apple-touch-icon" href="./irshad-logo.png">
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!--           Security Headers (Meta Tags)          -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: https:;
+    connect-src 'self'
+      https://fmsxnznoynnhcwvstheu.supabase.co
+      wss://fmsxnznoynnhcwvstheu.supabase.co;
+    frame-ancestors 'none';
+    form-action 'self';
+    base-uri 'self';
+    upgrade-insecure-requests
+  ">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!--              SEO & Social Meta Tags             -->
+  <!-- ═══════════════════════════════════════════════ -->
   <meta property="og:title" content="تسجيل الدخول | مبادرة الإرشاد المهني الشامل">
   <meta property="og:description" content="سجّل دخولك للوصول إلى بنك المحتوى المهني">
   <meta property="og:image" content="https://careerguide.works/irshad-logo.png">
   <meta property="og:url" content="https://careerguide.works/auth.html">
   <meta property="og:type" content="website">
   <meta name="description" content="سجّل دخولك للوصول إلى بنك المحتوى المهني - HRDF">
+
   <title>تسجيل الدخول | HRDF</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
@@ -58,11 +85,11 @@
   <div class="panel on" id="p1">
     <div class="field">
       <label>البريد الإلكتروني</label>
-      <input type="email" id="l-email" placeholder="example@email.com">
+      <input type="email" id="l-email" placeholder="example@email.com" autocomplete="email">
     </div>
     <div class="field">
       <label>كلمة المرور</label>
-      <input type="password" id="l-pass" placeholder="••••••••">
+      <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password">
     </div>
     <button class="btn" id="btn-login">دخول</button>
     <div class="msg" id="l-msg"></div>
@@ -71,9 +98,9 @@
   <!-- حساب جديد -->
   <div class="panel" id="p2">
     <div class="section-title">📋 المعلومات الأساسية</div>
-    <div class="field"><label>الاسم الكامل *</label><input type="text" id="r-name" placeholder="الاسم الكامل"></div>
-    <div class="field"><label>البريد الإلكتروني *</label><input type="email" id="r-email" placeholder="example@email.com"></div>
-    <div class="field"><label>كلمة المرور *</label><input type="password" id="r-pass" placeholder="••••••••"></div>
+    <div class="field"><label>الاسم الكامل *</label><input type="text" id="r-name" placeholder="الاسم الكامل" autocomplete="name"></div>
+    <div class="field"><label>البريد الإلكتروني *</label><input type="email" id="r-email" placeholder="example@email.com" autocomplete="email"></div>
+    <div class="field"><label>كلمة المرور *</label><input type="password" id="r-pass" placeholder="••••••••" autocomplete="new-password"></div>
     <div class="section-title">🏢 معلومات العمل</div>
     <div class="field"><label>جهة العمل *</label><input type="text" id="r-org" placeholder="اسم الجهة أو المؤسسة"></div>
     <div class="field">
@@ -100,7 +127,7 @@
         <option value="أخرى">أخرى</option>
       </select>
     </div>
-    <div class="field"><label>رقم الهاتف <span class="optional">(سري — يظهر للمشرفين فقط)</span></label><input type="tel" id="r-phone" placeholder="05xxxxxxxx"></div>
+    <div class="field"><label>رقم الهاتف <span class="optional">(سري — يظهر للمشرفين فقط)</span></label><input type="tel" id="r-phone" placeholder="05xxxxxxxx" autocomplete="tel"></div>
     <div class="section-title">🔗 معلومات اختيارية <span class="optional">(اختياري)</span></div>
     <div class="field"><label>رابط LinkedIn <span class="optional">(اختياري)</span></label><input type="url" id="r-linkedin" placeholder="https://linkedin.com/in/..."></div>
     <button class="btn" id="btn-register">إنشاء حساب</button>
@@ -109,9 +136,24 @@
 </div>
 
 <script>
-const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  // anon key — مصمم ليكون عاماً، الحماية عبر RLS في Supabase
+  const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ===== Rate Limiting محلي لمنع Brute Force =====
+var loginAttempts = 0;
+var lastAttemptTime = 0;
+
+function checkRateLimit() {
+  var now = Date.now();
+  if (now - lastAttemptTime > 5 * 60 * 1000) { loginAttempts = 0; }
+  if (loginAttempts >= 5) {
+    var wait = Math.ceil((5 * 60 * 1000 - (now - lastAttemptTime)) / 1000 / 60);
+    return 'تم تجاوز عدد المحاولات المسموح — انتظر ' + wait + ' دقيقة وحاول مجدداً';
+  }
+  return null;
+}
 
 // ===== ترجمة رسائل الخطأ =====
 function translateError(msg) {
@@ -165,26 +207,14 @@ document.getElementById('btn-login').addEventListener('click', async function() 
   msg.className = 'msg';
 
   // تحقق محلي
-  if (!email && !pass) {
-    msg.className = 'msg err';
-    msg.textContent = 'يرجى إدخال البريد الإلكتروني وكلمة المرور';
-    return;
-  }
-  if (!email) {
-    msg.className = 'msg err';
-    msg.textContent = 'يرجى إدخال البريد الإلكتروني';
-    return;
-  }
-  if (!pass) {
-    msg.className = 'msg err';
-    msg.textContent = 'يرجى إدخال كلمة المرور';
-    return;
-  }
-  if (!email.includes('@')) {
-    msg.className = 'msg err';
-    msg.textContent = 'صيغة البريد الإلكتروني غير صحيحة';
-    return;
-  }
+  if (!email && !pass) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال البريد الإلكتروني وكلمة المرور'; return; }
+  if (!email) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال البريد الإلكتروني'; return; }
+  if (!pass) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال كلمة المرور'; return; }
+  if (!email.includes('@')) { msg.className = 'msg err'; msg.textContent = 'صيغة البريد الإلكتروني غير صحيحة'; return; }
+
+  // Rate limiting
+  var rateErr = checkRateLimit();
+  if (rateErr) { msg.className = 'msg err'; msg.textContent = rateErr; return; }
 
   btn.textContent = 'جاري الدخول...';
   btn.disabled = true;
@@ -192,6 +222,8 @@ document.getElementById('btn-login').addEventListener('click', async function() 
   var res = await sb.auth.signInWithPassword({ email: email, password: pass });
 
   if (res.error) {
+    loginAttempts++;
+    lastAttemptTime = Date.now();
     msg.className = 'msg err';
     msg.textContent = translateError(res.error.message);
     btn.textContent = 'دخول';
@@ -199,6 +231,7 @@ document.getElementById('btn-login').addEventListener('click', async function() 
     return;
   }
 
+  loginAttempts = 0;
   msg.className = 'msg ok';
   msg.textContent = '✅ تم تسجيل الدخول، جاري التحويل...';
 
@@ -233,61 +266,15 @@ document.getElementById('btn-register').addEventListener('click', async function
   var btn = document.getElementById('btn-register');
   msg.className = 'msg';
 
-  // تحقق محلي
-  if (!name) {
-    msg.className = 'msg err';
-    msg.textContent = 'يرجى إدخال الاسم الكامل';
-    document.getElementById('r-name').focus();
-    return;
-  }
-  if (!email) {
-    msg.className = 'msg err';
-    msg.textContent = 'يرجى إدخال البريد الإلكتروني';
-    document.getElementById('r-email').focus();
-    return;
-  }
-  if (!email.includes('@') || !email.includes('.')) {
-    msg.className = 'msg err';
-    msg.textContent = 'صيغة البريد الإلكتروني غير صحيحة';
-    document.getElementById('r-email').focus();
-    return;
-  }
-  if (!pass) {
-    msg.className = 'msg err';
-    msg.textContent = 'يرجى إدخال كلمة المرور';
-    document.getElementById('r-pass').focus();
-    return;
-  }
-  if (pass.length < 6) {
-    msg.className = 'msg err';
-    msg.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
-    document.getElementById('r-pass').focus();
-    return;
-  }
-  if (!org) {
-    msg.className = 'msg err';
-    msg.textContent = 'يرجى إدخال جهة العمل';
-    document.getElementById('r-org').focus();
-    return;
-  }
-  if (!city) {
-    msg.className = 'msg err';
-    msg.textContent = 'يرجى اختيار المدينة';
-    document.getElementById('r-city').focus();
-    return;
-  }
-  if (phone && !/^05\d{8}$/.test(phone)) {
-    msg.className = 'msg err';
-    msg.textContent = 'صيغة رقم الهاتف غير صحيحة — يجب أن يبدأ بـ 05 ويتكون من 10 أرقام';
-    document.getElementById('r-phone').focus();
-    return;
-  }
-  if (linkedin && !linkedin.startsWith('http')) {
-    msg.className = 'msg err';
-    msg.textContent = 'رابط LinkedIn غير صحيح — يجب أن يبدأ بـ https://';
-    document.getElementById('r-linkedin').focus();
-    return;
-  }
+  if (!name) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال الاسم الكامل'; document.getElementById('r-name').focus(); return; }
+  if (!email) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال البريد الإلكتروني'; document.getElementById('r-email').focus(); return; }
+  if (!email.includes('@') || !email.includes('.')) { msg.className = 'msg err'; msg.textContent = 'صيغة البريد الإلكتروني غير صحيحة'; document.getElementById('r-email').focus(); return; }
+  if (!pass) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال كلمة المرور'; document.getElementById('r-pass').focus(); return; }
+  if (pass.length < 6) { msg.className = 'msg err'; msg.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل'; document.getElementById('r-pass').focus(); return; }
+  if (!org) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال جهة العمل'; document.getElementById('r-org').focus(); return; }
+  if (!city) { msg.className = 'msg err'; msg.textContent = 'يرجى اختيار المدينة'; document.getElementById('r-city').focus(); return; }
+  if (phone && !/^05\d{8}$/.test(phone)) { msg.className = 'msg err'; msg.textContent = 'صيغة رقم الهاتف غير صحيحة — يجب أن يبدأ بـ 05 ويتكون من 10 أرقام'; document.getElementById('r-phone').focus(); return; }
+  if (linkedin && !linkedin.startsWith('http')) { msg.className = 'msg err'; msg.textContent = 'رابط LinkedIn غير صحيح — يجب أن يبدأ بـ https://'; document.getElementById('r-linkedin').focus(); return; }
 
   btn.textContent = 'جاري إنشاء الحساب...';
   btn.disabled = true;
