@@ -119,6 +119,9 @@
     .badge-audio { background: #e2d9f3; color: #4a235a; }
     .badge-podcast { background: #fde8d8; color: #7d3c00; }
     .badge-default { background: #f0f0f0; color: #555; }
+.badge-book      { background: #e8d5f5; color: #6a1b9a; }
+.badge-theory    { background: #d1ecf1; color: #0c5460; }
+.badge-translate { background: #ffeeba; color: #856404; }
     .status-badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
     .status-published { background: #d4edda; color: #155724; }
     .status-pending { background: #fff3cd; color: #856404; }
@@ -254,6 +257,9 @@
             <option value="انفوجرافيك">انفوجرافيك</option>
             <option value="صوت">صوت</option>
             <option value="بودكاست">بودكاست</option>
+            <option value="تلخيص كتب">تلخيص كتب</option>
+            <option value="تلخيص نظريات">تلخيص نظريات</option>
+            <option value="ترجمة محتوى">ترجمة محتوى</option>         
           </select>
         </div>
         <div class="filter-item">
@@ -380,6 +386,9 @@
           <option value="انفوجرافيك">انفوجرافيك</option>
           <option value="صوت">صوت</option>
           <option value="بودكاست">بودكاست</option>
+          <option value="تلخيص كتب">تلخيص كتب</option>
+          <option value="تلخيص نظريات">تلخيص نظريات</option>
+          <option value="ترجمة محتوى">ترجمة محتوى</option>
         </select>
       </div>
       <div class="field">
@@ -431,6 +440,9 @@ const typeLabels = {
   'انفوجرافيك': { cls: 'badge-infographic', icon: '📊' },
   'صوت': { cls: 'badge-audio', icon: '🎵' },
   'بودكاست': { cls: 'badge-podcast', icon: '🎙️' }
+  'تلخيص كتب':    { cls: 'badge-book',    icon: '📚' },
+  'تلخيص نظريات': { cls: 'badge-theory',  icon: '🧠' },
+  'ترجمة محتوى':  { cls: 'badge-translate', icon: '🌐' },
 };
 const roleMap = { admin: '🛡️ مشرف', editor: '✏️ محرر', viewer: '👁 قارئ', pending: '⏳ في الانتظار' };
 
