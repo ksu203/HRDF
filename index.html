@@ -478,7 +478,7 @@ function renderTopbar(profile) {
   }
   if (currentRole === 'editor' || currentRole === 'admin') {
     var b2 = document.createElement('button');
-    b2.className = 'btn btn--primary'; b2.innerHTML = '📤 رفع';
+    b2.className = 'btn btn--primary'; b2.innerHTML = '📤 محتوى جديد';
     b2.onclick = function(){ window.location.href = './upload.html'; };
     actions.appendChild(b2);
   }
@@ -894,7 +894,7 @@ init();
         <ul style="list-style:none;line-height:2.2;">
           <li><a href="./index.html" style="color:#aaa;text-decoration:none;font-size:14px;">🏠 الصفحة الرئيسية</a></li>
           <li><a href="./auth.html" style="color:#aaa;text-decoration:none;font-size:14px;">🔑 تسجيل الدخول</a></li>
-          <li><a href="./upload.html" style="color:#aaa;text-decoration:none;font-size:14px;">📤 رفع محتوى</a></li>
+          <li><a href="./upload.html" style="color:#aaa;text-decoration:none;font-size:14px;">📤 محتوى جديد</a></li>
         </ul>
       </div>
       <div>
