@@ -14,8 +14,7 @@
   <!-- CSP: يسمح فقط بـ Supabase وموارد الموقع -->
 <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
-    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://static.cloudflareinsights.com;    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com https://www.careerguide.works;
     img-src 'self' data: blob: https:;
     connect-src 'self'
