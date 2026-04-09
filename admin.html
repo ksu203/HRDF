@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>لوحة التحكم | HRDF</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Tajawal', sans-serif; background: #f0f4f8; }
@@ -274,6 +274,31 @@
       </select>
     </div>
     <div id="perm-matrix" style="display:none;margin-top:16px;"></div>
+  </div>
+</div>
+  <!-- تصدير Excel -->
+<div class="card" style="margin-bottom:16px;">
+  <div class="card-header">
+    <h3>📊 تصدير تقرير المحتوى</h3>
+  </div>
+  <div style="padding:16px;">
+    <p style="font-size:13px;color:#666;margin-bottom:16px;">تصدير تقرير شامل عن جميع المحتوى المتوفر في النظام إلى ملف Excel.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div style="background:#f0fff8;border:1px solid #9fe1cb;border-radius:8px;padding:12px;text-align:center;">
+        <div style="font-size:24px;margin-bottom:4px;">📋</div>
+        <div style="font-size:13px;font-weight:700;color:#0B6B3A;">قائمة المحتوى</div>
+        <div style="font-size:11px;color:#888;margin-top:2px;">جميع التفاصيل</div>
+      </div>
+      <div style="background:#f0f0ff;border:1px solid #afa9ec;border-radius:8px;padding:12px;text-align:center;">
+        <div style="font-size:24px;margin-bottom:4px;">📊</div>
+        <div style="font-size:13px;font-weight:700;color:#534AB7;">إحصائيات</div>
+        <div style="font-size:11px;color:#888;margin-top:2px;">تحليل شامل</div>
+      </div>
+    </div>
+    <button class="btn btn-green" onclick="exportExcel()" style="width:100%;padding:12px;font-size:15px;">
+      ⬇️ تصدير Excel الآن
+    </button>
+    <div id="export-status" style="margin-top:10px;font-size:13px;color:#0B6B3A;text-align:center;display:none;"></div>
   </div>
 </div>
     <!-- سجل إجراءات المشرفين -->
@@ -588,7 +613,145 @@ async function savePermissionsLog(userId) {
   alert('✅ تم حفظ الصلاحيات في السجل');
   loadLogs();
 }
-  
+// ===== تصدير Excel =====
+async function exportExcel() {
+  var btn = document.querySelector('[onclick="exportExcel()"]');
+  var status = document.getElementById('export-status');
+  btn.textContent = '⏳ جاري التصدير...';
+  btn.disabled = true;
+  status.style.display = 'block';
+  status.textContent = 'جاري جلب البيانات...';
+
+  var { data: contentData } = await sb.from('content').select('*').order('created_at', { ascending: false });
+  var { data: profilesData } = await sb.from('profiles').select('id, full_name, email');
+
+  if (!contentData) {
+    status.textContent = 'خطأ في جلب البيانات';
+    btn.textContent = '⬇️ تصدير Excel الآن';
+    btn.disabled = false;
+    return;
+  }
+
+  var profilesMap = {};
+  (profilesData || []).forEach(function(p) { profilesMap[p.id] = p; });
+
+  // ===== ورقة 1: قائمة المحتوى =====
+  var contentRows = [
+    ['#', 'العنوان', 'نوع المحتوى', 'الفئة المستهدفة', 'الكاتب', 'البريد', 'الحالة', 'الظهور', 'التنزيل', 'تاريخ الرفع', 'رابط الملف']
+  ];
+
+  contentData.forEach(function(c, idx) {
+    var profile = profilesMap[c.created_by];
+    var authorName = profile ? (profile.full_name || profile.email || '-') : '-';
+    var authorEmail = profile ? (profile.email || '-') : '-';
+    var status = !c.is_reviewed ? 'قيد المراجعة' : (c.is_hidden ? 'مخفي' : 'منشور');
+    var visibility = c.is_hidden ? 'مخفي' : 'ظاهر';
+    var download = c.allow_download ? 'مسموح' : 'ممنوع';
+    var date = c.created_at ? new Date(c.created_at).toLocaleDateString('ar-SA') : '-';
+
+    contentRows.push([
+      idx + 1,
+      c.title || '-',
+      c.content_type || '-',
+      c.target_audience || '-',
+      authorName,
+      authorEmail,
+      status,
+      visibility,
+      download,
+      date,
+      c.file_url || '-'
+    ]);
+  });
+
+  // ===== ورقة 2: إحصائيات حسب النوع =====
+  var typeCounts = {};
+  contentData.forEach(function(c) {
+    var t = c.content_type || 'غير محدد';
+    typeCounts[t] = (typeCounts[t] || 0) + 1;
+  });
+  var typeRows = [['نوع المحتوى', 'العدد', 'النسبة %']];
+  var total = contentData.length;
+  Object.keys(typeCounts).sort(function(a,b){ return typeCounts[b]-typeCounts[a]; }).forEach(function(key) {
+    typeRows.push([key, typeCounts[key], Math.round(typeCounts[key]/total*100) + '%']);
+  });
+  typeRows.push(['الإجمالي', total, '100%']);
+
+  // ===== ورقة 3: إحصائيات حسب الفئة =====
+  var audienceCounts = {};
+  contentData.forEach(function(c) {
+    var t = c.target_audience || 'غير محدد';
+    audienceCounts[t] = (audienceCounts[t] || 0) + 1;
+  });
+  var audienceRows = [['الفئة المستهدفة', 'العدد', 'النسبة %']];
+  Object.keys(audienceCounts).sort(function(a,b){ return audienceCounts[b]-audienceCounts[a]; }).forEach(function(key) {
+    audienceRows.push([key, audienceCounts[key], Math.round(audienceCounts[key]/total*100) + '%']);
+  });
+  audienceRows.push(['الإجمالي', total, '100%']);
+
+  // ===== ورقة 4: إحصائيات الحالة =====
+  var published = contentData.filter(function(c){ return c.is_reviewed && !c.is_hidden; }).length;
+  var pending = contentData.filter(function(c){ return !c.is_reviewed; }).length;
+  var hidden = contentData.filter(function(c){ return c.is_reviewed && c.is_hidden; }).length;
+  var statusRows = [
+    ['الحالة', 'العدد', 'النسبة %'],
+    ['منشور', published, Math.round(published/total*100) + '%'],
+    ['قيد المراجعة', pending, Math.round(pending/total*100) + '%'],
+    ['مخفي', hidden, Math.round(hidden/total*100) + '%'],
+    ['الإجمالي', total, '100%']
+  ];
+
+  // ===== ورقة 5: إحصائيات الكتّاب =====
+  var authorCounts = {};
+  contentData.forEach(function(c) {
+    if (c.created_by) {
+      var p = profilesMap[c.created_by];
+      var name = p ? (p.full_name || p.email || 'مجهول') : 'مجهول';
+      authorCounts[name] = (authorCounts[name] || 0) + 1;
+    }
+  });
+  var authorRows = [['الكاتب', 'عدد المحتوى', 'النسبة %']];
+  Object.keys(authorCounts).sort(function(a,b){ return authorCounts[b]-authorCounts[a]; }).forEach(function(key) {
+    authorRows.push([key, authorCounts[key], Math.round(authorCounts[key]/total*100) + '%']);
+  });
+
+  // ===== بناء ملف Excel =====
+  status.textContent = 'جاري بناء الملف...';
+  var wb = XLSX.utils.book_new();
+
+  var ws1 = XLSX.utils.aoa_to_sheet(contentRows);
+  ws1['!cols'] = [
+    {wch:5}, {wch:35}, {wch:15}, {wch:20}, {wch:20},
+    {wch:25}, {wch:15}, {wch:10}, {wch:10}, {wch:15}, {wch:40}
+  ];
+  XLSX.utils.book_append_sheet(wb, ws1, 'قائمة المحتوى');
+
+  var ws2 = XLSX.utils.aoa_to_sheet(typeRows);
+  ws2['!cols'] = [{wch:20}, {wch:10}, {wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'حسب النوع');
+
+  var ws3 = XLSX.utils.aoa_to_sheet(audienceRows);
+  ws3['!cols'] = [{wch:25}, {wch:10}, {wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws3, 'حسب الفئة');
+
+  var ws4 = XLSX.utils.aoa_to_sheet(statusRows);
+  ws4['!cols'] = [{wch:20}, {wch:10}, {wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws4, 'حسب الحالة');
+
+  var ws5 = XLSX.utils.aoa_to_sheet(authorRows);
+  ws5['!cols'] = [{wch:25}, {wch:15}, {wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws5, 'حسب الكاتب');
+
+  var date = new Date().toLocaleDateString('ar-SA').replace(/\//g, '-');
+  XLSX.writeFile(wb, 'تقرير_المحتوى_' + date + '.xlsx');
+
+  await logAction('تصدير Excel', 'تم تصدير تقرير المحتوى — ' + total + ' عنصر');
+
+  status.textContent = '✅ تم التصدير بنجاح — ' + total + ' عنصر';
+  btn.textContent = '⬇️ تصدير Excel الآن';
+  btn.disabled = false;
+  loadLogs();
+}  
 // ===== سجل الإجراءات =====
 async function loadLogs() {
   var el = document.getElementById('logs-list');
