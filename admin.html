@@ -188,7 +188,7 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>العنوان</th><th>النوع</th><th>الحالة</th><th>الظهور</th><th>التنزيل</th><th>إجراءات</th></tr></thead>
+          <thead><tr><th>العنوان</th><th>النوع</th><th>بواسطة</th><th>الحالة</th><th>الظهور</th><th>التنزيل</th><th>إجراءات</th></tr></thead>
           <tbody id="content-table"><tr><td colspan="6" class="empty">جاري التحميل...</td></tr></tbody>
         </table>
       </div>
@@ -471,6 +471,7 @@ var { data } = await sb.from('content').select('*, profiles!content_created_by_f
     var visibility = c.is_hidden ? '<span class="badge badge-hidden">مخفي</span>' : '<span class="badge badge-visible">ظاهر</span>';
     var download = c.allow_download ? '<span class="badge badge-editor">✓</span>' : '<span class="badge badge-hidden">✗</span>';
     var rowClass = c.is_hidden ? 'hidden-row' : '';
+    var author = c.profiles ? (c.profiles.full_name || c.profiles.email || '-') : '-';
     var statusBadge = !c.is_reviewed ? '<span class="badge badge-pending">⏳ قيد المراجعة</span>' : (c.is_hidden ? '<span class="badge badge-hidden">🙈 مخفي</span>' : '<span class="badge badge-editor">✅ منشور</span>');
     html += '<tr class="'+rowClass+'"><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+statusBadge+'</td><td>'+visibility+'</td><td>'+download+'</td><td style="white-space:nowrap;">';
     html += '<span class="tooltip-wrap"><button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button><span class="tooltip-text">عرض المحتوى كما يراه الزوار</span></span> ';
