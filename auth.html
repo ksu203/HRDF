@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="./irshad-logo.png">
   <link rel="apple-touch-icon" href="./irshad-logo.png">
-
-  <!-- ═══════════════════════════════════════════════ -->
-  <!--           Security Headers (Meta Tags)          -->
-  <!-- ═══════════════════════════════════════════════ -->
 <meta http-equiv="Content-Security-Policy" content="
     default-src 'self';
     script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
@@ -26,16 +22,12 @@
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <!-- ═══════════════════════════════════════════════ -->
-  <!--              SEO & Social Meta Tags             -->
-  <!-- ═══════════════════════════════════════════════ -->
   <meta property="og:title" content="تسجيل الدخول | مبادرة الإرشاد المهني الشامل">
   <meta property="og:description" content="سجّل دخولك للوصول إلى بنك المحتوى المهني">
   <meta property="og:image" content="https://careerguide.works/irshad-logo.png">
   <meta property="og:url" content="https://careerguide.works/auth.html">
   <meta property="og:type" content="website">
   <meta name="description" content="سجّل دخولك للوصول إلى بنك المحتوى المهني - HRDF">
-
   <title>تسجيل الدخول | HRDF</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
@@ -134,12 +126,10 @@
 </div>
 
 <script>
-  // anon key — مصمم ليكون عاماً، الحماية عبر RLS في Supabase
-  const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL = 'https://fmsxnznoynnhcwvstheu.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ===== Rate Limiting محلي لمنع Brute Force =====
 var loginAttempts = 0;
 var lastAttemptTime = 0;
 
@@ -153,36 +143,36 @@ function checkRateLimit() {
   return null;
 }
 
-// ===== ترجمة رسائل الخطأ =====
 function translateError(msg) {
   if (!msg) return 'حدث خطأ غير متوقع';
   var m = msg.toLowerCase();
-  if (m.includes('invalid login credentials') || m.includes('invalid credentials'))
-    return 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
-  if (m.includes('email not confirmed'))
-    return 'يرجى تأكيد بريدك الإلكتروني أولاً — تحقق من صندوق الوارد';
-  if (m.includes('user already registered') || m.includes('already registered'))
-    return 'هذا البريد الإلكتروني مسجل مسبقاً — يرجى تسجيل الدخول';
-  if (m.includes('password should be at least') || m.includes('password'))
-    return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
-  if (m.includes('unable to validate email') || m.includes('invalid email'))
-    return 'صيغة البريد الإلكتروني غير صحيحة';
-  if (m.includes('email rate limit') || m.includes('rate limit') || m.includes('too many'))
-    return 'تم تجاوز الحد المسموح — يرجى الانتظار قليلاً والمحاولة مجدداً';
-  if (m.includes('network') || m.includes('fetch'))
-    return 'خطأ في الاتصال — تحقق من الإنترنت وحاول مجدداً';
-  if (m.includes('user not found'))
-    return 'لا يوجد حساب بهذا البريد الإلكتروني';
-  if (m.includes('signup disabled') || m.includes('signups not allowed'))
-    return 'التسجيل مغلق حالياً — يرجى التواصل مع المشرف';
-  if (m.includes('weak password'))
-    return 'كلمة المرور ضعيفة — استخدم حروفاً وأرقاماً';
-  if (m.includes('email link is invalid') || m.includes('token'))
-    return 'الرابط غير صالح أو منتهي الصلاحية';
+  if (m.includes('invalid login credentials') || m.includes('invalid credentials')) return 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+  if (m.includes('email not confirmed')) return 'يرجى تأكيد بريدك الإلكتروني أولاً — تحقق من صندوق الوارد';
+  if (m.includes('user already registered') || m.includes('already registered')) return 'هذا البريد الإلكتروني مسجل مسبقاً — يرجى تسجيل الدخول';
+  if (m.includes('password should be at least') || m.includes('password')) return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+  if (m.includes('unable to validate email') || m.includes('invalid email')) return 'صيغة البريد الإلكتروني غير صحيحة';
+  if (m.includes('email rate limit') || m.includes('rate limit') || m.includes('too many')) return 'تم تجاوز الحد المسموح — يرجى الانتظار قليلاً والمحاولة مجدداً';
+  if (m.includes('network') || m.includes('fetch')) return 'خطأ في الاتصال — تحقق من الإنترنت وحاول مجدداً';
+  if (m.includes('user not found')) return 'لا يوجد حساب بهذا البريد الإلكتروني';
+  if (m.includes('signup disabled') || m.includes('signups not allowed')) return 'التسجيل مغلق حالياً — يرجى التواصل مع المشرف';
+  if (m.includes('weak password')) return 'كلمة المرور ضعيفة — استخدم حروفاً وأرقاماً';
+  if (m.includes('email link is invalid') || m.includes('token')) return 'الرابط غير صالح أو منتهي الصلاحية';
   return 'حدث خطأ: ' + msg;
 }
 
-// ===== التبويبات =====
+function redirectByRole(role, msg, btn) {
+  if (role === 'super_admin' || role === 'admin') {
+    window.location.href = './admin.html';
+  } else if (role === 'editor' || role === 'viewer') {
+    window.location.href = './index.html';
+  } else {
+    msg.className = 'msg err';
+    msg.textContent = '⏳ حسابك في انتظار منح الصلاحية من المشرف';
+    btn.textContent = 'دخول';
+    btn.disabled = false;
+  }
+}
+
 document.getElementById('t1').addEventListener('click', function() {
   document.getElementById('t1').className = 'tab on';
   document.getElementById('t2').className = 'tab';
@@ -204,13 +194,11 @@ document.getElementById('btn-login').addEventListener('click', async function() 
   var btn = document.getElementById('btn-login');
   msg.className = 'msg';
 
-  // تحقق محلي
   if (!email && !pass) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال البريد الإلكتروني وكلمة المرور'; return; }
   if (!email) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال البريد الإلكتروني'; return; }
   if (!pass) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال كلمة المرور'; return; }
   if (!email.includes('@')) { msg.className = 'msg err'; msg.textContent = 'صيغة البريد الإلكتروني غير صحيحة'; return; }
 
-  // Rate limiting
   var rateErr = checkRateLimit();
   if (rateErr) { msg.className = 'msg err'; msg.textContent = rateErr; return; }
 
@@ -238,16 +226,9 @@ document.getElementById('btn-login').addEventListener('click', async function() 
   var role = profileRes.data ? profileRes.data.role : 'pending';
 
   setTimeout(function() {
-   if (role === 'super_admin' || role === 'admin') {
-  window.location.href = './admin.html';
-} else if (role === 'editor' || role === 'viewer') {
-  window.location.href = './index.html';
-} else {
-  msg.className = 'msg err';
-  msg.textContent = '⏳ حسابك في انتظار منح الصلاحية من المشرف';
-  btn.textContent = 'دخول';
-  btn.disabled = false;
-}
+    redirectByRole(role, msg, btn);
+  }, 1500);
+});
 
 // ===== إنشاء حساب =====
 document.getElementById('btn-register').addEventListener('click', async function() {
@@ -300,18 +281,7 @@ document.getElementById('btn-register').addEventListener('click', async function
   btn.textContent = 'إنشاء حساب';
   btn.disabled = false;
 
- setTimeout(function() {
-    if (role === 'super_admin' || role === 'admin') {
-      window.location.href = './admin.html';
-    } else if (role === 'editor' || role === 'viewer') {
-      window.location.href = './index.html';
-    } else {
-      msg.className = 'msg err';
-      msg.textContent = '⏳ حسابك في انتظار منح الصلاحية من المشرف';
-      btn.textContent = 'دخول';
-      btn.disabled = false;
-    }
-  }, 1500);
+  setTimeout(function() { window.location.href = './auth.html'; }, 3000);
 });
 </script>
 </body>
