@@ -626,7 +626,7 @@ async function loadUsers() {
   data.forEach(function(u) {
     var badge = '<span class="badge badge-'+u.role+'">'+u.role+'</span>';
     html += '<tr><td style="font-size:12px;">'+(u.email||'-')+'</td><td>'+(u.full_name||'-')+'</td><td>'+badge+'</td><td>';
-    html += '<button class="btn btn-blue" onclick="openRoleModal(\''+u.id+'\',\''+(u.email||'')+'\',\''+u.role+'\')">صلاحية</button> ';
+    if (u.role !== 'super_admin') {   html += '<button class="btn btn-blue" onclick="openRoleModal(\''+u.id+'\',\''+(u.email||'')+'\',\''+u.role+'\')">صلاحية</button> '; }
     html += '<button class="btn btn-gray" onclick="window.location.href=\'./profile.html?id='+u.id+'\'">ملف</button> ';
     html += '<button class="btn btn-red" onclick="deleteUser(\''+u.id+'\',\''+(u.email||'')+'\')">حذف</button></td></tr>';
     mobileHtml += '<div class="mobile-card"><div class="mobile-card-title">'+(u.full_name||u.email||'-')+'</div>';
@@ -650,6 +650,21 @@ document.getElementById('close-role').addEventListener('click', function() { doc
 document.getElementById('save-role').addEventListener('click', async function() {
   var newRole = document.getElementById('role-select').value;
   var email = document.getElementById('role-email').value;
+
+  // حماية super_admin من التغيير
+  var { data: targetProfile } = await sb.from('profiles').select('role').eq('id', selectedUserId).single();
+  if (targetProfile && targetProfile.role === 'super_admin') {
+    alert('⛔ لا يمكن تغيير صلاحية super_admin!');
+    document.getElementById('modal-role').className = 'modal-bg';
+    return;
+  }
+
+  // فقط super_admin يستطيع ترقية شخص إلى admin
+  if (newRole === 'admin' && currentUserRole !== 'super_admin') {
+    alert('⛔ فقط super_admin يستطيع ترقية مستخدم إلى admin!');
+    return;
+  }
+
   await sb.from('profiles').update({ role: newRole }).eq('id', selectedUserId);
   await logAction('تغيير صلاحية', 'تم تغيير دور ' + email + ' إلى ' + newRole);
   document.getElementById('modal-role').className = 'modal-bg';
