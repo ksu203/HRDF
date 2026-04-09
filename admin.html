@@ -465,8 +465,7 @@ document.getElementById('btn-create-admin').addEventListener('click', async func
 
 // ===== المحتوى =====
 async function loadContent() {
-  var { data } = await sb.from('content').select('*').order('id', { ascending: false });
-  if (!data) return;
+var { data } = await sb.from('content').select('*, profiles!content_created_by_fkey(full_name, email)').order('id', { ascending: false });  if (!data) return;
   var html = '', mobileHtml = '';
   data.forEach(function(c) {
     var visibility = c.is_hidden ? '<span class="badge badge-hidden">مخفي</span>' : '<span class="badge badge-visible">ظاهر</span>';
