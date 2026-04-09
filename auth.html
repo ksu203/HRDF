@@ -300,7 +300,18 @@ document.getElementById('btn-register').addEventListener('click', async function
   btn.textContent = 'إنشاء حساب';
   btn.disabled = false;
 
-  setTimeout(function() { window.location.href = './auth.html'; }, 3000);
+ setTimeout(function() {
+    if (role === 'super_admin' || role === 'admin') {
+      window.location.href = './admin.html';
+    } else if (role === 'editor' || role === 'viewer') {
+      window.location.href = './index.html';
+    } else {
+      msg.className = 'msg err';
+      msg.textContent = '⏳ حسابك في انتظار منح الصلاحية من المشرف';
+      btn.textContent = 'دخول';
+      btn.disabled = false;
+    }
+  }, 1500);
 });
 </script>
 </body>
