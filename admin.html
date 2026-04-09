@@ -261,7 +261,21 @@
         <span class="maintenance-status off" id="maintenance-status">متوقف</span>
       </div>
     </div>
-
+<!-- إدارة صلاحيات المستخدمين -->
+<div class="card" style="margin-bottom:16px;">
+  <div class="card-header">
+    <h3>🔑 إدارة صلاحيات المستخدمين</h3>
+  </div>
+  <div style="padding:16px;">
+    <div class="field">
+      <label>اختر مستخدماً</label>
+      <select id="perm-user-select" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-family:Tajawal,sans-serif;font-size:14px;">
+        <option value="">— اختر مستخدم —</option>
+      </select>
+    </div>
+    <div id="perm-matrix" style="display:none;margin-top:16px;"></div>
+  </div>
+</div>
     <!-- سجل إجراءات المشرفين -->
     <div class="card">
       <div class="card-header">
@@ -407,7 +421,7 @@ function setupTabs() {
     { tab: 'nt2', sec: 's2', load: loadContent },
     { tab: 'nt3', sec: 's3', load: loadCategories },
     { tab: 'nt4', sec: 's4', load: function() { loadNotifications(); loadUserNotifs(); } },
-    { tab: 'nt5', sec: 's5', load: function() { loadMaintenanceStatus(); loadLogs(); } }
+    { tab: 'nt5', sec: 's5', load: function() { loadMaintenanceStatus(); loadLogs(); loadPermissionsUsers(); } }
   ];
   tabs.forEach(function(t) {
     var el = document.getElementById(t.tab);
@@ -469,7 +483,112 @@ async function toggleMaintenance(isOn) {
   await logAction('وضع الصيانة', isOn ? 'تم تفعيل وضع الصيانة' : 'تم إيقاف وضع الصيانة');
   loadLogs();
 }
+// ===== إدارة الصلاحيات =====
+var ALL_PERMISSIONS = [
+  { key: 'access_dashboard',    label: 'الوصول للوحة التحكم',       icon: '🖥️' },
+  { key: 'upload_content',      label: 'رفع محتوى جديد',            icon: '📤' },
+  { key: 'edit_own_content',    label: 'تعديل محتواه فقط',          icon: '✏️' },
+  { key: 'delete_own_content',  label: 'حذف محتواه فقط',           icon: '🗑️' },
+  { key: 'edit_any_content',    label: 'تعديل أي محتوى',            icon: '✏️' },
+  { key: 'delete_any_content',  label: 'حذف أي محتوى',             icon: '🗑️' },
+  { key: 'review_content',      label: 'مراجعة وقبول المحتوى',      icon: '✅' },
+  { key: 'toggle_visibility',   label: 'إخفاء / إظهار محتوى',      icon: '👁️' },
+  { key: 'manage_downloads',    label: 'السماح / منع التنزيل',      icon: '⬇️' },
+  { key: 'approve_users',       label: 'قبول المستخدمين الجدد',     icon: '👤' },
+  { key: 'manage_roles',        label: 'تغيير صلاحيات المستخدمين',  icon: '🔑' },
+  { key: 'delete_users',        label: 'حذف المستخدمين',            icon: '❌' },
+  { key: 'manage_categories',   label: 'إدارة التصنيفات',           icon: '🏷️' },
+  { key: 'view_stats',          label: 'عرض إحصائيات النظام',       icon: '📊' },
+  { key: 'send_notifications',  label: 'إرسال إشعارات للمستخدمين', icon: '🔔' }
+];
 
+async function loadPermissionsUsers() {
+  var { data } = await sb.from('profiles').select('id, full_name, email, role').neq('role', 'super_admin');
+  if (!data) return;
+  var select = document.getElementById('perm-user-select');
+  select.innerHTML = '<option value="">— اختر مستخدم —</option>';
+  data.forEach(function(u) {
+    var opt = document.createElement('option');
+    opt.value = u.id;
+    opt.textContent = (u.full_name || u.email) + ' — ' + u.role;
+    select.appendChild(opt);
+  });
+  select.onchange = function() {
+    if (this.value) loadUserPermissions(this.value);
+    else document.getElementById('perm-matrix').style.display = 'none';
+  };
+}
+
+async function loadUserPermissions(userId) {
+  var { data } = await sb.from('user_permissions').select('*').eq('user_id', userId);
+  var granted = {};
+  (data || []).forEach(function(p) { granted[p.permission] = p.granted; });
+
+  var html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">';
+  ALL_PERMISSIONS.forEach(function(perm) {
+    var isGranted = granted[perm.key] !== false && granted[perm.key] !== undefined ? granted[perm.key] : false;
+    var checkedAttr = isGranted ? 'checked' : '';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:' + (isGranted ? '#f0fff8' : '#fff8f8') + ';border-radius:8px;border:1px solid ' + (isGranted ? '#9fe1cb' : '#f5c4b3') + ';">';
+    html += '<div style="display:flex;align-items:center;gap:8px;">';
+    html += '<span style="font-size:16px;">' + perm.icon + '</span>';
+    html += '<span style="font-size:13px;font-weight:500;color:#333;">' + perm.label + '</span>';
+    html += '</div>';
+    html += '<label class="toggle"><input type="checkbox" ' + checkedAttr + ' onchange="togglePermission(\'' + userId + '\',\'' + perm.key + '\',this.checked)"><span class="toggle-slider"></span></label>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div style="display:flex;gap:8px;">';
+  html += '<button class="btn btn-green" onclick="grantAll(\'' + userId + '\')">✅ منح الكل</button>';
+  html += '<button class="btn btn-red" onclick="revokeAll(\'' + userId + '\')">❌ إزالة الكل</button>';
+  html += '<button class="btn btn-gray" onclick="savePermissionsLog(\'' + userId + '\')">💾 حفظ في السجل</button>';
+  html += '</div>';
+
+  var matrix = document.getElementById('perm-matrix');
+  matrix.innerHTML = html;
+  matrix.style.display = 'block';
+}
+
+async function togglePermission(userId, permission, granted) {
+  var { data: existing } = await sb.from('user_permissions').select('id').eq('user_id', userId).eq('permission', permission).single();
+  if (existing) {
+    await sb.from('user_permissions').update({ granted: granted, granted_by: currentUserId }).eq('user_id', userId).eq('permission', permission);
+  } else {
+    await sb.from('user_permissions').insert({ user_id: userId, permission: permission, granted: granted, granted_by: currentUserId });
+  }
+  await logAction('تعديل صلاحية', permission + ' → ' + (granted ? 'ممنوحة' : 'مُزالة') + ' للمستخدم: ' + userId);
+  loadUserPermissions(userId);
+}
+
+async function grantAll(userId) {
+  if (!confirm('هل تريد منح جميع الصلاحيات لهذا المستخدم؟')) return;
+  for (var i = 0; i < ALL_PERMISSIONS.length; i++) {
+    var perm = ALL_PERMISSIONS[i];
+    var { data: existing } = await sb.from('user_permissions').select('id').eq('user_id', userId).eq('permission', perm.key).single();
+    if (existing) {
+      await sb.from('user_permissions').update({ granted: true, granted_by: currentUserId }).eq('user_id', userId).eq('permission', perm.key);
+    } else {
+      await sb.from('user_permissions').insert({ user_id: userId, permission: perm.key, granted: true, granted_by: currentUserId });
+    }
+  }
+  await logAction('منح جميع الصلاحيات', 'للمستخدم: ' + userId);
+  loadUserPermissions(userId);
+}
+
+async function revokeAll(userId) {
+  if (!confirm('هل تريد إزالة جميع الصلاحيات من هذا المستخدم؟')) return;
+  await sb.from('user_permissions').delete().eq('user_id', userId);
+  await logAction('إزالة جميع الصلاحيات', 'للمستخدم: ' + userId);
+  loadUserPermissions(userId);
+}
+
+async function savePermissionsLog(userId) {
+  var select = document.getElementById('perm-user-select');
+  var userName = select.options[select.selectedIndex].text;
+  await logAction('حفظ الصلاحيات', 'تم حفظ صلاحيات: ' + userName);
+  alert('✅ تم حفظ الصلاحيات في السجل');
+  loadLogs();
+}
+  
 // ===== سجل الإجراءات =====
 async function loadLogs() {
   var el = document.getElementById('logs-list');
