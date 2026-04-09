@@ -238,18 +238,16 @@ document.getElementById('btn-login').addEventListener('click', async function() 
   var role = profileRes.data ? profileRes.data.role : 'pending';
 
   setTimeout(function() {
-    if (role === 'admin') {
-      window.location.href = './admin.html';
-    } else if (role === 'editor' || role === 'viewer') {
-      window.location.href = './index.html';
-    } else {
-      msg.className = 'msg err';
-      msg.textContent = '⏳ حسابك في انتظار منح الصلاحية من المشرف';
-      btn.textContent = 'دخول';
-      btn.disabled = false;
-    }
-  }, 1500);
-});
+   if (role === 'super_admin' || role === 'admin') {
+  window.location.href = './admin.html';
+} else if (role === 'editor' || role === 'viewer') {
+  window.location.href = './index.html';
+} else {
+  msg.className = 'msg err';
+  msg.textContent = '⏳ حسابك في انتظار منح الصلاحية من المشرف';
+  btn.textContent = 'دخول';
+  btn.disabled = false;
+}
 
 // ===== إنشاء حساب =====
 document.getElementById('btn-register').addEventListener('click', async function() {
