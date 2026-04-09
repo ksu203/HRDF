@@ -3,12 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta property="og:title" content="لوحة التحكم | مبادرة الإرشاد المهني الشامل">
-  <meta property="og:description" content="لوحة تحكم المشرف - بنك المحتوى المهني">
-  <meta property="og:image" content="https://careerguide.works/irshad-logo.png">
-  <meta property="og:url" content="https://careerguide.works/admin.html">
-  <meta property="og:type" content="website">
-  <meta name="description" content="لوحة تحكم المشرف - بنك المحتوى المهني HRDF">
   <title>لوحة التحكم | HRDF</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -22,6 +16,8 @@
     .nav::-webkit-scrollbar { display: none; }
     .nav-tab { padding: 12px 16px; cursor: pointer; color: #888; font-size: 14px; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; flex-shrink: 0; }
     .nav-tab.on { color: #0B6B3A; border-bottom-color: #0B6B3A; font-weight: 700; }
+    .nav-tab.super-tab { color: #7F77DD; }
+    .nav-tab.super-tab.on { color: #534AB7; border-bottom-color: #534AB7; }
     .content { padding: 16px; max-width: 1200px; margin: 0 auto; }
     .section { display: none; }
     .section.on { display: block; }
@@ -50,12 +46,14 @@
     .btn-gray { background: #6c757d; color: white; }
     .btn-orange { background: #fd7e14; color: white; }
     .btn-yellow { background: #ffc107; color: #333; }
+    .btn-purple { background: #534AB7; color: white; }
     .btn:hover { opacity: 0.85; }
     .badge { padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; }
     .badge-pending { background: #fff3cd; color: #856404; }
     .badge-viewer { background: #cce5ff; color: #004085; }
     .badge-editor { background: #d4edda; color: #155724; }
     .badge-admin { background: #0B6B3A; color: white; }
+    .badge-super_admin { background: #534AB7; color: white; }
     .badge-hidden { background: #f8d7da; color: #721c24; }
     .badge-visible { background: #d4edda; color: #155724; }
     .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
@@ -90,18 +88,25 @@
     .create-msg { margin-top: 10px; padding: 10px; border-radius: 8px; text-align: center; font-size: 13px; display: none; }
     .notif-row { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
     .notif-row.unread { background: #f0fff8; }
+    .maintenance-banner { background: #dc3545; color: white; text-align: center; padding: 10px; font-size: 14px; font-weight: 700; display: none; }
+    .maintenance-card { border: 2px solid #534AB7; border-radius: 12px; padding: 20px; margin-bottom: 16px; background: #EEEDFE; }
+    .maintenance-card h3 { color: #3C3489; margin-bottom: 8px; }
+    .maintenance-card p { color: #534AB7; font-size: 13px; margin-bottom: 16px; }
+    .maintenance-toggle-wrap { display: flex; align-items: center; gap: 12px; }
+    .maintenance-status { font-size: 13px; font-weight: 700; }
+    .maintenance-status.on { color: #dc3545; }
+    .maintenance-status.off { color: #0B6B3A; }
+    .log-row { padding: 10px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: flex-start; gap: 12px; }
+    .log-icon { width: 32px; height: 32px; border-radius: 50%; background: #EEEDFE; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .log-info { flex: 1; }
+    .log-action { font-size: 13px; font-weight: 700; color: #333; }
+    .log-detail { font-size: 12px; color: #888; margin-top: 2px; }
+    .log-time { font-size: 11px; color: #aaa; white-space: nowrap; }
     @keyframes slideInUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     @keyframes slideOutDown { from { transform: translateY(0); opacity: 1; } to { transform: translateY(30px); opacity: 0; } }
-    #user-notif-banner {
-      display: none; position: fixed; bottom: 24px; left: 24px;
-      background: #0B6B3A; color: white; padding: 14px 18px;
-      border-radius: 14px; font-family: 'Tajawal', sans-serif; font-size: 14px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.22); z-index: 9999;
-      max-width: 300px; line-height: 1.6; animation: slideInUp 0.3s ease;
-    }
+    #user-notif-banner { display: none; position: fixed; bottom: 24px; left: 24px; background: #0B6B3A; color: white; padding: 14px 18px; border-radius: 14px; font-family: 'Tajawal', sans-serif; font-size: 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.22); z-index: 9999; max-width: 300px; line-height: 1.6; animation: slideInUp 0.3s ease; }
     #user-notif-banner.hide { animation: slideOutDown 0.3s ease forwards; }
     #user-notif-banner .close-btn { position: absolute; top: 8px; left: 10px; cursor: pointer; font-size: 16px; opacity: 0.7; background: none; border: none; color: white; line-height: 1; }
-    #user-notif-banner .close-btn:hover { opacity: 1; }
     @media (max-width: 640px) {
       .stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
       .stat-card .num { font-size: 22px; }
@@ -115,6 +120,10 @@
   </style>
 </head>
 <body>
+
+<div class="maintenance-banner" id="maintenance-banner">
+  🔧 الموقع في وضع الصيانة — المستخدمون لا يستطيعون الوصول حالياً
+</div>
 
 <div class="header">
   <h1>⚙️ لوحة التحكم</h1>
@@ -132,6 +141,7 @@
     <span class="notif-badge" id="notif-count" style="display:none">0</span>
     <span class="notif-badge" id="user-notif-count" style="display:none;background:#0B6B3A;">0</span>
   </div>
+  <div class="nav-tab super-tab" id="nt5" style="display:none;">🔐 النظام</div>
 </div>
 
 <div class="content">
@@ -235,6 +245,33 @@
       <div class="mobile-list" id="notif-mobile"></div>
     </div>
   </div>
+
+  <!-- النظام — super_admin فقط -->
+  <div class="section" id="s5">
+
+    <!-- وضع الصيانة -->
+    <div class="maintenance-card">
+      <h3>🔧 وضع الصيانة</h3>
+      <p>عند التفعيل، يرى الزوار رسالة صيانة ولا يستطيعون استخدام الموقع. المشرفون يستطيعون الدخول بشكل طبيعي.</p>
+      <div class="maintenance-toggle-wrap">
+        <label class="toggle">
+          <input type="checkbox" id="maintenance-toggle" onchange="toggleMaintenance(this.checked)">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="maintenance-status off" id="maintenance-status">متوقف</span>
+      </div>
+    </div>
+
+    <!-- سجل إجراءات المشرفين -->
+    <div class="card">
+      <div class="card-header">
+        <h3>📋 سجل إجراءات المشرفين</h3>
+        <button class="btn btn-red" onclick="clearLogs()" style="font-size:11px;">مسح السجل</button>
+      </div>
+      <div id="logs-list"><div class="empty">جاري التحميل...</div></div>
+    </div>
+
+  </div>
 </div>
 
 <div id="user-notif-banner">
@@ -326,6 +363,8 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUserId = null;
+let currentUserRole = null;
+let currentUserEmail = null;
 let editContentId = null;
 let selectedUserId = null;
 
@@ -333,11 +372,33 @@ async function checkAuth() {
   var { data } = await sb.auth.getSession();
   if (!data.session) { window.location.href = './auth.html'; return; }
   currentUserId = data.session.user.id;
-  var { data: profile } = await sb.from('profiles').select('role').eq('id', currentUserId).single();
-  if (!profile || profile.role !== 'admin') {
+  var { data: profile } = await sb.from('profiles').select('role, email, full_name').eq('id', currentUserId).single();
+  if (!profile || (profile.role !== 'admin' && profile.role !== 'super_admin' && profile.role !== 'editor')) {
     alert('ليس لديك صلاحية الدخول');
     window.location.href = './auth.html';
+    return;
   }
+  currentUserRole = profile.role;
+  currentUserEmail = profile.email;
+
+  if (currentUserRole === 'super_admin') {
+    document.getElementById('nt5').style.display = 'block';
+  }
+
+  if (currentUserRole === 'editor') {
+    document.getElementById('nt1').style.display = 'none';
+    document.getElementById('nt3').style.display = 'none';
+    document.getElementById('nt4').style.display = 'none';
+  }
+}
+
+async function logAction(action, details) {
+  await sb.from('admin_logs').insert({
+    admin_id: currentUserId,
+    admin_email: currentUserEmail,
+    action: action,
+    details: details
+  });
 }
 
 function setupTabs() {
@@ -345,15 +406,20 @@ function setupTabs() {
     { tab: 'nt1', sec: 's1', load: loadUsers },
     { tab: 'nt2', sec: 's2', load: loadContent },
     { tab: 'nt3', sec: 's3', load: loadCategories },
-    { tab: 'nt4', sec: 's4', load: function() { loadNotifications(); loadUserNotifs(); } }
+    { tab: 'nt4', sec: 's4', load: function() { loadNotifications(); loadUserNotifs(); } },
+    { tab: 'nt5', sec: 's5', load: function() { loadMaintenanceStatus(); loadLogs(); } }
   ];
   tabs.forEach(function(t) {
-    document.getElementById(t.tab).addEventListener('click', function() {
+    var el = document.getElementById(t.tab);
+    if (!el) return;
+    el.addEventListener('click', function() {
       tabs.forEach(function(x) {
-        document.getElementById(x.tab).className = 'nav-tab';
-        document.getElementById(x.sec).className = 'section';
+        var tx = document.getElementById(x.tab);
+        var sx = document.getElementById(x.sec);
+        if (tx) tx.className = tx.id === 'nt5' ? 'nav-tab super-tab' : 'nav-tab';
+        if (sx) sx.className = 'section';
       });
-      document.getElementById(t.tab).className = 'nav-tab on';
+      el.className = el.id === 'nt5' ? 'nav-tab super-tab on' : 'nav-tab on';
       document.getElementById(t.sec).className = 'section on';
       t.load();
     });
@@ -374,6 +440,61 @@ document.getElementById('toggle-add-user').addEventListener('click', function() 
     form.style.display = 'none'; arrow.textContent = '▼ فتح';
   }
 });
+
+// ===== وضع الصيانة =====
+async function loadMaintenanceStatus() {
+  var { data } = await sb.from('system_settings').select('value').eq('key', 'maintenance_mode').single();
+  var isOn = data && data.value === 'true';
+  document.getElementById('maintenance-toggle').checked = isOn;
+  updateMaintenanceUI(isOn);
+}
+
+function updateMaintenanceUI(isOn) {
+  var status = document.getElementById('maintenance-status');
+  var banner = document.getElementById('maintenance-banner');
+  if (isOn) {
+    status.textContent = '🔴 مفعّل — الموقع في وضع الصيانة';
+    status.className = 'maintenance-status on';
+    banner.style.display = 'block';
+  } else {
+    status.textContent = '🟢 متوقف — الموقع يعمل بشكل طبيعي';
+    status.className = 'maintenance-status off';
+    banner.style.display = 'none';
+  }
+}
+
+async function toggleMaintenance(isOn) {
+  await sb.from('system_settings').update({ value: isOn ? 'true' : 'false', updated_by: currentUserId, updated_at: new Date().toISOString() }).eq('key', 'maintenance_mode');
+  updateMaintenanceUI(isOn);
+  await logAction('وضع الصيانة', isOn ? 'تم تفعيل وضع الصيانة' : 'تم إيقاف وضع الصيانة');
+  loadLogs();
+}
+
+// ===== سجل الإجراءات =====
+async function loadLogs() {
+  var el = document.getElementById('logs-list');
+  el.innerHTML = '<div class="empty">جاري التحميل...</div>';
+  var { data } = await sb.from('admin_logs').select('*').order('created_at', { ascending: false }).limit(50);
+  if (!data || !data.length) { el.innerHTML = '<div class="empty">لا توجد إجراءات مسجلة بعد</div>'; return; }
+  var icons = { 'وضع الصيانة': '🔧', 'حذف مستخدم': '🗑️', 'تغيير صلاحية': '🔑', 'حذف محتوى': '📄', 'مراجعة محتوى': '✅', 'إخفاء محتوى': '🙈', 'إظهار محتوى': '👁️' };
+  var html = '';
+  data.forEach(function(log) {
+    var icon = icons[log.action] || '📝';
+    var time = new Date(log.created_at).toLocaleString('ar-SA');
+    html += '<div class="log-row">';
+    html += '<div class="log-icon">'+icon+'</div>';
+    html += '<div class="log-info"><div class="log-action">'+log.action+'</div><div class="log-detail">'+(log.details||'')+'</div><div class="log-detail" style="margin-top:2px;color:#aaa;">'+( log.admin_email||'-')+'</div></div>';
+    html += '<div class="log-time">'+time+'</div>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+async function clearLogs() {
+  if (!confirm('هل أنت متأكد من مسح جميع السجلات؟')) return;
+  await sb.from('admin_logs').delete().neq('id', 0);
+  loadLogs();
+}
 
 // ===== المستخدمون =====
 async function loadUsers() {
@@ -408,9 +529,13 @@ function openRoleModal(id, email, role) {
 }
 document.getElementById('close-role').addEventListener('click', function() { document.getElementById('modal-role').className = 'modal-bg'; });
 document.getElementById('save-role').addEventListener('click', async function() {
-  await sb.from('profiles').update({ role: document.getElementById('role-select').value }).eq('id', selectedUserId);
+  var newRole = document.getElementById('role-select').value;
+  var email = document.getElementById('role-email').value;
+  await sb.from('profiles').update({ role: newRole }).eq('id', selectedUserId);
+  await logAction('تغيير صلاحية', 'تم تغيير دور ' + email + ' إلى ' + newRole);
   document.getElementById('modal-role').className = 'modal-bg';
   loadUsers();
+  loadLogs();
 });
 
 async function deleteUser(id, email) {
@@ -424,8 +549,10 @@ async function deleteUser(id, email) {
   });
   var result = await res.json();
   if (result.error) { alert('خطأ: ' + result.error); return; }
+  await logAction('حذف مستخدم', 'تم حذف المستخدم: ' + email);
   alert('✅ تم الحذف نهائياً');
   loadUsers();
+  loadLogs();
 }
 
 document.getElementById('btn-create-admin').addEventListener('click', async function() {
@@ -442,6 +569,7 @@ document.getElementById('btn-create-admin').addEventListener('click', async func
   var { data, error } = await sb.auth.signUp({ email: email, password: pass });
   if (error) { msg.style.display='block'; msg.style.background='#f8d7da'; msg.style.color='#721c24'; msg.textContent='خطأ: '+error.message; btn.textContent='➕ إنشاء'; btn.disabled=false; return; }
   if (data && data.user) await sb.from('profiles').update({ full_name: name, role: role }).eq('id', data.user.id);
+  await logAction('إنشاء حساب', 'تم إنشاء حساب: ' + email + ' بدور: ' + role);
   msg.style.display='block'; msg.style.background='#d4edda'; msg.style.color='#155724'; msg.textContent='✅ تم إنشاء الحساب: '+email;
   document.getElementById('new-admin-email').value='';
   document.getElementById('new-admin-pass').value='';
@@ -465,11 +593,11 @@ async function loadContent() {
     var rowClass = c.is_hidden ? 'hidden-row' : '';
     var statusBadge = !c.is_reviewed ? '<span class="badge badge-pending">⏳ قيد المراجعة</span>' : (c.is_hidden ? '<span class="badge badge-hidden">🙈 مخفي</span>' : '<span class="badge badge-editor">✅ منشور</span>');
     html += '<tr class="'+rowClass+'"><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+author+'</td><td>'+statusBadge+'</td><td>'+visibility+'</td><td>'+download+'</td><td style="white-space:nowrap;">';
-    html += '<span class="tooltip-wrap"><button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button><span class="tooltip-text">عرض المحتوى كما يراه الزوار</span></span> ';
-    html += '<span class="tooltip-wrap"><button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button><span class="tooltip-text">تعديل العنوان والنوع والفئة</span></span> ';
-    html += '<span class="tooltip-wrap"><button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button><span class="tooltip-text">'+(c.is_hidden?'إظهار المحتوى للزوار':'إخفاء المحتوى عن الزوار')+'</span></span> ';
-    html += '<span class="tooltip-wrap"><button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button><span class="tooltip-text">'+(c.allow_download?'منع تنزيل الملف':'السماح بتنزيل الملف')+'</span></span> ';
-    html += '<span class="tooltip-wrap"><button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button><span class="tooltip-text">حذف المحتوى نهائياً ⚠️</span></span></td></tr>';
+    html += '<span class="tooltip-wrap"><button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button><span class="tooltip-text">عرض المحتوى</span></span> ';
+    html += '<span class="tooltip-wrap"><button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button><span class="tooltip-text">تعديل المحتوى</span></span> ';
+    html += '<span class="tooltip-wrap"><button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button><span class="tooltip-text">'+(c.is_hidden?'إظهار':'إخفاء')+'</span></span> ';
+    html += '<span class="tooltip-wrap"><button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button><span class="tooltip-text">'+(c.allow_download?'منع التنزيل':'السماح بالتنزيل')+'</span></span> ';
+    html += '<span class="tooltip-wrap"><button class="btn btn-red" onclick="deleteContent('+c.id+',\''+c.title+'\')">حذف</button><span class="tooltip-text">حذف نهائياً ⚠️</span></span></td></tr>';
     mobileHtml += '<div class="mobile-card'+(c.is_hidden?' hidden-row':'')+'"><div class="mobile-card-title">'+c.title+'</div>';
     mobileHtml += '<div class="mobile-card-meta"><span class="badge">'+(c.content_type||'-')+'</span> <span style="font-size:11px;color:#555;">'+author+'</span> '+statusBadge+' '+visibility+' '+download+'</div>';
     mobileHtml += '<div class="mobile-card-actions">';
@@ -477,13 +605,17 @@ async function loadContent() {
     mobileHtml += '<button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button>';
     mobileHtml += '<button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button>';
     mobileHtml += '<button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button>';
-    mobileHtml += '<button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button></div></div>';
+    mobileHtml += '<button class="btn btn-red" onclick="deleteContent('+c.id+',\''+c.title+'\')">حذف</button></div></div>';
   });
   document.getElementById('content-table').innerHTML = html || '<tr><td colspan="7" class="empty">لا يوجد محتوى</td></tr>';
   document.getElementById('content-mobile').innerHTML = mobileHtml || '<div class="empty">لا يوجد محتوى</div>';
 }
 
-async function toggleHidden(id, isHidden) { await sb.from('content').update({ is_hidden: !isHidden }).eq('id', id); loadContent(); }
+async function toggleHidden(id, isHidden) {
+  await sb.from('content').update({ is_hidden: !isHidden }).eq('id', id);
+  await logAction(isHidden ? 'إظهار محتوى' : 'إخفاء محتوى', 'معرف المحتوى: ' + id);
+  loadContent();
+}
 async function toggleDownload(id, allow) { await sb.from('content').update({ allow_download: !allow }).eq('id', id); loadContent(); }
 
 document.getElementById('c-type').addEventListener('change', function() {
@@ -554,6 +686,7 @@ document.getElementById('save-content').addEventListener('click', async function
   if (fileUrl) obj.file_url = fileUrl;
   if (editContentId) await sb.from('content').update(obj).eq('id', editContentId);
   else await sb.from('content').insert(obj);
+  await logAction(editContentId ? 'تعديل محتوى' : 'إضافة محتوى', 'العنوان: ' + title);
   btn.textContent='حفظ'; btn.disabled=false;
   document.getElementById('modal-content').className='modal-bg';
   document.getElementById('upload-status').textContent='';
@@ -561,10 +694,12 @@ document.getElementById('save-content').addEventListener('click', async function
   loadContent();
 });
 
-async function deleteContent(id) {
+async function deleteContent(id, title) {
   if (!confirm('هل أنت متأكد؟')) return;
   await sb.from('content').delete().eq('id', id);
+  await logAction('حذف محتوى', 'تم حذف: ' + title);
   loadContent();
+  loadLogs();
 }
 
 // ===== التصنيفات =====
@@ -611,10 +746,10 @@ async function loadNotifications() {
     var date = new Date(c.created_at).toLocaleDateString('ar-SA');
     var uploader = c.profiles ? (c.profiles.full_name||c.profiles.email) : '-';
     html += '<tr><td>'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+uploader+'</td><td>'+date+'</td>';
-    html += '<td><button class="btn btn-green" onclick="reviewContent('+c.id+')">✓ مراجعة</button> <button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button> <button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button></td></tr>';
+    html += '<td><button class="btn btn-green" onclick="reviewContent('+c.id+')">✓ مراجعة</button> <button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button> <button class="btn btn-red" onclick="deleteContent('+c.id+',\''+c.title+'\')">حذف</button></td></tr>';
     mobileHtml += '<div class="mobile-card"><div class="mobile-card-title">'+c.title+'</div>';
     mobileHtml += '<div class="mobile-card-meta"><span style="font-size:11px;color:#888;">'+uploader+' · '+date+'</span></div>';
-    mobileHtml += '<div class="mobile-card-actions"><button class="btn btn-green" onclick="reviewContent('+c.id+')">✓ مراجعة</button><button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button><button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button></div></div>';
+    mobileHtml += '<div class="mobile-card-actions"><button class="btn btn-green" onclick="reviewContent('+c.id+')">✓ مراجعة</button><button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button><button class="btn btn-red" onclick="deleteContent('+c.id+',\''+c.title+'\')">حذف</button></div></div>';
   });
   document.getElementById('notif-table').innerHTML = html;
   document.getElementById('notif-mobile').innerHTML = mobileHtml;
@@ -622,7 +757,9 @@ async function loadNotifications() {
 
 async function reviewContent(id) {
   await sb.from('content').update({ is_reviewed: true, is_hidden: false }).eq('id', id);
+  await logAction('مراجعة محتوى', 'تم قبول ونشر المحتوى رقم: ' + id);
   loadNotifications();
+  loadLogs();
 }
 
 async function checkNotifications() {
@@ -633,7 +770,7 @@ async function checkNotifications() {
   if (count>0) badge.textContent = count;
 }
 
-// ===== إشعارات المستخدمين الجدد =====
+// ===== إشعارات المستخدمين =====
 async function loadUserNotifs() {
   var el = document.getElementById('user-notif-list');
   el.innerHTML = '<div class="empty">جاري التحميل...</div>';
@@ -642,20 +779,15 @@ async function loadUserNotifs() {
   var badge = document.getElementById('user-notif-count');
   badge.style.display = unread>0?'inline':'none';
   badge.textContent = unread;
-  if (!data || !data.length) {
-    el.innerHTML = '<div class="empty">لا توجد إشعارات مستخدمين جدد</div>';
-    return;
-  }
+  if (!data || !data.length) { el.innerHTML = '<div class="empty">لا توجد إشعارات مستخدمين جدد</div>'; return; }
   var html = '';
   data.forEach(function(n) {
     var time = new Date(n.created_at).toLocaleString('ar-SA');
     var isUnread = !n.is_read;
     var role = n.role || 'pending';
     html += '<div class="notif-row'+(isUnread?' unread':'')+'">';
-    html += '<div>';
-    html += '<div style="font-weight:700;font-size:14px;">'+(isUnread?'🔵 ':'')+'👤 '+(n.title||'مستخدم جديد')+'</div>';
-    html += '<div style="font-size:12px;color:#888;margin-top:2px;">'+(n.email||'')+' · '+time+'</div>';
-    html += '</div>';
+    html += '<div><div style="font-weight:700;font-size:14px;">'+(isUnread?'🔵 ':'')+'👤 '+(n.title||'مستخدم جديد')+'</div>';
+    html += '<div style="font-size:12px;color:#888;margin-top:2px;">'+(n.email||'')+' · '+time+'</div></div>';
     html += '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">';
     html += '<span class="badge badge-'+role+'">'+role+'</span>';
     if (role === 'pending') {
@@ -663,9 +795,7 @@ async function loadUserNotifs() {
     } else {
       html += '<span style="font-size:11px;color:#0B6B3A;font-weight:700;">✅ مقبول</span>';
     }
-    if (isUnread) {
-      html += '<button class="btn btn-gray" style="font-size:11px;" onclick="markUserNotifRead('+n.id+')">مقروء</button>';
-    }
+    if (isUnread) html += '<button class="btn btn-gray" style="font-size:11px;" onclick="markUserNotifRead('+n.id+')">مقروء</button>';
     html += '<button class="btn btn-red" style="font-size:11px;" onclick="deleteUserNotif('+n.id+')">حذف</button>';
     html += '</div></div>';
   });
@@ -679,26 +809,16 @@ async function approveUser(notifId, encodedEmail) {
   var { error } = await sb.from('profiles').update({ role: 'viewer' }).eq('email', email);
   if (error) { alert('خطأ: ' + error.message); return; }
   await sb.from('admin_notifications').delete().eq('id', notifId);
+  await logAction('قبول مستخدم', 'تم قبول: ' + email + ' كـ viewer');
   alert('✅ تم قبول ' + email + ' كقارئ');
   loadUserNotifs();
   loadUsers();
+  loadLogs();
 }
 
-async function markUserNotifRead(id) {
-  await sb.from('admin_notifications').update({ is_read: true }).eq('id', id);
-  loadUserNotifs();
-}
-
-async function markAllUserNotifsRead() {
-  await sb.from('admin_notifications').update({ is_read: true }).eq('type', 'new_user');
-  loadUserNotifs();
-}
-
-async function deleteUserNotif(id) {
-  await sb.from('admin_notifications').delete().eq('id', id);
-  loadUserNotifs();
-}
-
+async function markUserNotifRead(id) { await sb.from('admin_notifications').update({ is_read: true }).eq('id', id); loadUserNotifs(); }
+async function markAllUserNotifsRead() { await sb.from('admin_notifications').update({ is_read: true }).eq('type', 'new_user'); loadUserNotifs(); }
+async function deleteUserNotif(id) { await sb.from('admin_notifications').delete().eq('id', id); loadUserNotifs(); }
 async function clearAllUserNotifs() {
   if (!confirm('هل تريد حذف جميع إشعارات المستخدمين؟')) return;
   await sb.from('admin_notifications').delete().eq('type', 'new_user');
@@ -720,49 +840,38 @@ function watchNewUsers() {
       if (user.id === currentUserId) return;
       var name = user.full_name || user.email || 'مستخدم جديد';
       showUserNotification(name, user.email, user.role || 'pending');
-      loadUsers();
-      checkNotifications();
-      updateUserNotifBadge();
-    })
-    .subscribe(function(status) {
-      if (status === 'SUBSCRIBED') console.log('✅ Realtime: يراقب تسجيل مستخدمين جدد');
-    });
+      loadUsers(); checkNotifications(); updateUserNotifBadge();
+    }).subscribe();
 }
 
 function showUserNotification(name, email, role) {
   var banner = document.getElementById('user-notif-banner');
   var contentEl = document.getElementById('user-notif-content');
   banner.classList.remove('hide');
-  contentEl.innerHTML =
-    '<div style="font-size:13px;opacity:0.8;margin-bottom:4px;">👤 مستخدم جديد انضم</div>' +
-    '<div style="font-weight:700;font-size:15px;">' + name + '</div>' +
-    (email ? '<div style="font-size:12px;opacity:0.75;margin-top:2px;">' + email + '</div>' : '') +
-    '<div style="margin-top:8px;">' +
-      '<span style="background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:20px;font-size:11px;">' + role + '</span> ' +
-      '<button onclick="document.getElementById(\'nt4\').click()" style="background:rgba(255,255,255,0.25);border:none;color:white;padding:3px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:Tajawal,sans-serif;">عرض الإشعارات</button>' +
-    '</div>';
+  contentEl.innerHTML = '<div style="font-size:13px;opacity:0.8;margin-bottom:4px;">👤 مستخدم جديد انضم</div><div style="font-weight:700;font-size:15px;">'+name+'</div>'+(email?'<div style="font-size:12px;opacity:0.75;margin-top:2px;">'+email+'</div>':'')+'<div style="margin-top:8px;"><span style="background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:20px;font-size:11px;">'+role+'</span></div>';
   banner.style.display = 'block';
   clearTimeout(window._notifTimer);
-  window._notifTimer = setTimeout(function() {
-    banner.classList.add('hide');
-    setTimeout(function() { banner.style.display = 'none'; banner.classList.remove('hide'); }, 300);
-  }, 8000);
+  window._notifTimer = setTimeout(function() { banner.classList.add('hide'); setTimeout(function() { banner.style.display='none'; banner.classList.remove('hide'); }, 300); }, 8000);
 }
 
 document.getElementById('close-notif-banner').addEventListener('click', function() {
   var banner = document.getElementById('user-notif-banner');
   banner.classList.add('hide');
   clearTimeout(window._notifTimer);
-  setTimeout(function() { banner.style.display = 'none'; banner.classList.remove('hide'); }, 300);
+  setTimeout(function() { banner.style.display='none'; banner.classList.remove('hide'); }, 300);
 });
 
 async function init() {
   await checkAuth();
   setupTabs();
-  loadUsers();
-  checkNotifications();
-  updateUserNotifBadge();
-  watchNewUsers();
+  if (currentUserRole !== 'editor') {
+    loadUsers();
+    checkNotifications();
+    updateUserNotifBadge();
+    watchNewUsers();
+  } else {
+    loadContent();
+  }
 }
 init();
 </script>
