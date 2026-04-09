@@ -189,7 +189,7 @@
       <div class="table-wrap">
         <table>
           <thead><tr><th>العنوان</th><th>النوع</th><th>بواسطة</th><th>الحالة</th><th>الظهور</th><th>التنزيل</th><th>إجراءات</th></tr></thead>
-          <tbody id="content-table"><tr><td colspan="6" class="empty">جاري التحميل...</td></tr></tbody>
+          <tbody id="content-table"><tr><td colspan="7" class="empty">جاري التحميل...</td></tr></tbody>
         </table>
       </div>
       <div class="mobile-list" id="content-mobile"></div>
@@ -214,8 +214,6 @@
 
   <!-- الإشعارات -->
   <div class="section" id="s4">
-
-    <!-- إشعارات المستخدمين الجدد -->
     <div class="card">
       <div class="card-header">
         <h3>👤 مستخدمون جدد انضموا</h3>
@@ -226,8 +224,6 @@
       </div>
       <div id="user-notif-list"><div class="empty">جاري التحميل...</div></div>
     </div>
-
-    <!-- إشعارات المحتوى -->
     <div class="card">
       <div class="card-header"><h3>🔔 إشعارات المحتوى الجديد</h3></div>
       <div class="table-wrap">
@@ -238,11 +234,9 @@
       </div>
       <div class="mobile-list" id="notif-mobile"></div>
     </div>
-
   </div>
 </div>
 
-<!-- بانر إشعار المستخدم الجديد -->
 <div id="user-notif-banner">
   <button class="close-btn" id="close-notif-banner">✕</button>
   <div id="user-notif-content"></div>
@@ -422,21 +416,14 @@ document.getElementById('save-role').addEventListener('click', async function() 
 async function deleteUser(id, email) {
   if (id === currentUserId) { alert('لا يمكنك حذف حسابك الخاص!'); return; }
   if (!confirm('هل أنت متأكد من حذف المستخدم: ' + email + '؟')) return;
-
   var { data: { session } } = await sb.auth.getSession();
-  
   var res = await fetch('https://fmsxnznoynnhcwvstheu.supabase.co/functions/v1/delete-user', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + session.access_token
-    },
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.access_token },
     body: JSON.stringify({ userId: id })
   });
-
   var result = await res.json();
   if (result.error) { alert('خطأ: ' + result.error); return; }
-  
   alert('✅ تم الحذف نهائياً');
   loadUsers();
 }
@@ -465,22 +452,26 @@ document.getElementById('btn-create-admin').addEventListener('click', async func
 
 // ===== المحتوى =====
 async function loadContent() {
-var { data } = await sb.from('content').select('*, profiles!content_created_by_fkey(full_name, email)').order('id', { ascending: false });  if (!data) return;
+  var { data: contentData } = await sb.from('content').select('*').order('id', { ascending: false });
+  var { data: profilesData } = await sb.from('profiles').select('id, full_name, email');
+  var data = contentData;
+  if (!data) return;
   var html = '', mobileHtml = '';
   data.forEach(function(c) {
+    var profile = profilesData ? profilesData.find(function(p){ return p.id === c.created_by; }) : null;
+    var author = profile ? (profile.full_name || profile.email || '-') : '-';
     var visibility = c.is_hidden ? '<span class="badge badge-hidden">مخفي</span>' : '<span class="badge badge-visible">ظاهر</span>';
     var download = c.allow_download ? '<span class="badge badge-editor">✓</span>' : '<span class="badge badge-hidden">✗</span>';
     var rowClass = c.is_hidden ? 'hidden-row' : '';
-    var author = c.profiles ? (c.profiles.full_name || c.profiles.email || '-') : '-';
     var statusBadge = !c.is_reviewed ? '<span class="badge badge-pending">⏳ قيد المراجعة</span>' : (c.is_hidden ? '<span class="badge badge-hidden">🙈 مخفي</span>' : '<span class="badge badge-editor">✅ منشور</span>');
-    html += '<tr class="'+rowClass+'"><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+statusBadge+'</td><td>'+visibility+'</td><td>'+download+'</td><td style="white-space:nowrap;">';
+    html += '<tr class="'+rowClass+'"><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+c.title+'</td><td>'+(c.content_type||'-')+'</td><td>'+author+'</td><td>'+statusBadge+'</td><td>'+visibility+'</td><td>'+download+'</td><td style="white-space:nowrap;">';
     html += '<span class="tooltip-wrap"><button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button><span class="tooltip-text">عرض المحتوى كما يراه الزوار</span></span> ';
     html += '<span class="tooltip-wrap"><button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button><span class="tooltip-text">تعديل العنوان والنوع والفئة</span></span> ';
     html += '<span class="tooltip-wrap"><button class="btn '+(c.is_hidden?'btn-green':'btn-orange')+'" onclick="toggleHidden('+c.id+','+c.is_hidden+')">'+(c.is_hidden?'إظهار':'إخفاء')+'</button><span class="tooltip-text">'+(c.is_hidden?'إظهار المحتوى للزوار':'إخفاء المحتوى عن الزوار')+'</span></span> ';
     html += '<span class="tooltip-wrap"><button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button><span class="tooltip-text">'+(c.allow_download?'منع تنزيل الملف':'السماح بتنزيل الملف')+'</span></span> ';
     html += '<span class="tooltip-wrap"><button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button><span class="tooltip-text">حذف المحتوى نهائياً ⚠️</span></span></td></tr>';
     mobileHtml += '<div class="mobile-card'+(c.is_hidden?' hidden-row':'')+'"><div class="mobile-card-title">'+c.title+'</div>';
-    mobileHtml += '<div class="mobile-card-meta"><span class="badge">'+(c.content_type||'-')+'</span>'+statusBadge+' '+visibility+' '+download+'</div>';
+    mobileHtml += '<div class="mobile-card-meta"><span class="badge">'+(c.content_type||'-')+'</span> <span style="font-size:11px;color:#555;">'+author+'</span> '+statusBadge+' '+visibility+' '+download+'</div>';
     mobileHtml += '<div class="mobile-card-actions">';
     mobileHtml += '<button class="btn btn-green" onclick="window.location.href=\'./view.html?id='+c.id+'\'">👁 عرض</button>';
     mobileHtml += '<button class="btn btn-blue" onclick="openEditContent('+c.id+')">تعديل</button>';
@@ -488,7 +479,7 @@ var { data } = await sb.from('content').select('*, profiles!content_created_by_f
     mobileHtml += '<button class="btn '+(c.allow_download?'btn-yellow':'btn-green')+'" onclick="toggleDownload('+c.id+','+c.allow_download+')">'+(c.allow_download?'منع':'سماح')+'</button>';
     mobileHtml += '<button class="btn btn-red" onclick="deleteContent('+c.id+')">حذف</button></div></div>';
   });
-  document.getElementById('content-table').innerHTML = html || '<tr><td colspan="6" class="empty">لا يوجد محتوى</td></tr>';
+  document.getElementById('content-table').innerHTML = html || '<tr><td colspan="7" class="empty">لا يوجد محتوى</td></tr>';
   document.getElementById('content-mobile').innerHTML = mobileHtml || '<div class="empty">لا يوجد محتوى</div>';
 }
 
@@ -538,8 +529,9 @@ document.getElementById('save-content').addEventListener('click', async function
   var fileInput = document.getElementById('c-file');
   if (fileInput.files && fileInput.files[0]) {
     var file = fileInput.files[0];
-var ext = file.name.split('.').pop().toLowerCase();
-var fileName = 'file_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + ext;    document.getElementById('upload-progress').style.display='block';
+    var ext = file.name.split('.').pop().toLowerCase();
+    var fileName = 'file_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + ext;
+    document.getElementById('upload-progress').style.display='block';
     document.getElementById('upload-progress-fill').style.width='30%';
     document.getElementById('upload-status').textContent='جاري رفع الملف...';
     var { error: uploadError } = await sb.storage.from('content-files').upload(fileName, file);
@@ -666,7 +658,6 @@ async function loadUserNotifs() {
     html += '</div>';
     html += '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">';
     html += '<span class="badge badge-'+role+'">'+role+'</span>';
-    // زر القبول — يظهر فقط إذا الدور pending
     if (role === 'pending') {
       html += '<button class="btn btn-green" style="font-size:11px;" onclick="approveUser('+n.id+',\''+encodeURIComponent(n.email||'')+'\')">✓ قبول</button>';
     } else {
@@ -685,14 +676,9 @@ async function approveUser(notifId, encodedEmail) {
   var email = decodeURIComponent(encodedEmail);
   if (!email) { alert('البريد غير موجود'); return; }
   if (!confirm('هل تريد قبول تسجيل: ' + email + '؟')) return;
-
-  // تغيير دور المستخدم إلى viewer
   var { error } = await sb.from('profiles').update({ role: 'viewer' }).eq('email', email);
   if (error) { alert('خطأ: ' + error.message); return; }
-
-  // حذف الإشعار تلقائياً بعد القبول
   await sb.from('admin_notifications').delete().eq('id', notifId);
-
   alert('✅ تم قبول ' + email + ' كقارئ');
   loadUserNotifs();
   loadUsers();
@@ -727,14 +713,9 @@ async function updateUserNotifBadge() {
   badge.textContent = count;
 }
 
-// ===== مراقبة تسجيل مستخدمين جدد (Realtime) =====
 function watchNewUsers() {
   sb.channel('watch-new-users')
-    .on('postgres_changes', {
-      event: 'INSERT',
-      schema: 'public',
-      table: 'profiles'
-    }, function(payload) {
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'profiles' }, function(payload) {
       var user = payload.new;
       if (user.id === currentUserId) return;
       var name = user.full_name || user.email || 'مستخدم جديد';
@@ -775,7 +756,6 @@ document.getElementById('close-notif-banner').addEventListener('click', function
   setTimeout(function() { banner.style.display = 'none'; banner.classList.remove('hide'); }, 300);
 });
 
-// ===== التهيئة =====
 async function init() {
   await checkAuth();
   setupTabs();
