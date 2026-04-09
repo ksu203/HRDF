@@ -431,6 +431,42 @@ body { font-family: 'SST Arabic', 'Tajawal', sans-serif; background: #f0f4f8; co
 </div>
 
 <script>
+  <script>
+(async function() {
+  const sb = window.supabase.createClient(
+    'https://fmsxnznoynnhcwvstheu.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtc3huem5veW5uaGN3dnN0aGV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NTY3MTQsImV4cCI6MjA5MDQzMjcxNH0.XljzZu6bjifj1D8Kp0_cM3IqW4K9YoVR-ji5gOlQjpI'
+  );
+
+  // تحقق من وضع الصيانة
+  var { data } = await sb.from('system_settings').select('value').eq('key', 'maintenance_mode').single();
+  if (data && data.value === 'true') {
+    // تحقق إذا المستخدم مشرف
+    var { data: session } = await sb.auth.getSession();
+    if (session && session.session) {
+      var { data: profile } = await sb.from('profiles').select('role').eq('id', session.session.user.id).single();
+      if (profile && (profile.role === 'admin' || profile.role === 'super_admin')) {
+        return; // المشرف يدخل بشكل طبيعي
+      }
+    }
+    // إظهار صفحة الصيانة للزوار
+    document.body.innerHTML = `
+      <div style="
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        min-height: 100vh; background: #f0f4f8; font-family: 'Tajawal', sans-serif;
+        text-align: center; padding: 20px;
+      ">
+        <div style="font-size: 60px; margin-bottom: 20px;">🔧</div>
+        <h1 style="font-size: 24px; color: #0B6B3A; margin-bottom: 12px;">الموقع في وضع الصيانة</h1>
+        <p style="color: #666; font-size: 16px; max-width: 400px; line-height: 1.6;">
+          نعمل حالياً على تحسين الموقع وسنعود قريباً.<br>نعتذر عن أي إزعاج.
+        </p>
+        <p style="color: #aaa; font-size: 13px; margin-top: 20px;">careerguide.works</p>
+      </div>
+    `;
+  }
+})();
+</script>
   // ═══════════════════════════════════════════════════════
   // ملاحظة أمنية مهمة:
   // SUPABASE_KEY هنا هو "anon key" وهو مصمم ليكون عاماً.
