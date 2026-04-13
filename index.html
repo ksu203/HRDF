@@ -523,8 +523,8 @@ async function checkAuth() {
   if (profile) currentRole = profile.role;
   renderTopbar(profile);
   renderMobileMenu(profile);
-  if (currentRole === 'admin' || currentRole === 'editor') {
-    document.getElementById('admin-notice').className = 'admin-notice show';
+if (currentRole === 'admin' || currentRole === 'super_admin' || currentRole === 'editor') { 
+  document.getElementById('admin-notice').className = 'admin-notice show';
     document.getElementById('status-stats-card').style.display = 'block';
     document.getElementById('status-filter-item').style.display = 'block';
   }
@@ -539,7 +539,7 @@ function renderTopbar(profile) {
     b.onclick = function(){ window.location.href = './auth.html'; };
     actions.appendChild(b); return;
   }
-  if (currentRole === 'admin') {
+if (currentRole === 'admin' || currentRole === 'super_admin') {
     var b1 = document.createElement('button');
     b1.className = 'btn btn--primary'; b1.innerHTML = '⚙️ لوحة التحكم';
     b1.onclick = function(){ window.location.href = './admin.html'; };
