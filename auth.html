@@ -310,23 +310,25 @@ document.getElementById('btn-forgot').addEventListener('click', async function()
   if (!email) { msg.className = 'msg err'; msg.textContent = 'يرجى إدخال البريد الإلكتروني'; return; }
   if (!email.includes('@')) { msg.className = 'msg err'; msg.textContent = 'صيغة البريد غير صحيحة'; return; }
 
-  btn.textContent = 'جاري الإرسال...';
-  btn.disabled = true;
+btn.textContent = '⏳ جاري الإرسال...';
+btn.disabled = true;
+msg.className = 'msg ok';
+msg.textContent = '⏳ جاري إرسال الرابط، قد يستغرق بضع ثوانٍ...';
 
-  var { error } = await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://careerguide.works/reset-password.html'
-  });
+var { error } = await sb.auth.resetPasswordForEmail(email, {
+  redirectTo: 'https://careerguide.works/reset-password.html'
+});
 
-  if (error) {
-    msg.className = 'msg err';
-    msg.textContent = translateError(error.message);
-  } else {
-    msg.className = 'msg ok';
-    msg.textContent = '✅ تم الإرسال! تحقق من بريدك الإلكتروني';
-  }
+if (error) {
+  msg.className = 'msg err';
+  msg.textContent = translateError(error.message);
+} else {
+  msg.className = 'msg ok';
+  msg.textContent = '✅ تم الإرسال! تحقق من بريدك الإلكتروني وصندوق الرسائل غير المرغوب فيها';
+}
 
-  btn.textContent = 'إرسال رابط إعادة التعيين';
-  btn.disabled = false;
+btn.textContent = 'إرسال رابط إعادة التعيين';
+btn.disabled = false;
 });
 </script>
 </body>
