@@ -748,6 +748,18 @@ async function exportExcel() {
   btn.disabled = false;
   loadLogs();
 }  
+  // ===== إعادة تعيين كلمة المرور =====
+async function resetPassword(email) {
+  if (!email) { alert('لا يوجد بريد إلكتروني لهذا المستخدم'); return; }
+  if (!confirm('إرسال رابط إعادة تعيين كلمة المرور إلى: ' + email + '؟')) return;
+  var { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://careerguide.works/auth.html'
+  });
+  if (error) { alert('خطأ: ' + error.message); return; }
+  await logAction('إعادة تعيين كلمة المرور', 'تم إرسال رابط لـ: ' + email);
+  alert('✅ تم إرسال رابط إعادة التعيين إلى: ' + email);
+  loadLogs();
+}
 // ===== سجل الإجراءات =====
 async function loadLogs() {
   var el = document.getElementById('logs-list');
@@ -787,6 +799,7 @@ async function loadUsers() {
     html += '<tr><td style="font-size:12px;">'+(u.email||'-')+'</td><td>'+(u.full_name||'-')+'</td><td>'+badge+'</td><td>';
     if (u.role !== 'super_admin') {   html += '<button class="btn btn-blue" onclick="openRoleModal(\''+u.id+'\',\''+(u.email||'')+'\',\''+u.role+'\')">صلاحية</button> '; }
     html += '<button class="btn btn-gray" onclick="window.location.href=\'./profile.html?id='+u.id+'\'">ملف</button> ';
+    html += '<button class="btn btn-purple" onclick="resetPassword(\''+(u.email||'')+'\')">🔑 كلمة مرور</button> ';
     html += '<button class="btn btn-red" onclick="deleteUser(\''+u.id+'\',\''+(u.email||'')+'\')">حذف</button></td></tr>';
     mobileHtml += '<div class="mobile-card"><div class="mobile-card-title">'+(u.full_name||u.email||'-')+'</div>';
     mobileHtml += '<div class="mobile-card-meta">'+badge+'<span style="font-size:11px;color:#888;">'+(u.email||'-')+'</span></div>';
