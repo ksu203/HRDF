@@ -460,26 +460,22 @@ function setupTabs() {
       });
       el.className = el.id === 'nt5' ? 'nav-tab super-tab on' : 'nav-tab on';
       document.getElementById(t.sec).className = 'section on';
+      localStorage.setItem('activeAdminTab', t.tab);
       t.load();
     });
   });
-}
 
-document.getElementById('btn-logout').addEventListener('click', async function() {
-  await sb.auth.signOut();
-  window.location.href = './auth.html';
-});
-
-document.getElementById('toggle-add-user').addEventListener('click', function() {
-  var form = document.getElementById('add-user-form');
-  var arrow = document.getElementById('add-user-arrow');
-  if (form.style.display === 'none' || form.style.display === '') {
-    form.style.display = 'block'; arrow.textContent = '▲ إغلاق';
+  var savedTab = localStorage.getItem('activeAdminTab');
+  if (savedTab && document.getElementById(savedTab)) {
+    document.getElementById(savedTab).click();
   } else {
-    form.style.display = 'none'; arrow.textContent = '▼ فتح';
+    if (currentUserRole === 'editor') {
+      document.getElementById('nt2').click();
+    } else {
+      document.getElementById('nt1').click();
+    }
   }
-});
-
+}
 // ===== وضع الصيانة =====
 async function loadMaintenanceStatus() {
   var { data } = await sb.from('system_settings').select('value').eq('key', 'maintenance_mode').single();
@@ -1161,14 +1157,9 @@ document.getElementById('close-notif-banner').addEventListener('click', function
 async function init() {
   await checkAuth();
   setupTabs();
-  if (currentUserRole !== 'editor') {
-    loadUsers();
-    checkNotifications();
-    updateUserNotifBadge();
-    watchNewUsers();
-  } else {
-    loadContent();
-  }
+checkNotifications();
+  updateUserNotifBadge();
+  watchNewUsers();
 }
 init();
 </script>
