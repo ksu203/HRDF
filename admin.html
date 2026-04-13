@@ -760,7 +760,18 @@ async function resetPassword(email) {
   alert('✅ تم إرسال رابط إعادة التعيين إلى: ' + email);
   loadLogs();
 }
-// ===== سجل الإجراءات =====
+async function resetPassword(email) {
+  if (!email) { alert('لا يوجد بريد إلكتروني'); return; }
+  if (!confirm('إرسال رابط إعادة تعيين كلمة المرور إلى: ' + email + '؟')) return;
+  var { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://careerguide.works/reset-password.html'
+  });
+  if (error) { alert('خطأ: ' + error.message); return; }
+  await logAction('إعادة تعيين كلمة المرور', 'تم إرسال رابط لـ: ' + email);
+  alert('✅ تم إرسال الرابط إلى: ' + email);
+  loadLogs();
+}
+  // ===== سجل الإجراءات =====
 async function loadLogs() {
   var el = document.getElementById('logs-list');
   el.innerHTML = '<div class="empty">جاري التحميل...</div>';
