@@ -136,7 +136,6 @@
 <div class="nav">
   <div class="nav-tab on" id="nt1">👥 المستخدمون</div>
   <div class="nav-tab" id="nt2">📋 المحتوى</div>
-  <div class="nav-tab" id="nt3">🏷️ التصنيفات</div>
   <div class="nav-tab" id="nt4">🔔 الإشعارات
     <span class="notif-badge" id="notif-count" style="display:none">0</span>
     <span class="notif-badge" id="user-notif-count" style="display:none;background:#0B6B3A;">0</span>
@@ -444,7 +443,6 @@ function setupTabs() {
   var tabs = [
     { tab: 'nt1', sec: 's1', load: loadUsers },
     { tab: 'nt2', sec: 's2', load: loadContent },
-    { tab: 'nt3', sec: 's3', load: loadCategories },
     { tab: 'nt4', sec: 's4', load: function() { loadNotifications(); loadUserNotifs(); } },
     { tab: 'nt5', sec: 's5', load: function() { loadMaintenanceStatus(); loadLogs(); loadPermissionsUsers(); } }
   ];
